@@ -1,0 +1,43 @@
+.stage {
+  --speed: var(--global-speed, 1);
+  --ink: #4b4a5e;
+  position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+  background: #eaf6ff;
+  container-type: inline-size;   /* cqi 単位（幅の 1%）を使うため */
+  isolation: isolate;
+  font-family: var(--font-body);
+}
+.stage > * { pointer-events: none; }
+.stage.cool { --ink: #fff; }   /* かっこいい側は暗い背景に白線 */
+
+/* 複数の演出で使う土台 */
+.fx-flash { position: absolute; inset: 0; background: #fff; opacity: 0; }   /* 白フラッシュ */
+.fx-cam   { position: absolute; inset: 0; }                                   /* カメラ（画面ごと揺らす） */
+.fx-scene {                                                                   /* 画面転換の前後シーン */
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font: 700 14cqi/1 var(--font-en); color: var(--ink);
+}
+.fx-scene.a { background: #d7eeff; }
+.fx-scene.b { background: #ffe3ef; }
+.fx-scene.b.swap { opacity: 0; }
+.fx-persp { position: absolute; inset: 0; display: grid; place-items: center; perspective: 90cqi; }  /* 3D 用 */
+.fx-label {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 2cqi 4cqi;
+  border-radius: 999px; background: rgba(255, 255, 255, .78); border: .3cqi solid var(--ink);
+  font: 700 4.6cqi/1 var(--font-en); letter-spacing: .14em; color: var(--ink); white-space: nowrap;
+}
+/* UI デモ共通：ボタン・ダミー写真・小カード */
+.fx-btn {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+  display: inline-flex; align-items: center; gap: 1.5cqi; padding: 3.2cqi 7cqi; border-radius: 999px;
+  font: 700 4.4cqi/1 var(--font-body); letter-spacing: .04em; white-space: nowrap;
+  color: #ff6fa8; background: #fff; border: .4cqi solid #ff8fb8;
+  overflow: hidden; isolation: isolate;
+}
+.fx-photo { position: relative; background: linear-gradient(135deg, #8fd0ff, #c9b8ff 55%, #ff9ec4); }   /* 写真の代わり */
+.fx-photo::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, .55), transparent 40%); }
+.fx-card-ui { position: relative; background: #fff; border-radius: 3cqi; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; }
+/* 数値を補間できるように登録（カウントアップ、ハーフトーン、グラデ枠） */
+@property --n   { syntax: "<integer>"; inherits: false; initial-value: 0; }
+@property --dot { syntax: "<length>";  inherits: false; initial-value: 0px; }
+@property --a   { syntax: "<angle>";   inherits: false; initial-value: 0deg; }

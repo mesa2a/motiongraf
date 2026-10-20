@@ -1,0 +1,15 @@
+.stage-fadeup { background: #f0f7ff; }
+.fx-list { position: absolute; inset: 12% 18%; margin: 0; display: grid; gap: 3cqi; align-content: center; }
+.fx-list li { height: 9cqi; border-radius: 3cqi; border: .3cqi solid var(--ink); opacity: 0; translate: 0 4cqi; }
+.fx-list li:nth-child(1) { background: #ffd3e3; }
+.fx-list li:nth-child(2) { background: #fff4cc; }
+.fx-list li:nth-child(3) { background: #d7eeff; }
+.play .fx-list li              { animation: li-in calc(3s / var(--speed)) ease-out infinite; }
+.play .fx-list li:nth-child(2) { animation-delay: calc(.15s / var(--speed)); }   /* 少しずつ遅らせる */
+.play .fx-list li:nth-child(3) { animation-delay: calc(.3s / var(--speed)); }
+
+@keyframes li-in {
+  0%        { opacity: 0; translate: 0 4cqi; }
+  15%, 75%  { opacity: 1; translate: 0 0; }
+  85%, 100% { opacity: 0; translate: 0 -2cqi; }
+}

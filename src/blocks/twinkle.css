@@ -1,0 +1,9 @@
+.stage-twinkle { background: linear-gradient(#3a3d7a, #8b7fc0); }
+.fx-starlayer    { position: absolute; inset: 0; background: radial-gradient(circle, #fff .4cqi, transparent .6cqi) 0 0 / 11cqi 9cqi; }
+.fx-starlayer.s2 { background-position: 5cqi 4cqi; background-size: 15cqi 12cqi; }
+.fx-starlayer.s3 { background-position: 2cqi 7cqi; background-size: 8cqi 13cqi; }
+.fx-moon { position: absolute; right: 14%; top: 18%; width: 14cqi; aspect-ratio: 1; border-radius: 50%; background: #fff6cf; box-shadow: inset -3cqi 1.5cqi 0 #e3d8b0, 0 0 3cqi rgba(255, 246, 207, .6); }
+.play .fx-starlayer    { animation: twinkle calc(2.4s / var(--speed)) ease-in-out infinite; }
+.play .fx-starlayer.s2 { animation-delay: calc(-.8s / var(--speed)); }    /* 3 層をずらす */
+.play .fx-starlayer.s3 { animation-delay: calc(-1.6s / var(--speed)); }
+@keyframes twinkle { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }

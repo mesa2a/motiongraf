@@ -1,0 +1,17 @@
+.stage-popin { background: #fff5e8; }
+.fx-pops { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; gap: 3cqi; }
+.fx-pops i { width: 12cqi; aspect-ratio: 1; border-radius: 50%; border: .3cqi solid var(--ink); background: #ffd3e3; scale: 0; }
+.fx-pops i:nth-child(2) { background: #fff4cc; }
+.fx-pops i:nth-child(3) { background: #d9f5ec; }
+.fx-pops i:nth-child(4) { background: #d7eeff; }
+.fx-pops i:nth-child(5) { background: #e8e0ff; }
+.play .fx-pops i {
+  animation: pop-in calc(3s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite;
+  animation-delay: calc(var(--i) * .1s / var(--speed));
+}
+@keyframes pop-in {
+  0%, 5%    { scale: 0; }
+  20%       { scale: 1.15; }     /* 行き過ぎて戻る */
+  28%, 72%  { scale: 1; }
+  84%, 100% { scale: 0; }
+}

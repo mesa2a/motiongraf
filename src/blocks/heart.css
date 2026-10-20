@@ -1,0 +1,19 @@
+.stage-heart { background: #fff0f6; }
+@property --hc { syntax: "<color>"; inherits: true; initial-value: #d9d4e6; }   /* ハートの色。登録しておくと補間できる */
+.fx-heart { position: absolute; left: 50%; top: 50%; width: 16cqi; aspect-ratio: 1; translate: -50% -60%; rotate: 45deg; --hc: #d9d4e6; background: var(--hc); }
+.fx-heart::before, .fx-heart::after { content: ""; position: absolute; width: 100%; height: 100%; border-radius: 50%; background: var(--hc); }   /* 四角 + 丸 2 つでハート */
+.fx-heart::before { left: -50%; top: 0; }
+.fx-heart::after  { left: 0; top: -50%; }
+.fx-particles { position: absolute; left: 50%; top: 50%; width: 0; height: 0; translate: 0 -2cqi; }
+.fx-particles i { position: absolute; left: -1.5cqi; top: -1.5cqi; width: 3cqi; aspect-ratio: 1; border-radius: 50%; background: #ffd45e; transform: rotate(calc(var(--i) * 60deg)) translateY(0); scale: 0; }   /* 向きは rotate()、飛ぶのはその後ろの translateY() */
+.fx-particles i:nth-child(odd) { background: #ff8fb8; }
+.play .fx-heart       { animation: heart-pop calc(2.8s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; }
+.play .fx-particles i { animation: burst-dot calc(2.8s / var(--speed)) ease-out infinite; }
+@keyframes heart-pop {
+  0%, 25%   { scale: 1;    --hc: #d9d4e6; }
+  32%       { scale: .8;   --hc: #ff8fb8; }    /* 一度縮んで */
+  42%       { scale: 1.25; --hc: #ff8fb8; }    /* ぽんっ */
+  50%, 80%  { scale: 1;    --hc: #ff8fb8; }
+  90%, 100% { scale: 1;    --hc: #d9d4e6; }
+}
+@keyframes burst-dot { 0%, 30% { scale: 0; transform: rotate(calc(var(--i) * 60deg)) translateY(0); } 36% { scale: 1; } 60%, 100% { scale: 0; transform: rotate(calc(var(--i) * 60deg)) translateY(-14cqi); } }

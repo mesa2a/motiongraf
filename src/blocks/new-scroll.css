@@ -1,0 +1,52 @@
+/* @@ scroll-reveal */
+.stage-scrollreveal { background: #f4f0ff; }
+.fx-phone { position: absolute; left: 50%; top: 8%; translate: -50% 0; width: 34cqi; height: 60cqi; border-radius: 4cqi; background: #fff; border: .8cqi solid var(--ink); overflow: hidden; }
+.fx-page { padding: 3cqi; display: grid; gap: 2.2cqi; }
+.fx-page .it { height: 11cqi; border-radius: 2cqi; background: #e8e0ff; opacity: 0; translate: 0 3cqi; }
+.fx-page .it:nth-child(2n) { background: #ffd3e3; }
+.fx-page .it:nth-child(3n) { background: #d7eeff; }
+/* ---- デモ（スクロールの代わりに translate で動かしている） ---- */
+.play .fx-page     { animation: page-scroll calc(6s / var(--speed)) ease-in-out infinite; }
+.play .fx-page .it { animation: item-reveal calc(6s / var(--speed)) ease-out infinite; animation-delay: calc(var(--i) * .55s / var(--speed)); }
+@keyframes page-scroll { 0%, 10% { translate: 0 0; } 85%, 100% { translate: 0 -34cqi; } }
+@keyframes item-reveal { 0%, 8% { opacity: 0; translate: 0 3cqi; } 20%, 100% { opacity: 1; translate: 0 0; } }
+
+/* ---- 実装（本物のスクロール連動。このページのカードにも使っています） ---- */
+.reveal-on-scroll {
+  animation: reveal-in linear both;
+  animation-timeline: view();            /* 要素が画面に入ってくる進み具合をタイムラインにする */
+  animation-range: entry 0% entry 40%;   /* 入り始め〜40% の間で再生 */
+}
+@keyframes reveal-in { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+
+/* @@ scroll-progress */
+.stage-scrollprog { background: #effaf4; }
+.fx-prog { position: absolute; left: 0; right: 0; top: 0; height: 1.6cqi; background: linear-gradient(90deg, #ff8fb8, #c9b8ff); transform: scaleX(0); transform-origin: left; }
+.fx-doc { position: absolute; left: 20%; right: 20%; top: 6cqi; display: grid; gap: 2cqi; }
+.fx-doc b { display: block; height: 2cqi; border-radius: 1cqi; background: #d7eeff; }
+.fx-doc b:nth-child(3n) { width: 70%; }
+.fx-doc b:nth-child(4n) { height: 12cqi; background: #e8e0ff; }
+/* ---- デモ ---- */
+.play .fx-prog { animation: prog-grow  calc(6s / var(--speed)) ease-in-out infinite; }
+.play .fx-doc  { animation: doc-scroll calc(6s / var(--speed)) ease-in-out infinite; }
+@keyframes prog-grow  { 0%, 10% { transform: scaleX(0); } 85%, 100% { transform: scaleX(1); } }
+@keyframes doc-scroll { 0%, 10% { translate: 0 0; } 85%, 100% { translate: 0 -40cqi; } }
+
+/* ---- 実装（このページ上部のバーに使っています） ---- */
+.scroll-progress-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; transform-origin: left;
+  animation: bar-grow linear both;
+  animation-timeline: scroll(root);      /* ページ全体のスクロール量をタイムラインにする */
+}
+@keyframes bar-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* @@ scroll-hint */
+.stage-scrollhint { background: linear-gradient(#eaf6ff, #fff0f6); }
+.fx-mouse { position: absolute; left: 50%; top: 50%; translate: -50% -60%; width: 9cqi; height: 15cqi; border: .6cqi solid var(--ink); border-radius: 5cqi; }
+.fx-mouse i { position: absolute; left: 50%; top: 2.2cqi; width: 1.6cqi; height: 3cqi; translate: -50% 0; border-radius: 1cqi; background: #ff6fa8; }
+.fx-mouse span { position: absolute; left: 50%; top: 115%; translate: -50% 0; font: 700 2.8cqi/1 var(--font-en); letter-spacing: .3em; color: var(--ink); white-space: nowrap; text-align: center; }
+.fx-mouse span::after { content: ""; display: block; width: 2cqi; height: 2cqi; margin: 1.2cqi auto 0; border-right: .5cqi solid var(--ink); border-bottom: .5cqi solid var(--ink); rotate: 45deg; }
+.play .fx-mouse i           { animation: wheel calc(1.6s / var(--speed)) ease-in-out infinite; }
+.play .fx-mouse span::after { animation: chev  calc(1.6s / var(--speed)) ease-in-out infinite; }
+@keyframes wheel { 0% { translate: -50% 0; opacity: 1; } 70%, 100% { translate: -50% 5cqi; opacity: 0; } }
+@keyframes chev  { 0%, 100% { translate: 0 0; opacity: .4; } 50% { translate: 0 1cqi; opacity: 1; } }

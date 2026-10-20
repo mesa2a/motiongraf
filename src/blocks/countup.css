@@ -1,0 +1,10 @@
+.stage-count { background: #e8e0ff; }
+.fx-count {
+  position: absolute; inset: 0; display: grid; grid-auto-flow: column; justify-content: center; align-content: center; align-items: baseline;
+  font: 700 22cqi/1 var(--font-en); color: var(--ink);
+  counter-reset: n var(--n);          /* 登録済みの --n を counter に流し込む */
+}
+.fx-count::before { content: counter(n); }
+.fx-count small { font-size: 8cqi; margin-left: .1em; color: #ff8fb8; }
+.play .fx-count { animation: count-up calc(4s / var(--speed)) cubic-bezier(.2, .8, .3, 1) infinite; }
+@keyframes count-up { 0%, 10% { --n: 0; } 70%, 100% { --n: 100; } }

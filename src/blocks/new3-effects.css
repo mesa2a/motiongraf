@@ -1,0 +1,139 @@
+/* @@ rain */
+.stage-rain { background: linear-gradient(#9fb0cf, #c9d4e6); }
+.fx-rain {
+  position: absolute; inset: -10%; transform: skewX(-10deg);   /* 斜めに降らせる */
+  background:                                                   /* 細い縦線を 2 層 */
+    linear-gradient(90deg, rgba(255, 255, 255, .8) 0 .3cqi, transparent .3cqi) 0 0 / 3cqi 100%,
+    linear-gradient(90deg, rgba(255, 255, 255, .45) 0 .25cqi, transparent .25cqi) 1.5cqi 0 / 5cqi 100%;
+  -webkit-mask: linear-gradient(transparent 0 45%, #000 45% 100%) 0 0 / 100% 12cqi;   /* 線を途切れさせて雨粒に */
+          mask: linear-gradient(transparent 0 45%, #000 45% 100%) 0 0 / 100% 12cqi;
+}
+.fx-rain-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 10cqi; background: linear-gradient(transparent, rgba(255, 255, 255, .4)); }
+.play .fx-rain { animation: rain-fall calc(.6s / var(--speed)) linear infinite; }
+@keyframes rain-fall { to { mask-position: 0 12cqi; -webkit-mask-position: 0 12cqi; } }   /* マスクをタイル 1 枚分だけ下へ */
+
+/* @@ lightning */
+.stage-lightning { background: #171a2b; }
+.fx-bolt { position: absolute; left: 50%; top: 0; width: 14cqi; height: 70cqi; translate: -50% 0; background: #fff; filter: drop-shadow(0 0 2cqi #b1c6ff); opacity: 0;
+  clip-path: polygon(40% 0, 60% 0, 48% 32%, 70% 32%, 36% 100%, 44% 55%, 24% 55%); }   /* 稲妻の形 */
+.play .fx-bolt { animation: bolt-flicker calc(3.5s / var(--speed)) steps(1) infinite; }
+.play.stage-lightning .fx-flash { animation: bolt-flash calc(3.5s / var(--speed)) steps(1) infinite; }
+@keyframes bolt-flicker { 0%, 30%, 33%, 35%, 40%, 100% { opacity: 0; } 31%, 34%, 36%, 38% { opacity: 1; } }
+@keyframes bolt-flash   { 0%, 30%, 32%, 36%, 40%, 100% { opacity: 0; } 31%, 37% { opacity: .5; } 33% { opacity: .15; } }
+
+/* @@ fireflies */
+.stage-fireflies { background: linear-gradient(#6b6a9a, #3f4170); }
+.fx-ff { position: absolute; left: calc(var(--x) * 1cqi); top: calc(var(--y) * 1cqi); width: 1.6cqi; height: 1.6cqi; border-radius: 50%; background: #ffe9a3; box-shadow: 0 0 1.5cqi #ffe9a3, 0 0 4cqi rgba(255, 233, 163, .6); }
+.play .fx-ff { animation: ff-drift calc(6s / var(--speed)) ease-in-out infinite alternate, ff-glow calc(2.2s / var(--speed)) ease-in-out infinite; animation-delay: calc(var(--d) * -1s / var(--speed)), calc(var(--d) * -.7s / var(--speed)); }
+@keyframes ff-drift { from { translate: 0 0; } to { translate: 8cqi -5cqi; } }
+@keyframes ff-glow  { 0%, 100% { opacity: .15; scale: .6; } 50% { opacity: 1; scale: 1; } }
+
+/* @@ shooting-star */
+.stage-shooting { background: linear-gradient(#3f4170, #6b6a9a); }
+.fx-ss { position: absolute; left: calc(var(--x) * 1cqi); top: calc(var(--y) * 1cqi); width: 26cqi; height: .4cqi; border-radius: 1cqi; background: linear-gradient(90deg, transparent, #fff); rotate: 30deg; transform-origin: right center; opacity: 0; }
+.fx-ss::after { content: ""; position: absolute; right: -.4cqi; top: -.6cqi; width: 1.6cqi; height: 1.6cqi; border-radius: 50%; background: #fff; box-shadow: 0 0 2cqi #fff; }
+.play .fx-ss { animation: star-shoot calc(5s / var(--speed)) ease-in infinite; animation-delay: calc(var(--d) * 1s / var(--speed)); }
+@keyframes star-shoot { 0% { translate: 0 0; opacity: 0; } 5% { opacity: 1; } 25% { translate: -40cqi 23cqi; opacity: 0; } 100% { translate: -40cqi 23cqi; opacity: 0; } }   /* 30° の向きに沿って移動 */
+
+/* @@ speedlines-h */
+.stage-speedlines { background: #171a2b; }
+.fx-slh {
+  position: absolute; inset: 0; opacity: .7;
+  background:
+    linear-gradient(90deg, transparent 0 30%, #fff 60%, transparent 70%) 0 12% / 36cqi .5cqi repeat-x,
+    linear-gradient(90deg, transparent 0 30%, #fff 60%, transparent 70%) 0 30% / 52cqi .3cqi repeat-x,
+    linear-gradient(90deg, transparent 0 30%, #fff 60%, transparent 70%) 0 64% / 44cqi .4cqi repeat-x,
+    linear-gradient(90deg, transparent 0 30%, #fff 60%, transparent 70%) 0 86% / 60cqi .3cqi repeat-x;
+}
+.fx-slh-text { position: absolute; inset: 0; display: grid; place-items: center; font: 400 26cqi/1 var(--font-cool-en); color: #ffe14d; -webkit-text-stroke: .5cqi #171a2b; paint-order: stroke fill; letter-spacing: .05em; transform: skewX(-12deg); }
+.play .fx-slh { animation: sl-flow calc(.5s / var(--speed)) linear infinite; }
+.play .fx-slh-text { animation: sl-text calc(.3s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes sl-flow { to { background-position-x: -36cqi, -52cqi, -44cqi, -60cqi; } }
+@keyframes sl-text { from { translate: -.6cqi 0; } to { translate: .6cqi 0; } }
+
+/* @@ screen-shake */
+.stage-quake { background: #ffe3ef; }
+.fx-quake-text { position: absolute; inset: 0; display: grid; place-items: center; font: 400 18cqi/1 var(--font-cool); color: var(--ink); }
+.play.stage-quake .fx-cam { animation: quake calc(3s / var(--speed)) infinite; }
+@keyframes quake {   /* 小刻み → 大きく → 減衰 */
+  0%, 20%  { translate: 0 0; rotate: 0deg; }
+  22% { translate: -.4cqi .2cqi; } 24% { translate: .4cqi -.2cqi; } 26% { translate: -.4cqi 0; } 28% { translate: .4cqi .2cqi; }
+  32% { translate: -2.5cqi 1.5cqi; rotate: -1.2deg; } 36% { translate: 2.5cqi -1.5cqi; rotate: 1.2deg; } 40% { translate: -2cqi 1cqi; rotate: -.8deg; } 44% { translate: 1.6cqi -.8cqi; rotate: .6deg; }
+  48% { translate: -1cqi .5cqi; rotate: -.3deg; } 52% { translate: .5cqi -.3cqi; rotate: .1deg; } 56%, 100% { translate: 0 0; rotate: 0deg; }
+}
+
+/* @@ camera-flash */
+.stage-camflash { background: #fff; }
+.fx-cf-photo { position: absolute; inset: 0; }
+.fx-cf-frame { position: absolute; inset: 0; box-shadow: inset 0 0 12cqi rgba(0, 0, 0, .35); opacity: 0; }   /* 周辺減光 */
+.play.stage-camflash .fx-flash { animation: cam-flash  calc(3.5s / var(--speed)) infinite; }
+.play .fx-cf-frame             { animation: cam-vig    calc(3.5s / var(--speed)) infinite; }
+.play .fx-cf-photo             { animation: cam-freeze calc(3.5s / var(--speed)) infinite; }
+@keyframes cam-flash  { 0%, 28% { opacity: 0; } 30% { opacity: 1; } 34% { opacity: .6; } 38%, 100% { opacity: 0; } }
+@keyframes cam-vig    { 0%, 30% { opacity: 0; } 36%, 80% { opacity: 1; } 90%, 100% { opacity: 0; } }
+@keyframes cam-freeze { 0%, 30% { filter: none; scale: 1; } 36%, 80% { filter: saturate(.7) contrast(1.1); scale: .96; } 90%, 100% { filter: none; scale: 1; } }   /* 撮れた写真っぽく */
+
+/* @@ spotlight */
+.stage-spot { background: #0b0c16; }
+.fx-spot { position: absolute; inset: 0; display: grid; place-items: center; font: 400 20cqi/1 var(--font-cool-en); letter-spacing: .1em; color: #fff; background: #26294a;
+  -webkit-mask: radial-gradient(circle, #000 16cqi, transparent 17cqi) no-repeat; mask: radial-gradient(circle, #000 16cqi, transparent 17cqi) no-repeat;
+  -webkit-mask-size: 200% 200%; mask-size: 200% 200%; }   /* マスクを 2 倍にして位置を動かす */
+.play .fx-spot { animation: spot-move calc(6s / var(--speed)) ease-in-out infinite; }
+@keyframes spot-move { 0%, 100% { mask-position: 20% 30%; -webkit-mask-position: 20% 30%; } 35% { mask-position: 80% 60%; -webkit-mask-position: 80% 60%; } 70% { mask-position: 50% 90%; -webkit-mask-position: 50% 90%; } }
+
+/* @@ scanlines */
+.stage-scan { background: #0b0c16; }
+.fx-scan-text { position: absolute; inset: 0; display: grid; place-items: center; font: 400 18cqi/1 var(--font-cool-en); letter-spacing: .12em; color: #3ef2ff; text-shadow: 0 0 2cqi rgba(62, 242, 255, .8); }
+.fx-scan { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .35) 0 .4cqi, transparent .4cqi 1cqi); }   /* 走査線 */
+.fx-scan-band { position: absolute; left: 0; right: 0; height: 10cqi; background: linear-gradient(transparent, rgba(255, 255, 255, .12), transparent); translate: 0 -12cqi; }
+.play .fx-scan-band { animation: scan-band calc(2.6s / var(--speed)) linear infinite; }
+.play .fx-scan-text { animation: scan-flicker calc(2.6s / var(--speed)) steps(1) infinite; }
+@keyframes scan-band    { to { translate: 0 70cqi; } }
+@keyframes scan-flicker { 0%, 70%, 73%, 100% { opacity: 1; } 71% { opacity: .5; } 72% { opacity: .8; } }
+
+/* @@ smoke */
+.stage-smoke { background: linear-gradient(#e7edf8, #fff); }
+.fx-smoke { position: absolute; left: 50%; bottom: -8cqi; width: 12cqi; height: 12cqi; border-radius: 50%; background: rgba(170, 175, 200, .55); filter: blur(1.5cqi); translate: calc(var(--x) * 1cqi) 0; opacity: 0; }
+.play .fx-smoke { animation: smoke-rise calc(5s / var(--speed)) ease-out infinite; animation-delay: calc(var(--d) * -1s / var(--speed)); }
+@keyframes smoke-rise { 0% { translate: calc(var(--x) * 1cqi) 0; scale: .5; opacity: 0; } 15% { opacity: .9; } 100% { translate: calc(var(--x) * 1cqi + 6cqi) -60cqi; scale: 2.4; opacity: 0; } }   /* 上るほど広がって薄く */
+
+/* @@ charge */
+.stage-charge { background: radial-gradient(circle at 50% 50%, #2a0a4a, #0b0c16 70%); }
+.fx-ch { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+.fx-ch i { position: absolute; left: -1cqi; top: -1cqi; width: 2cqi; height: 2cqi; border-radius: 50%; background: #3ef2ff; box-shadow: 0 0 1.5cqi #3ef2ff; transform: rotate(calc(var(--i) * 30deg)) translateY(-34cqi); opacity: 0; }   /* 外周から中心へ */
+.fx-ch-core { position: absolute; left: 50%; top: 50%; width: 8cqi; height: 8cqi; translate: -50% -50%; border-radius: 50%; background: #fff; box-shadow: 0 0 4cqi #3ef2ff, 0 0 10cqi #ff4fa3; scale: 0; }
+.fx-ch-ring { position: absolute; left: 50%; top: 50%; width: 10cqi; height: 10cqi; translate: -50% -50%; border-radius: 50%; border: 1cqi solid #3ef2ff; scale: 0; opacity: 0; }
+.play .fx-ch i      { animation: charge-in calc(3.5s / var(--speed)) cubic-bezier(.6, 0, .9, .4) infinite; animation-delay: calc(var(--i) * .04s / var(--speed)); }
+.play .fx-ch-core   { animation: charge-core calc(3.5s / var(--speed)) infinite; }
+.play .fx-ch-ring   { animation: charge-ring calc(3.5s / var(--speed)) cubic-bezier(.1, .7, .3, 1) infinite; }
+.play.stage-charge .fx-flash { animation: charge-flash calc(3.5s / var(--speed)) infinite; }
+@keyframes charge-in   { 0%, 10% { transform: rotate(calc(var(--i) * 30deg)) translateY(-34cqi); opacity: 0; } 15% { opacity: 1; } 50% { transform: rotate(calc(var(--i) * 30deg)) translateY(0); opacity: 1; } 51%, 100% { opacity: 0; } }
+@keyframes charge-core { 0%, 15% { scale: 0; } 50% { scale: .6; } 55% { scale: 1.6; } 60%, 100% { scale: 0; } }
+@keyframes charge-ring { 0%, 55% { scale: 0; opacity: 1; } 85%, 100% { scale: 8; opacity: 0; } }
+@keyframes charge-flash { 0%, 54% { opacity: 0; } 56% { opacity: 1; } 64%, 100% { opacity: 0; } }
+
+/* @@ countdown */
+.stage-countdown { background: #171a2b; }
+.fx-cd { position: absolute; inset: 0; display: grid; place-items: center; }
+.fx-cd b { grid-area: 1 / 1; font: 400 36cqi/1 var(--font-cool-en); color: #fff; opacity: 0; }
+.fx-cd b.go { color: #ffe14d; -webkit-text-stroke: .5cqi #fff; paint-order: stroke fill; }
+.fx-cd-ring { position: absolute; left: 50%; top: 50%; width: 44cqi; height: 44cqi; translate: -50% -50%; border-radius: 50%; border: .6cqi solid rgba(255, 255, 255, .25); border-top-color: #ff4fa3; }
+.play .fx-cd b    { animation: cd-pop calc(4s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: calc(var(--i) * 1s / var(--speed)); }   /* 1 秒ずつ順番に */
+.play .fx-cd-ring { animation: cd-ring calc(1s / var(--speed)) linear infinite; }
+@keyframes cd-pop  { 0% { scale: 2.2; opacity: 0; } 6% { scale: 1; opacity: 1; } 18% { scale: 1; opacity: 1; } 24%, 100% { scale: .8; opacity: 0; } }
+@keyframes cd-ring { to { rotate: 360deg; } }
+
+/* @@ lens-flare */
+.stage-flare { background: linear-gradient(135deg, #cfe0f8, #f7f0f6); }
+.fx-flare { position: absolute; left: 0; top: 0; width: 0; height: 0; translate: 20cqi 14cqi; }
+.fx-flare i { position: absolute; left: 0; top: 0; translate: -50% -50%; border-radius: 50%; width: calc(var(--s) * 1cqi); height: calc(var(--s) * 1cqi); background: radial-gradient(circle, rgba(255, 255, 255, .95), rgba(255, 230, 170, .4) 50%, transparent 72%); transform: translate(calc(var(--k) * 10cqi), calc(var(--k) * 6cqi)); }   /* 光源と中心を結ぶ線上に並ぶ */
+.fx-flare .sun { width: 14cqi; height: 14cqi; background: radial-gradient(circle, #fff 20%, rgba(255, 244, 214, .9) 40%, transparent 70%); box-shadow: 0 0 10cqi 4cqi rgba(255, 255, 255, .6); }
+.fx-flare .streak { width: 70cqi; height: .6cqi; border-radius: 1cqi; background: linear-gradient(90deg, transparent, #fff, transparent); transform: none; }
+.play .fx-flare { animation: flare-move calc(8s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes flare-move { from { translate: 20cqi 14cqi; } to { translate: 60cqi 30cqi; } }
+
+/* @@ wind */
+.stage-wind { background: linear-gradient(#e7edf8, #f7f8fb); }
+.fx-wind { position: absolute; left: 0; top: calc(var(--y) * 1cqi); width: 34cqi; height: 10cqi; border-top: .5cqi solid #b1c6ff; border-radius: 50%; translate: -40cqi 0; opacity: 0; }   /* 角丸の上辺だけ描くと弧になる */
+.play .fx-wind { animation: wind-blow calc(2.4s / var(--speed)) cubic-bezier(.3, 0, .7, 1) infinite; animation-delay: calc(var(--d) * -1s / var(--speed)); }
+@keyframes wind-blow { 0% { translate: -40cqi 0; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { translate: 140cqi -3cqi; opacity: 0; } }

@@ -1,0 +1,430 @@
+/* ============================================================
+   style.css — ページ全体のデザイン
+   白地に小さな花ときらめき、ピンクと水色、Arvo の英字見出し
+   ============================================================ */
+
+:root {
+  --bg: #fcfbf9;
+  --paper: #ffffff;
+  --ink: #777790;            /* 本文・見出しの灰紫 */
+  --ink-dark: #5e5d78;
+  --ink-soft: #9a9ab0;
+  --line: #e9e7ee;
+  --pink: #f3aabb;
+  --pink-soft: #f8d2db;
+  --pink-pale: #fbf0f2;
+  --blue: #bccbee;
+  --blue-pale: #eff2fa;
+  --lavender: #d9c6f0;
+  --lavender-pale: #f6eeff;
+  --yellow: #f5d98c;
+  --yellow-pale: #fbf7ee;
+  --orange: #f4b38d;
+  --mint: #b5e4d1;
+  --mint-pale: #eefbf6;
+  --lime: #d4f00f;
+  --gray-pale: #f6f5f3;
+  /* 旧名の互換（カードの --accent 指定で使用） */
+  --sky: var(--blue);
+  --peach: #f6cdb6;
+  --lemon: var(--yellow);
+  /* かっこいい側 */
+  --dark: #171a2b;
+  --neon-cyan: #3ef2ff;
+  --neon-pink: #ff4fa3;
+  --neon-yellow: #ffe14d;
+  --font-en: "Arvo", "Georgia", serif;
+  --font-display: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --font-body: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+  --font-cool: "Dela Gothic One", "Hiragino Sans", sans-serif;
+  --font-cool-en: "Bebas Neue", Impact, sans-serif;
+  --global-speed: 1;
+  --radius: 20px;
+
+  /* 白地用の模様：小さな花、十字のきらめき、点、ドット柄の雲 */
+  --pattern-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='720'%3E%3Cdefs%3E%3Cpattern id='d' width='6' height='6' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='3' cy='3' r='1' fill='%23ebebf0'/%3E%3C/pattern%3E%3Cg id='f'%3E%3Ccircle cy='-6' r='3.6'/%3E%3Ccircle cx='5.7' cy='-1.9' r='3.6'/%3E%3Ccircle cx='3.5' cy='4.9' r='3.6'/%3E%3Ccircle cx='-3.5' cy='4.9' r='3.6'/%3E%3Ccircle cx='-5.7' cy='-1.9' r='3.6'/%3E%3C/g%3E%3Cpath id='s' d='M0 -8v5M0 3v5M-8 0h5M3 0h5' fill='none' stroke-width='2' stroke-linecap='round'/%3E%3C/defs%3E%3Cpath d='M560 40c40-30 110-20 130 20s-10 80-60 80-90 20-120-10-10-70 50-90z' fill='url(%23d)'/%3E%3Cpath d='M20 400c30-40 100-30 120 10s0 90-50 90-90 30-110-10 0-60 40-90z' fill='url(%23d)'/%3E%3Cpath d='M330 600c40-30 100-10 110 30s-20 70-70 60-80 30-100-10 20-60 60-80z' fill='url(%23d)'/%3E%3Cuse href='%23f' x='120' y='110' fill='%23f6d4db'/%3E%3Cuse href='%23f' x='430' y='200' fill='%23f6e4b8'/%3E%3Cuse href='%23f' x='660' y='330' fill='%23e4dbf3'/%3E%3Cuse href='%23f' x='250' y='340' fill='%23d3dcf3'/%3E%3Cuse href='%23f' x='560' y='520' fill='%23cbeadd'/%3E%3Cuse href='%23f' x='90' y='620' fill='%23f6d8c6'/%3E%3Cuse href='%23f' x='400' y='480' fill='%23e8efc2'/%3E%3Cuse href='%23s' x='300' y='60' stroke='%23d3dcf3'/%3E%3Cuse href='%23s' x='40' y='250' stroke='%23f6e4b8'/%3E%3Cuse href='%23s' x='600' y='230' stroke='%23f6d4db'/%3E%3Cuse href='%23s' x='200' y='500' stroke='%23cbeadd'/%3E%3Cuse href='%23s' x='520' y='650' stroke='%23e4dbf3'/%3E%3Cuse href='%23s' x='360' y='300' stroke='%23f6d8c6'/%3E%3Ccircle cx='180' cy='40' r='2.5' fill='%23e4dbf3'/%3E%3Ccircle cx='470' cy='120' r='2.5' fill='%23f6d4db'/%3E%3Ccircle cx='700' cy='470' r='2.5' fill='%23d3dcf3'/%3E%3Ccircle cx='60' cy='540' r='2.5' fill='%23f6e4b8'/%3E%3Ccircle cx='300' cy='680' r='2.5' fill='%23cbeadd'/%3E%3Ccircle cx='640' cy='140' r='2.5' fill='%23e8efc2'/%3E%3C/svg%3E");
+  /* ピンク地用の模様：白い花、黄色のきらめき、淡い雲 */
+  --pattern-pink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='720'%3E%3Cdefs%3E%3Cpattern id='d' width='6' height='6' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='3' cy='3' r='1' fill='%23ffffff' fill-opacity='.55'/%3E%3C/pattern%3E%3Cg id='f'%3E%3Ccircle cy='-6' r='3.6'/%3E%3Ccircle cx='5.7' cy='-1.9' r='3.6'/%3E%3Ccircle cx='3.5' cy='4.9' r='3.6'/%3E%3Ccircle cx='-3.5' cy='4.9' r='3.6'/%3E%3Ccircle cx='-5.7' cy='-1.9' r='3.6'/%3E%3C/g%3E%3Cpath id='s' d='M0 -8v5M0 3v5M-8 0h5M3 0h5' fill='none' stroke-width='2' stroke-linecap='round'/%3E%3C/defs%3E%3Cpath d='M560 40c40-30 110-20 130 20s-10 80-60 80-90 20-120-10-10-70 50-90z' fill='url(%23d)'/%3E%3Cpath d='M20 400c30-40 100-30 120 10s0 90-50 90-90 30-110-10 0-60 40-90z' fill='url(%23d)'/%3E%3Cpath d='M330 600c40-30 100-10 110 30s-20 70-70 60-80 30-100-10 20-60 60-80z' fill='url(%23d)'/%3E%3Cg fill='%23ffffff' fill-opacity='.6'%3E%3Cuse href='%23f' x='120' y='110'/%3E%3Cuse href='%23f' x='430' y='200'/%3E%3Cuse href='%23f' x='660' y='330'/%3E%3Cuse href='%23f' x='250' y='340'/%3E%3Cuse href='%23f' x='560' y='520'/%3E%3Cuse href='%23f' x='90' y='620'/%3E%3C/g%3E%3Cg stroke='%23ffd451'%3E%3Cuse href='%23s' x='300' y='60'/%3E%3Cuse href='%23s' x='40' y='250'/%3E%3Cuse href='%23s' x='600' y='230'/%3E%3Cuse href='%23s' x='200' y='500'/%3E%3Cuse href='%23s' x='520' y='650'/%3E%3C/g%3E%3C/svg%3E");
+  /* 見出し下の波線 */
+  --wave-pink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='8'%3E%3Cpath d='M0 4Q5 0 10 4T20 4' fill='none' stroke='%23f3aabb' stroke-width='2'/%3E%3C/svg%3E");
+  --wave-white: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='8'%3E%3Cpath d='M0 4Q5 0 10 4T20 4' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body {
+  margin: 0;
+  background: var(--bg) var(--pattern-light) repeat top center / 1240px 1240px;
+  color: var(--ink);
+  font: 400 .97rem/1.9 var(--font-body);
+  letter-spacing: .04em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+h1, h2, h3 { margin: 0; line-height: 1.3; font-family: var(--font-display); font-weight: 700; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+code {
+  font-family: var(--font-mono); font-size: .85em;
+  background: var(--blue-pale); color: #6d6fa8; padding: .1em .4em; border-radius: 6px;
+}
+pre { margin: 0; }
+pre code { background: none; padding: 0; font-size: inherit; border-radius: 0; color: inherit; }
+.pc { display: none; }
+@media (min-width: 720px) { .pc { display: inline; } }
+
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 1rem; top: 1rem; z-index: 100; background: var(--pink); color: #fff; padding: .5rem 1rem; border-radius: 999px; }
+
+/* ------------------------------------------------------------
+   ボタン（細い枠のピル。ホバーで塗りつぶし）
+   ------------------------------------------------------------ */
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font: 700 .86rem/1 var(--font-body); letter-spacing: .08em;
+  padding: .9rem 1.8rem; border: 1.5px solid var(--ink); border-radius: 999px;
+  background: transparent; color: var(--ink); cursor: pointer; text-decoration: none;
+  transition: background-color .3s, color .3s, border-color .3s;
+}
+.btn:hover { background: var(--ink); color: #fff; }
+.btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.btn-primary { background: var(--pink); border-color: var(--pink); color: #fff; }
+.btn-primary:hover { background: #fff; color: var(--ink); border-color: var(--ink); }
+.btn-sm { padding: .6rem 1.1rem; font-size: .78rem; }
+.btn-code.is-open { background: var(--ink); color: #fff; }
+
+/* ------------------------------------------------------------
+   ヘッダー
+   ------------------------------------------------------------ */
+.site-head {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  display: flex; align-items: center; gap: 1.5rem;
+  padding: .7rem 1.5rem;
+  background: rgba(255, 255, 255, .9);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.logo { display: flex; align-items: center; gap: .6rem; text-decoration: none; }
+.logo-mark { width: 26px; height: 26px; display: grid; place-items: center; }
+.logo-mark::before {   /* 5 枚花弁の小さな花 */
+  content: ""; width: 22px; height: 22px;
+  background:
+    radial-gradient(circle at 50% 22%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 78% 42%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 68% 78%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 32% 78%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 22% 42%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 50% 50%, #fff 14%, transparent 16%);
+}
+.logo-text { font: 700 .95rem/1 var(--font-en); letter-spacing: .16em; color: var(--ink); padding-top: .1em; }
+.site-nav { display: flex; gap: 1.6rem; margin-left: auto; }
+.site-nav a { text-decoration: none; font: 400 .82rem/1 var(--font-en); letter-spacing: .12em; position: relative; padding: .3rem .1rem; color: var(--ink); }
+.site-nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 8px; background: var(--wave-pink) repeat-x left center; opacity: 0; transition: opacity .25s; }
+.site-nav a:hover::after { opacity: 1; }
+.speed { display: flex; align-items: center; gap: .5rem; font: 400 .72rem/1 var(--font-en); letter-spacing: .16em; color: var(--ink-soft); }
+.speed select {
+  font: 700 .82rem/1 var(--font-body); background: #fff; color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 999px; padding: .4rem .7rem; cursor: pointer;
+}
+@media (max-width: 680px) {
+  .site-nav { display: none; }
+  .speed { margin-left: auto; }
+  .logo-text { display: none; }
+}
+
+/* ------------------------------------------------------------
+   ヒーロー（淡い空とロゴ風タイトル）
+   ------------------------------------------------------------ */
+.hero {
+  position: relative; min-height: 92svh;
+  display: grid; place-items: center; overflow: hidden;
+  padding: 7rem 1.5rem 5rem;
+  background: linear-gradient(180deg, #d3def2 0%, #e7edf8 45%, #f7f8fb 80%, var(--bg) 100%);
+}
+.hero::before {   /* 雲のような白いぼかし */
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 34% 22% at 18% 72%, rgba(255, 255, 255, .95), transparent 70%),
+    radial-gradient(ellipse 40% 24% at 82% 64%, rgba(255, 255, 255, .95), transparent 70%),
+    radial-gradient(ellipse 26% 16% at 55% 20%, rgba(255, 255, 255, .8), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 1), transparent 70%);
+}
+.hero-deco { position: absolute; inset: 0; pointer-events: none; }
+.deco { position: absolute; left: calc(var(--x) * 1vw); top: calc(var(--y) * 1vh); width: calc(var(--s, 1) * 18px); aspect-ratio: 1; }
+.deco.flower {   /* 5 枚花弁 */
+  background:
+    radial-gradient(circle at 50% 22%, var(--c) 24%, transparent 26%),
+    radial-gradient(circle at 78% 42%, var(--c) 24%, transparent 26%),
+    radial-gradient(circle at 68% 78%, var(--c) 24%, transparent 26%),
+    radial-gradient(circle at 32% 78%, var(--c) 24%, transparent 26%),
+    radial-gradient(circle at 22% 42%, var(--c) 24%, transparent 26%),
+    radial-gradient(circle at 50% 50%, #fff 14%, transparent 16%);
+  animation: deco-float calc(var(--t, 6) * 1s) ease-in-out infinite alternate; animation-delay: calc(var(--d, 0) * -1s);
+}
+.deco.spark {   /* 十字のきらめき */
+  background:
+    linear-gradient(var(--c), var(--c)) 50% 0 / 2px 32% no-repeat,
+    linear-gradient(var(--c), var(--c)) 50% 100% / 2px 32% no-repeat,
+    linear-gradient(var(--c), var(--c)) 0 50% / 32% 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) 100% 50% / 32% 2px no-repeat;
+  animation: deco-twinkle 2.6s ease-in-out infinite; animation-delay: calc(var(--d, 0) * -1s);
+}
+.deco.dot { width: 6px; border-radius: 50%; background: var(--c); animation: deco-float 7s ease-in-out infinite alternate; animation-delay: calc(var(--d, 0) * -1s); }
+.hero-inner { position: relative; text-align: center; max-width: 1000px; }
+
+.hero-ep {
+  display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .6rem .9rem; margin-bottom: 1.8rem;
+  opacity: 0; animation: fade-up .7s ease-out .1s forwards;
+}
+.hero-ep-en {
+  font: 400 .72rem/1 var(--font-en); letter-spacing: .24em; color: var(--ink); white-space: nowrap;
+  background: rgba(255, 255, 255, .8); padding: .5rem .95rem .45rem; border-radius: 999px;
+}
+.hero-ep-ja { font: 700 .85rem/1 var(--font-body); letter-spacing: .14em; color: var(--ink-dark); }
+
+.hero-title { display: grid; justify-items: center; gap: .1em; }
+.hero-title .line { display: flex; font: 700 clamp(3rem, 11vw, 8.2rem)/1 var(--font-en); letter-spacing: .02em; }
+.hero-title .line b {   /* ロゴ風：白とピンクの文字を交互に、少しずつ傾ける */
+  display: inline-block; font-weight: 700; color: #fff; opacity: 0;
+  text-shadow: 0 .04em .12em rgba(80, 90, 150, .16);
+  rotate: calc(var(--r, 0) * .6deg); translate: 0 calc(var(--o, 0) * .04em);
+  animation: letter-in .7s cubic-bezier(.3, 1.3, .5, 1) forwards; animation-delay: calc(.25s + var(--i) * .05s);
+}
+.hero-title .line b:nth-child(even) { color: #f3a9bb; }
+.hero-sub {
+  margin-top: 1.6rem; font: 400 .8rem/1 var(--font-en); letter-spacing: .34em; color: var(--ink-soft);
+  opacity: 0; animation: fade-up .7s ease-out 1.2s forwards;
+}
+.hero-lead {
+  margin-top: 1.4rem; font: 700 clamp(.92rem, 1.5vw, 1.02rem)/2.1 var(--font-body); color: var(--ink-dark);
+  opacity: 0; animation: fade-up .7s ease-out 1.35s forwards;
+}
+.hero-lead em { font-style: normal; background: linear-gradient(transparent 62%, rgba(245, 217, 140, .6) 62%); padding: 0 .15em; }
+.hero-actions {
+  display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; margin-top: 2.2rem;
+  opacity: 0; animation: fade-up .7s ease-out 1.5s forwards;
+}
+.hero-scroll {
+  position: absolute; bottom: 1.6rem; left: 50%; translate: -50% 0;
+  display: grid; justify-items: center; gap: .2rem;
+  font: 400 .68rem/1 var(--font-en); letter-spacing: .3em; color: var(--ink-soft);
+  opacity: 0; animation: fade-up .6s ease-out 2.1s forwards;
+}
+.hero-scroll span { font-size: 1rem; animation: nod 1.6s ease-in-out infinite; }
+
+@keyframes letter-in   { from { opacity: 0; scale: .6; } to { opacity: 1; scale: 1; } }
+@keyframes deco-float  { from { translate: 0 -8px; rotate: -8deg; } to { translate: 0 8px; rotate: 8deg; } }
+@keyframes deco-twinkle { 0%, 100% { scale: .5; opacity: .4; } 50% { scale: 1.1; opacity: 1; } }
+@keyframes fade-up { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes nod { 0%, 100% { translate: 0 0; } 50% { translate: 0 5px; } }
+
+/* ------------------------------------------------------------
+   セクション共通（Arvo の英字見出し + 波線）
+   ------------------------------------------------------------ */
+.section { position: relative; padding: 6rem 1.5rem; max-width: 1280px; margin: 0 auto; }
+.section-alt { max-width: none; background: #faf0f2 var(--pattern-light) repeat top center / 1240px 1240px; }
+.section-alt > * { max-width: 1280px; margin-left: auto; margin-right: auto; }
+.sec-head { display: grid; gap: .6rem; margin-bottom: 3.5rem; max-width: 760px; justify-items: start; }
+.sec-scene { font: 400 .72rem/1 var(--font-en); letter-spacing: .24em; color: var(--pink); }
+.section-alt .sec-scene { color: var(--pink); }
+.sec-title {
+  position: relative; display: inline-block; padding-bottom: 1rem;
+  font: 400 clamp(1.7rem, 3.4vw, 2.2rem)/1.2 var(--font-en); letter-spacing: .16em; color: var(--ink);
+}
+.sec-title::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: var(--wave-pink) repeat-x left center; }
+.sec-title small { display: block; margin-top: .4rem; font: 700 .9rem/1 var(--font-body); letter-spacing: .1em; color: var(--ink-soft); }
+.section-alt .sec-title { color: var(--ink); }
+.section-alt .sec-title small { color: var(--ink-soft); }
+.sec-lead { color: var(--ink); font-size: .95rem; margin-top: .2rem; }
+.sec-lead code { color: #6d6fa8; }
+
+/* ------------------------------------------------------------
+   カタログ：カード
+   ------------------------------------------------------------ */
+.grid {
+  display: grid; gap: 2.2rem 1.9rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+}
+.card {
+  --accent: var(--pink);
+  position: relative;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(119, 119, 144, .06);
+  transition: transform .25s ease-out, box-shadow .25s ease-out;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(119, 119, 144, .14); }
+.card-common { margin-bottom: 2.6rem; }
+.card-common .card-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); }
+.card-common .stage { border-inline-end: 1px solid var(--line); border-bottom: 0; aspect-ratio: auto; min-height: 200px; }
+.card-common .card-desc { padding: 1.2rem 1.4rem; }
+@media (max-width: 760px) {
+  .card-common .card-body { grid-template-columns: 1fr; }
+  .card-common .stage { border-inline-end: 0; border-bottom: 1px solid var(--line); aspect-ratio: 16 / 9; }
+}
+.card-head { display: grid; grid-template-columns: auto 1fr; gap: .3rem .9rem; align-items: start; padding: 1.1rem 1.25rem .95rem; }
+.card-no {
+  grid-row: 1 / 3; min-width: 2.5rem; height: 2.5rem; padding: 0 .55rem; display: grid; place-items: center;
+  font: 400 .9rem/1 var(--font-en); letter-spacing: .06em; color: var(--ink-dark);
+  background: color-mix(in srgb, var(--accent) 55%, #fff); border-radius: 999px;
+}
+.card-no.star { font-size: 1rem; }
+/* 通し番号は CSS カウンターで自動採番 */
+#catalog { counter-reset: card; }
+.card[data-id]:not([data-id="_common"]) { counter-increment: card; }
+.card-no:not(.star)::before { content: counter(card, decimal-leading-zero); }
+.card-title { font: 700 1.05rem/1.5 var(--font-display); letter-spacing: .04em; color: var(--ink-dark); display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; }
+.card-title small { font: 400 .7rem/1 var(--font-en); letter-spacing: .12em; color: var(--ink-soft); }
+.card-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+.card-tags li {
+  font: 400 .68rem/1 var(--font-mono); color: var(--ink);
+  background: color-mix(in srgb, var(--accent) 22%, #fff); padding: .3rem .55rem; border-radius: 999px;
+}
+.card .stage { border-block: 1px solid var(--line); }
+.card-desc { padding: 1.1rem 1.25rem .4rem; font-size: .88rem; color: var(--ink); flex: 1; }
+.card-actions { display: flex; gap: .6rem; padding: .9rem 1.25rem 1.3rem; }
+/* かっこいい演出のカード */
+.card[data-tone="cool"] .card-no { background: var(--dark); color: #fff; }
+.card[data-tone="cool"] .card-title::after {
+  content: "COOL"; font: 400 .58rem/1 var(--font-en); letter-spacing: .14em;
+  background: var(--dark); color: var(--neon-yellow); padding: .3em .55em; border-radius: 4px;
+}
+
+.code-panel { position: relative; border-top: 1px solid var(--line); background: var(--gray-pale); }
+.code-panel pre {
+  max-height: 460px; overflow: auto;
+  padding: 1.2rem 1.25rem 1.4rem; font: 400 .78rem/1.65 var(--font-mono);
+  color: var(--ink-dark); tab-size: 2;
+}
+.btn-copy {
+  position: absolute; top: .7rem; right: 1rem; z-index: 1;
+  font: 700 .7rem/1 var(--font-body); letter-spacing: .06em; padding: .5rem .85rem; border-radius: 999px;
+  background: #fff; color: var(--ink); border: 2px solid var(--ink); cursor: pointer;
+  transition: background-color .3s, color .3s;
+}
+.btn-copy:hover { background: var(--ink); color: #fff; }
+.btn-copy.done { background: var(--mint); border-color: var(--mint); color: var(--ink-dark); }
+/* ハイライト */
+.code-panel .s, .step pre .s { color: #5b8ad6; }
+.code-panel .p, .step pre .p { color: #e07a97; }
+.code-panel .n, .step pre .n { color: #d29a1a; }
+.code-panel .c, .step pre .c { color: #a3a3b8; font-style: italic; }
+
+/* 「視差効果を減らす」設定時のオーバーレイ */
+body.reduce .stage:not(.play)::after {
+  content: "モーションはお休み中（OS設定）。▶ もういちど で再生";
+  position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+  padding: 1rem; font-size: .82rem; font-weight: 700; color: var(--ink);
+  background: rgba(255, 255, 255, .85);
+}
+
+/* カテゴリ */
+.cat-nav { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; margin: -1.5rem 0 2.8rem; }
+.cat-nav a {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font: 400 .8rem/1 var(--font-en); letter-spacing: .12em; text-decoration: none; color: var(--ink);
+  padding: .5rem 0; position: relative;
+}
+.cat-nav a::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--pink)); }
+.cat-nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 8px; background: var(--wave-pink) repeat-x left center; opacity: 0; transition: opacity .25s; }
+.cat-nav a:hover::after { opacity: 1; }
+.cat { margin-top: 4.5rem; scroll-margin-top: 5.5rem; }
+.cat-head { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.6rem; padding-bottom: .8rem; border-bottom: 2px solid var(--line); }
+.cat-title { font: 400 1.3rem/1.3 var(--font-en); letter-spacing: .16em; color: var(--ink); display: flex; align-items: center; gap: .7rem; }
+.cat-title b {
+  width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 55%, #fff); color: var(--ink-dark); font: 400 .85rem/1 var(--font-en);
+}
+.cat-title small { font: 700 .85rem/1 var(--font-body); letter-spacing: .08em; color: var(--ink-soft); margin-left: .2rem; }
+.cat-lead { color: var(--ink); font-size: .86rem; }
+.cat-lead code { color: #6d6fa8; }
+
+/* ------------------------------------------------------------
+   コツ（ピンクの帯）
+   ------------------------------------------------------------ */
+.tips { display: grid; gap: 1.4rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+.tip {
+  --accent: var(--pink);
+  position: relative; padding: 1.6rem 1.5rem 1.5rem;
+  background: #fff; border-radius: var(--radius); color: var(--ink);
+  box-shadow: 0 4px 16px rgba(119, 119, 144, .07);
+  display: grid; gap: .5rem; align-content: start;
+}
+.tip-no { font: 400 .78rem/1 var(--font-en); letter-spacing: .16em; color: var(--pink); }
+.tip h3 { font: 700 1.02rem/1.5 var(--font-display); letter-spacing: .03em; color: var(--ink-dark); }
+.tip p { font-size: .88rem; color: var(--ink); }
+.tip > code {
+  margin-top: .4rem; display: block; padding: .6rem .9rem; font-size: .78rem;
+  background: var(--gray-pale); color: #5b8ad6; border-radius: 8px;
+}
+
+/* ------------------------------------------------------------
+   使い方（淡い黄色）
+   ------------------------------------------------------------ */
+#usage { max-width: none; background: #faf8f1 var(--pattern-light) repeat top center / 1240px 1240px; }
+#usage > * { max-width: 1280px; margin-left: auto; margin-right: auto; }
+.steps { display: grid; gap: 2.5rem; max-width: 900px; }
+.step { display: grid; grid-template-columns: auto 1fr; gap: 1.4rem; align-items: start; }
+.step-no {
+  display: grid; place-items: center; width: 2.8rem; height: 2.8rem; border-radius: 50%;
+  font: 400 1.05rem/1 var(--font-en); color: var(--ink-dark); background: color-mix(in srgb, var(--yellow) 60%, #fff);
+}
+.step h3 { font: 700 1.12rem/1.5 var(--font-display); letter-spacing: .03em; color: var(--ink-dark); margin-bottom: .4rem; }
+.step h3 code { font-size: .8em; vertical-align: .08em; }
+.step p { color: var(--ink); font-size: .92rem; }
+.step a { color: #5b8ad6; }
+.step pre {
+  margin-top: 1rem; padding: 1.1rem 1.2rem; background: #fff; border-radius: 14px;
+  font: 400 .78rem/1.65 var(--font-mono); color: var(--ink-dark); overflow: auto; box-shadow: 0 6px 16px rgba(119, 119, 144, .08);
+}
+@media (max-width: 560px) { .step { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   フッター
+   ------------------------------------------------------------ */
+.site-foot {
+  position: relative; padding: 4rem 1.5rem 3rem; text-align: center; font-size: .85rem;
+  background: #faf0f2 var(--pattern-light) repeat top center / 1240px 1240px; color: var(--ink); display: grid; gap: .4rem; justify-items: center;
+}
+.foot-mark { width: 36px; height: 36px; display: grid; place-items: center; }
+.foot-mark::before {
+  content: ""; width: 30px; height: 30px;
+  background:
+    radial-gradient(circle at 50% 22%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 78% 42%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 68% 78%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 32% 78%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 22% 42%, var(--pink) 24%, transparent 26%),
+    radial-gradient(circle at 50% 50%, #fff 14%, transparent 16%);
+  animation: deco-float 4s ease-in-out infinite alternate;
+}
+.foot-title { font: 400 1rem/1 var(--font-en); letter-spacing: .3em; color: var(--ink); margin-top: .6rem; }
+.foot-small { font-size: .74rem; color: var(--ink-soft); }
+
+/* ------------------------------------------------------------
+   スクロール連動（対応ブラウザのみ。カタログの「スクロール連動」参照）
+   ------------------------------------------------------------ */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 4px; z-index: 60;
+  background: linear-gradient(90deg, var(--pink), var(--lavender), var(--blue));
+  transform-origin: left; transform: scaleX(0);
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress { animation: site-progress linear both; animation-timeline: scroll(root); }
+  .card { animation: site-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 35%; }
+}
+@keyframes site-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes site-reveal   { from { opacity: 0; translate: 0 28px; } to { opacity: 1; translate: 0 0; } }
+
+/* ------------------------------------------------------------
+   視差効果を減らす
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .deco, .hero-scroll span, .foot-mark::before, .card { animation: none !important; }
+  .hero-ep, .hero-title .line b, .hero-sub, .hero-lead, .hero-actions, .hero-scroll { animation: none !important; opacity: 1 !important; }
+  .card, .card:hover { transform: none; transition: none; }
+}

@@ -1,0 +1,18 @@
+.stage-slash { background: #0f1020; }
+.fx-target { position: absolute; inset: 0; }
+.fx-target span { position: absolute; inset: 0; display: grid; place-items: center; font: 400 30cqi/1 var(--font-cool); color: #fff; }
+.fx-target .top    { clip-path: polygon(0 0, 100% 0, 100% 38%, 0 62%); }     /* 斜めに分割 */
+.fx-target .bottom { clip-path: polygon(0 62%, 100% 38%, 100% 100%, 0 100%); }
+.fx-slash {
+  position: absolute; top: 50%; left: -10%; width: 120%; height: .8cqi;
+  background: #fff; box-shadow: 0 0 2cqi #3ef2ff, 0 0 6cqi #3ef2ff;
+  transform: rotate(-7.7deg); clip-path: inset(0 100% 0 0);
+}
+.play .fx-slash             { animation: slash-draw   calc(3s / var(--speed)) infinite; }
+.play .fx-target .top       { animation: split-top    calc(3s / var(--speed)) infinite; }
+.play .fx-target .bottom    { animation: split-bottom calc(3s / var(--speed)) infinite; }
+.play.stage-slash .fx-flash { animation: hit-flash    calc(3s / var(--speed)) infinite; }
+@keyframes slash-draw { 0%, 10% { clip-path: inset(0 100% 0 0); } 20% { clip-path: inset(0 0 0 0); } 30%, 100% { clip-path: inset(0 0 0 100%); } }
+@keyframes split-top    { 0%, 22% { transform: none; } 26%, 80% { transform: translate(-2cqi, -2cqi); filter: drop-shadow(0 0 1cqi #ff4fa3); } 92%, 100% { transform: translate(-2cqi, -2cqi); opacity: 0; } }
+@keyframes split-bottom { 0%, 22% { transform: none; } 26%, 80% { transform: translate(2cqi, 2cqi);   filter: drop-shadow(0 0 1cqi #ff4fa3); } 92%, 100% { transform: translate(2cqi, 2cqi); opacity: 0; } }
+@keyframes hit-flash    { 0%, 21% { opacity: 0; } 23% { opacity: .9; } 28%, 100% { opacity: 0; } }

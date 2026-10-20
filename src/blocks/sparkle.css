@@ -1,0 +1,13 @@
+.stage-sparkle { background: #e8e0ff; }
+.fx-spark {
+  position: absolute; left: calc(var(--x) * 1cqi); top: calc(var(--y) * 1cqi);
+  width: 8cqi; aspect-ratio: 1; translate: -50% -50%; scale: 0;
+  background: #fff0b8;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);   /* 4 つ星 */
+}
+.fx-spark:nth-child(even) { background: #fff; }
+.play .fx-spark {
+  animation: twinkle-star calc(1.8s / var(--speed)) ease-in-out infinite;
+  animation-delay: calc(var(--d) * -1s / var(--speed));
+}
+@keyframes twinkle-star { 0%, 100% { scale: 0; rotate: 0deg; } 50% { scale: 1; rotate: 90deg; } }

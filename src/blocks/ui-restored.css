@@ -1,0 +1,352 @@
+/* @@ hamburger */
+.stage-burger { background: #fff5f9; }
+.fx-burger { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 22cqi; height: 22cqi; border-radius: 50%; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .14); }
+.fx-burger i { position: absolute; left: 25%; width: 50%; height: 1.4cqi; top: calc(50% - .7cqi); border-radius: 1cqi; background: var(--ink); transition: translate .3s, rotate .3s, opacity .3s, scale .3s; }
+.fx-burger i:nth-child(1) { translate: 0 -4cqi; }
+.fx-burger i:nth-child(3) { translate: 0 4cqi; }
+.fx-burger.open i:nth-child(1) { translate: 0 0; rotate: 45deg; }     /* 実装：.open を付け外しするだけ */
+.fx-burger.open i:nth-child(2) { opacity: 0; scale: 0 1; }
+.fx-burger.open i:nth-child(3) { translate: 0 0; rotate: -45deg; }
+/* ---- デモ用の自動再生 ---- */
+.play .fx-burger i:nth-child(1) { animation: bg-top calc(3s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+.play .fx-burger i:nth-child(2) { animation: bg-mid calc(3s / var(--speed)) infinite; }
+.play .fx-burger i:nth-child(3) { animation: bg-bot calc(3s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+@keyframes bg-top { 0%, 25% { translate: 0 -4cqi; rotate: 0deg; } 40%, 70% { translate: 0 0; rotate: 45deg; }  85%, 100% { translate: 0 -4cqi; rotate: 0deg; } }
+@keyframes bg-mid { 0%, 25% { opacity: 1; scale: 1 1; }           40%, 70% { opacity: 0; scale: 0 1; }           85%, 100% { opacity: 1; scale: 1 1; } }
+@keyframes bg-bot { 0%, 25% { translate: 0 4cqi; rotate: 0deg; }  40%, 70% { translate: 0 0; rotate: -45deg; } 85%, 100% { translate: 0 4cqi; rotate: 0deg; } }
+
+/* @@ accordion */
+.stage-acc { background: #f0f7ff; }
+.fx-acc { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 60cqi; border-radius: 2.5cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; }
+.fx-acc .q { display: flex; justify-content: space-between; align-items: center; padding: 3cqi 3.5cqi; font: 700 3.8cqi/1 var(--font-body); color: var(--ink); }
+.fx-acc .q i { width: 2.2cqi; height: 2.2cqi; border-right: .5cqi solid #ff6fa8; border-bottom: .5cqi solid #ff6fa8; rotate: 45deg; translate: 0 -.6cqi; transition: rotate .3s, translate .3s; }
+.fx-acc .a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.2, .8, .2, 1); }   /* 0fr → 1fr で「高さ auto」を補間できる */
+.fx-acc .a > div { min-height: 0; overflow: hidden; }
+.fx-acc .a p { margin: 0; padding: 0 3.5cqi 3cqi; font: 400 3.2cqi/1.7 var(--font-body); color: #5f6f8f; }
+.fx-acc.open .a   { grid-template-rows: 1fr; }     /* 実装：.open を付け外し */
+.fx-acc.open .q i { rotate: 225deg; translate: 0 .4cqi; }
+/* ---- デモ用の自動再生 ---- */
+.play .fx-acc .a   { animation: acc-open calc(4s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-acc .q i { animation: acc-chev calc(4s / var(--speed)) infinite; }
+@keyframes acc-open { 0%, 20% { grid-template-rows: 0fr; } 32%, 70% { grid-template-rows: 1fr; } 82%, 100% { grid-template-rows: 0fr; } }
+@keyframes acc-chev { 0%, 20% { rotate: 45deg; translate: 0 -.6cqi; } 32%, 70% { rotate: 225deg; translate: 0 .4cqi; } 82%, 100% { rotate: 45deg; translate: 0 -.6cqi; } }
+
+/* @@ dropdown */
+.stage-dropdown { background: #fff; }
+.fx-dd { position: absolute; left: 50%; top: 14%; translate: -50% 0; }
+.fx-dd .tg { padding: 2.4cqi 5cqi; border-radius: 999px; background: var(--ink); color: #fff; font: 700 3.6cqi/1 var(--font-body); }
+.fx-dd .menu {
+  position: absolute; left: 0; top: calc(100% + 1.5cqi); width: 34cqi; padding: 1.5cqi; border-radius: 2.5cqi;
+  background: #fff; box-shadow: 0 3cqi 7cqi rgba(75, 74, 94, .16);
+  transform-origin: top left; transform: scale(.9); opacity: 0; transition: transform .25s, opacity .25s;
+}
+.fx-dd .menu b { display: block; padding: 2.2cqi 2.6cqi; border-radius: 1.5cqi; font: 500 3.3cqi/1 var(--font-body); color: var(--ink); opacity: 0; translate: -1cqi 0; }
+.fx-dd .menu b:nth-child(2) { background: #fff0f6; color: #ff6fa8; }
+.fx-dd.open .menu   { transform: scale(1); opacity: 1; }     /* 実装：.open を付け外し */
+.fx-dd.open .menu b { opacity: 1; translate: 0 0; }
+/* ---- デモ用の自動再生 ---- */
+.play .fx-dd .menu   { animation: dd-open calc(4s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+.play .fx-dd .menu b { animation: dd-item calc(4s / var(--speed)) ease-out infinite; animation-delay: calc(var(--i) * .06s / var(--speed)); }
+@keyframes dd-open { 0%, 15% { transform: scale(.9); opacity: 0; } 25%, 75% { transform: scale(1); opacity: 1; } 85%, 100% { transform: scale(.95); opacity: 0; } }
+@keyframes dd-item { 0%, 20% { opacity: 0; translate: -1cqi 0; } 30%, 75% { opacity: 1; translate: 0 0; } 85%, 100% { opacity: 0; } }
+
+/* @@ modal */
+.stage-modal { background: #fff0f6; }
+.fx-backdrop { position: absolute; inset: 0; background: rgba(75, 74, 94, .45); opacity: 0; }
+.fx-modal {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 52cqi; padding: 4cqi; border-radius: 3cqi;
+  background: #fff; box-shadow: 0 4cqi 10cqi rgba(75, 74, 94, .25); text-align: center;
+  opacity: 0; transform: scale(.92) translateY(2cqi);
+}
+.fx-modal strong { display: block; font: 700 4.1cqi/1.3 var(--font-display); color: var(--ink); white-space: nowrap; }
+.fx-modal p { margin: 1.5cqi 0 3cqi; font: 400 3cqi/1.6 var(--font-body); color: #5f6f8f; }
+.fx-modal b { display: inline-block; padding: 2cqi 5cqi; border-radius: 999px; background: linear-gradient(135deg, #ff8fb8, #c9b8ff); color: #fff; font: 700 3.2cqi/1 var(--font-body); }
+/* ---- デモ用の自動再生 ---- */
+.play .fx-backdrop { animation: bd-fade   calc(4.5s / var(--speed)) infinite; }
+.play .fx-modal    { animation: modal-pop calc(4.5s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+@keyframes bd-fade   { 0%, 10% { opacity: 0; } 20%, 78% { opacity: 1; } 88%, 100% { opacity: 0; } }
+@keyframes modal-pop { 0%, 12% { opacity: 0; transform: scale(.92) translateY(2cqi); } 24%, 76% { opacity: 1; transform: none; } 88%, 100% { opacity: 0; transform: scale(.96) translateY(1cqi); } }
+
+/* ---- 実装：<dialog> なら @starting-style で「開く時」のアニメーションが CSS だけで書ける ---- */
+dialog.fx-dialog { opacity: 0; transform: scale(.92) translateY(8px); transition: opacity .3s, transform .3s, overlay .3s allow-discrete, display .3s allow-discrete; }
+dialog.fx-dialog[open] { opacity: 1; transform: none; }
+@starting-style { dialog.fx-dialog[open] { opacity: 0; transform: scale(.92) translateY(8px); } }
+dialog.fx-dialog::backdrop { background: rgba(75, 74, 94, .45); }
+
+/* @@ toast */
+.stage-toast { background: #f0f7ff; }
+.fx-toast {
+  position: absolute; right: 4cqi; bottom: 4cqi; display: flex; align-items: center; gap: 2cqi; padding: 2.6cqi 3.4cqi;
+  border-radius: 2cqi; background: #fff; box-shadow: 0 2cqi 6cqi rgba(75, 74, 94, .18);
+  font: 700 3.3cqi/1.3 var(--font-body); color: var(--ink); overflow: hidden;
+  translate: 120% 0;
+}
+.fx-toast i { width: 4cqi; height: 4cqi; border-radius: 50%; background: #9fe3cd; display: grid; place-items: center; color: #fff; font-size: 2.6cqi; font-style: normal; }
+.fx-toast::after { content: ""; position: absolute; left: 0; bottom: 0; height: .7cqi; width: 100%; background: linear-gradient(90deg, #9fe3cd, #8fd0ff); transform-origin: left; }   /* 残り時間 */
+.play .fx-toast        { animation: toast-in   calc(4.5s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+.play .fx-toast::after { animation: toast-life calc(4.5s / var(--speed)) linear infinite; }
+@keyframes toast-in   { 0%, 8% { translate: 120% 0; } 20%, 80% { translate: 0 0; } 90%, 100% { translate: 120% 0; } }
+@keyframes toast-life { 0%, 20% { transform: scaleX(1); } 80%, 100% { transform: scaleX(0); } }
+
+/* @@ tooltip */
+.stage-tooltip { background: #fff5f9; }
+.fx-tipwrap { position: absolute; left: 50%; top: 56%; translate: -50% -50%; }
+.fx-tipwrap .tg { width: 12cqi; height: 12cqi; border-radius: 50%; background: #fff; border: .5cqi solid #ff8fb8; display: grid; place-items: center; font: 700 6cqi/1 var(--font-en); color: #ff6fa8; }
+.fx-tip {
+  position: absolute; left: 50%; bottom: calc(100% + 2.5cqi); translate: -50% 0; padding: 2cqi 3cqi; border-radius: 1.8cqi;
+  background: var(--ink); color: #fff; font: 500 3cqi/1.4 var(--font-body); white-space: nowrap;
+  transform-origin: bottom center; transform: scale(.8) translateY(1cqi); opacity: 0; transition: transform .25s, opacity .25s;
+}
+.fx-tip::after { content: ""; position: absolute; left: 50%; top: 100%; translate: -50% 0; border: 1.4cqi solid transparent; border-top-color: var(--ink); }   /* しっぽ */
+.fx-tipwrap:hover .fx-tip { transform: none; opacity: 1; }   /* 実装はこれだけ */
+/* ---- デモ用の自動再生 ---- */
+.play .fx-tip { animation: tip-pop calc(3.6s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+@keyframes tip-pop { 0%, 15% { transform: scale(.8) translateY(1cqi); opacity: 0; } 28%, 75% { transform: none; opacity: 1; } 88%, 100% { transform: scale(.9) translateY(.5cqi); opacity: 0; } }
+
+/* @@ checkbox */
+.stage-check { background: #fff; }
+.fx-todo { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; gap: 3cqi; }
+.fx-todo label { position: relative; display: flex; align-items: center; gap: 2.5cqi; font: 500 3.8cqi/1 var(--font-body); color: var(--ink); }
+.fx-todo .box { width: 5cqi; height: 5cqi; border-radius: 1.4cqi; border: .5cqi solid #ff8fb8; background: #fff; display: grid; place-items: center; transition: background .2s; }
+.fx-todo .box i { width: 1.4cqi; height: 2.6cqi; border-right: .6cqi solid #fff; border-bottom: .6cqi solid #fff; rotate: 45deg; translate: 0 -.3cqi; scale: 0; transition: scale .3s cubic-bezier(.3, 1.5, .5, 1); }
+.fx-todo label::after { content: ""; position: absolute; left: 7.5cqi; right: 0; top: 50%; height: .4cqi; background: #c9b8ff; transform: scaleX(0); transform-origin: left; transition: transform .3s; }   /* 取り消し線 */
+/* 実装：input:checked + .box { background: #ff8fb8 }  input:checked + .box i { scale: 1 } など */
+.play .fx-todo .box         { animation: box-fill  calc(4.8s / var(--speed)) infinite;                                   animation-delay: calc(var(--i) * .7s / var(--speed)); }
+.play .fx-todo .box i       { animation: check-pop calc(4.8s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite;    animation-delay: calc(var(--i) * .7s / var(--speed)); }
+.play .fx-todo label::after { animation: strike    calc(4.8s / var(--speed)) ease-out infinite;                        animation-delay: calc(var(--i) * .7s / var(--speed)); }
+@keyframes box-fill  { 0%, 15% { background: #fff; } 20%, 72% { background: #ff8fb8; } 80%, 100% { background: #fff; } }
+@keyframes check-pop { 0%, 15% { scale: 0; } 24%, 72% { scale: 1; } 80%, 100% { scale: 0; } }
+@keyframes strike    { 0%, 18% { transform: scaleX(0); } 30%, 72% { transform: scaleX(1); } 80%, 100% { transform: scaleX(0); } }
+
+/* @@ form-shake */
+.stage-form { background: #f4f0ff; }
+.fx-field { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 56cqi; }
+.fx-field .in  { padding: 3cqi 3.5cqi; border-radius: 2cqi; background: #fff; border: .5cqi solid #e8e0ff; font: 500 3.6cqi/1 var(--font-body); color: #a39fb3; }
+.fx-field .err { margin-top: 1.4cqi; font: 700 2.9cqi/1.4 var(--font-body); color: #ff5b8a; opacity: 0; translate: 0 -1cqi; transition: opacity .25s, translate .25s; }
+.fx-field.invalid .in  { border-color: #ff5b8a; animation: shake-x .4s; }   /* 実装：.invalid を付ける */
+.fx-field.invalid .err { opacity: 1; translate: 0 0; }
+@keyframes shake-x { 0%, 100% { translate: 0 0; } 20%, 60% { translate: -1.2cqi 0; } 40%, 80% { translate: 1.2cqi 0; } }
+/* ---- デモ用の自動再生 ---- */
+.play .fx-field .in  { animation: field-err calc(4s / var(--speed)) infinite; }
+.play .fx-field .err { animation: err-show  calc(4s / var(--speed)) infinite; }
+@keyframes field-err {
+  0%, 25%   { border-color: #e8e0ff; translate: 0 0; }
+  27%       { border-color: #ff5b8a; translate: -1.2cqi 0; }
+  29%       { translate: 1.2cqi 0; }
+  31%       { translate: -1cqi 0; }
+  33%       { translate: 1cqi 0; }
+  35%, 78%  { border-color: #ff5b8a; translate: 0 0; }
+  88%, 100% { border-color: #e8e0ff; }
+}
+@keyframes err-show { 0%, 27% { opacity: 0; translate: 0 -1cqi; } 35%, 78% { opacity: 1; translate: 0 0; } 88%, 100% { opacity: 0; } }
+
+/* @@ toggle */
+.stage-toggle { background: #fffaf0; }
+.fx-toggle { position: absolute; left: 50%; top: 50%; width: 32cqi; height: 16cqi; translate: -50% -50%; border-radius: 8cqi; border: .3cqi solid var(--ink); background: #e9e3f2; }
+.fx-toggle i { position: absolute; left: 1.2cqi; top: 1.2cqi; width: 11.2cqi; aspect-ratio: 1; border-radius: 50%; background: #fff; border: .3cqi solid var(--ink); }
+.play .fx-toggle   { animation: toggle-track calc(3s / var(--speed)) ease infinite; }
+.play .fx-toggle i { animation: toggle-knob  calc(3s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+@keyframes toggle-track { 0%, 30% { background: #e9e3f2; } 40%, 70% { background: #9fe3cd; } 80%, 100% { background: #e9e3f2; } }
+@keyframes toggle-knob  { 0%, 30% { translate: 0 0; }        40%, 70% { translate: 16cqi 0; }    80%, 100% { translate: 0 0; } }
+
+/* @@ dots-loader */
+.stage-dots { background: #fff5e8; }
+.fx-dotsl { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; gap: 3cqi; }
+.fx-dotsl i { width: 8cqi; aspect-ratio: 1; border-radius: 50%; border: .3cqi solid var(--ink); background: #ff8fb8; }
+.fx-dotsl i:nth-child(2) { background: #ffd45e; }
+.fx-dotsl i:nth-child(3) { background: #6fbcff; }
+.play .fx-dotsl i {
+  animation: dot-bounce calc(.6s / var(--speed)) ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -.2s / var(--speed));
+}
+@keyframes dot-bounce { from { translate: 0 3cqi; scale: 1.1 .9; } to { translate: 0 -4cqi; scale: .95 1.05; } }
+
+/* @@ ring-loader */
+.stage-ring { background: #e8e0ff; }
+.fx-loop { position: absolute; left: 50%; top: 50%; translate: -50% -50%; aspect-ratio: 1; border-radius: 50%; }
+.fx-loop.r1   { width: 36cqi; border: 1cqi dashed #ff8fb8; }
+.fx-loop.r2   { width: 26cqi; border: 1cqi solid transparent; border-top-color: #6fbcff; border-bottom-color: #6fbcff; }
+.fx-loop.r3   { width: 16cqi; border: 1cqi dotted #ffd45e; }
+.fx-loop.core { width: 8cqi;  background: var(--ink); }
+.play .fx-loop.r1   { animation: spin  calc(6s / var(--speed)) linear infinite; }
+.play .fx-loop.r2   { animation: spin  calc(2s / var(--speed)) linear infinite reverse; }
+.play .fx-loop.r3   { animation: spin  calc(3s / var(--speed)) linear infinite; }
+.play .fx-loop.core { animation: pulse calc(1s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes spin  { to { rotate: 360deg; } }
+@keyframes pulse { from { scale: .8; } to { scale: 1.2; } }
+
+/* @@ shimmer */
+.stage-shimmer { background: #fff; }
+.fx-skel { position: absolute; inset: 0; display: grid; grid-template-columns: 16cqi 1fr; gap: 2cqi 3cqi; align-content: center; padding: 0 14%; }
+.fx-skel i {
+  display: block; border-radius: 2cqi;
+  background: linear-gradient(90deg, #efe6d6 0 40%, #fff7fb 50%, #efe6d6 60% 100%) 100% 0 / 300% 100%;
+}
+.fx-skel .av   { grid-row: 1 / 4; aspect-ratio: 1; border-radius: 50%; }
+.fx-skel .ln   { height: 3.5cqi; }
+.fx-skel .ln.s { width: 60%; }
+.play .fx-skel i { animation: shimmer calc(1.4s / var(--speed)) linear infinite; }
+@keyframes shimmer { to { background-position: -50% 0; } }   /* ハイライトが左から右へ通り過ぎる */
+
+/* @@ progress */
+.stage-progress { background: #effaf4; }
+.fx-track { position: absolute; left: 12%; right: 12%; top: 50%; height: 9cqi; translate: 0 -50%; border-radius: 5cqi; border: .3cqi solid var(--ink); background: #fff; overflow: hidden; }
+.fx-fill  { height: 100%; width: 0; border-radius: inherit; background: repeating-linear-gradient(-45deg, #6fd3b3 0 3cqi, #9fe3cd 3cqi 6cqi) 0 0 / 8.49cqi 100%; }
+.fx-pct   { position: absolute; left: 50%; top: 24%; translate: -50% 0; font: 700 7cqi/1 var(--font-en); color: var(--ink); counter-reset: n var(--n); }
+.fx-pct::before { content: counter(n) "%"; }
+.play .fx-fill {
+  animation:
+    fill-up      calc(4s / var(--speed)) cubic-bezier(.2, .8, .3, 1) infinite,
+    stripes-move calc(.6s / var(--speed)) linear infinite;
+}
+.play .fx-pct { animation: count-up calc(4s / var(--speed)) cubic-bezier(.2, .8, .3, 1) infinite; }
+@keyframes fill-up      { 0%, 10% { width: 0; } 70%, 100% { width: 100%; } }
+@keyframes stripes-move { to { background-position: 8.49cqi 0; } }   /* 6cqi ÷ cos(45deg) */
+@keyframes count-up     { 0%, 10% { --n: 0; } 70%, 100% { --n: 100; } }
+
+/* @@ tabs */
+.stage-tabs { background: #fff; }
+.fx-tabs { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 60cqi; }
+.fx-tabs .bar { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: .4cqi solid #ffd3e3; }
+.fx-tabs .bar span { padding: 2.2cqi 0; text-align: center; font: 700 3.4cqi/1 var(--font-body); color: #8a879c; }
+.fx-tabs .bar i { position: absolute; left: 0; bottom: -.4cqi; width: 33.333%; height: .6cqi; border-radius: 1cqi; background: #ff6fa8; transition: translate .4s cubic-bezier(.3, 1.2, .4, 1); }   /* 下線は 1 本だけ */
+.fx-tabs .panes { position: relative; height: 16cqi; overflow: hidden; }
+.fx-tabs .panes div { position: absolute; inset: 0; padding: 3cqi 1cqi 0; display: grid; gap: 1.6cqi; align-content: start; opacity: 0; }
+.fx-tabs .panes b { display: block; height: 2cqi; border-radius: 1cqi; background: #e8e0ff; }
+.fx-tabs .panes b:nth-child(2) { width: 80%; }
+.fx-tabs .panes b:nth-child(3) { width: 55%; }
+.fx-tabs .panes div:nth-child(2) b { background: #d7eeff; }
+.fx-tabs .panes div:nth-child(3) b { background: #ffd3e3; }
+/* 実装：選択中の index で下線を translate: calc(index * 100%) 0、パネルは .active だけ opacity: 1 */
+.play .fx-tabs .bar i     { animation: tab-ind    calc(6s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+.play .fx-tabs .bar span  { animation: tab-active calc(6s / var(--speed)) infinite; animation-delay: calc(var(--i) * 2s / var(--speed)); }
+.play .fx-tabs .panes div { animation: tab-pane   calc(6s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: calc(var(--i) * 2s / var(--speed)); }
+@keyframes tab-ind    { 0%, 28% { translate: 0 0; } 33%, 61% { translate: 100% 0; } 66%, 95% { translate: 200% 0; } 100% { translate: 0 0; } }
+@keyframes tab-active { 0%, 28% { color: #4b4a5e; } 33%, 100% { color: #8a879c; } }
+@keyframes tab-pane   { 0% { translate: 3cqi 0; opacity: 0; } 5%, 28% { translate: 0 0; opacity: 1; } 33%, 100% { translate: -3cqi 0; opacity: 0; } }
+
+/* @@ search-expand */
+.stage-search { background: #f4f0ff; }
+.fx-search { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; align-items: center; height: 11cqi; width: 11cqi; border-radius: 999px; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; transition: width .4s cubic-bezier(.2, .8, .2, 1); }
+.fx-search i { position: relative; flex: none; width: 11cqi; height: 11cqi; display: grid; place-items: center; }
+.fx-search i::before { content: ""; width: 3.6cqi; height: 3.6cqi; border: .6cqi solid var(--ink); border-radius: 50%; translate: -.6cqi -.6cqi; }   /* 虫めがね */
+.fx-search i::after  { content: ""; position: absolute; width: 2.2cqi; height: .6cqi; background: var(--ink); rotate: 45deg; translate: 1.8cqi 1.8cqi; }
+.fx-search span { white-space: nowrap; font: 500 3.4cqi/1 var(--font-body); color: #a39fb3; opacity: 0; transition: opacity .3s .15s; }
+.fx-search.open { width: 48cqi; }
+.fx-search.open span { opacity: 1; }   /* 実装：クリックや :focus-within で .open */
+/* ---- デモ用の自動再生 ---- */
+.play .fx-search      { animation: search-open calc(4s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-search span { animation: search-ph   calc(4s / var(--speed)) infinite; }
+@keyframes search-open { 0%, 20% { width: 11cqi; } 35%, 75% { width: 48cqi; } 90%, 100% { width: 11cqi; } }
+@keyframes search-ph   { 0%, 30% { opacity: 0; } 40%, 72% { opacity: 1; } 80%, 100% { opacity: 0; } }
+
+/* @@ rating */
+.stage-rating { background: #fffaf0; }
+.fx-rate { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; gap: 1.5cqi; font-size: 10cqi; line-height: 1; }
+.fx-rate i { font-style: normal; color: #e8e0ff; transition: color .2s, scale .3s cubic-bezier(.3, 1.6, .5, 1); }
+.fx-rate i.on { color: #ffd45e; }   /* 実装：選んだ数だけ .on を付ける */
+/* ---- デモ用の自動再生 ---- */
+.play .fx-rate i { animation: star-on calc(4s / var(--speed)) cubic-bezier(.3, 1.6, .5, 1) infinite; animation-delay: calc(var(--i) * .18s / var(--speed)); }
+@keyframes star-on { 0%, 15% { color: #e8e0ff; scale: 1; } 22% { color: #ffd45e; scale: 1.35; } 30%, 75% { color: #ffd45e; scale: 1; } 85%, 100% { color: #e8e0ff; scale: 1; } }
+
+/* @@ pager-dots */
+.stage-pager { background: #fff; }
+.fx-slides { position: absolute; left: 50%; top: 44%; translate: -50% -50%; width: 56cqi; height: 28cqi; border-radius: 3cqi; overflow: hidden; }
+.fx-slides .track { display: flex; width: 300%; height: 100%; }
+.fx-slides .ph { width: 33.333%; height: 100%; }
+.fx-slides .ph:nth-child(2) { filter: hue-rotate(60deg); }
+.fx-slides .ph:nth-child(3) { filter: hue-rotate(-80deg); }
+.fx-pager { position: absolute; left: 50%; top: 84%; translate: -50% -50%; display: flex; gap: 1.5cqi; }
+.fx-pager i { width: 2.4cqi; height: 2.4cqi; border-radius: 999px; background: #e8e0ff; transition: width .3s, background .3s; }
+.fx-pager i.on { width: 7cqi; background: #ff6fa8; }   /* 現在のドットだけ横に伸びる */
+/* ---- デモ用の自動再生 ---- */
+.play .fx-slides .track { animation: slide-track calc(6s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-pager i       { animation: dot-on      calc(6s / var(--speed)) infinite; animation-delay: calc(var(--i) * 2s / var(--speed)); }
+@keyframes slide-track { 0%, 28% { translate: 0 0; } 33%, 61% { translate: -33.333% 0; } 66%, 95% { translate: -66.666% 0; } 100% { translate: 0 0; } }
+@keyframes dot-on      { 0%, 28% { width: 7cqi; background: #ff6fa8; } 33%, 100% { width: 2.4cqi; background: #e8e0ff; } }
+
+/* @@ floating-label */
+.stage-flabel { background: #f0f7ff; }
+.fx-fl { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 56cqi; }
+.fx-fl .box { position: relative; height: 12cqi; border-radius: 2cqi; background: #fff; border: .5cqi solid #e8e0ff; transition: border-color .3s; }
+.fx-fl label { position: absolute; left: 3.5cqi; top: 50%; translate: 0 -50%; padding: 0 .5cqi; background: #fff; font: 500 3.6cqi/1 var(--font-body); color: #a39fb3; transform-origin: left; transition: translate .25s, scale .25s, color .25s; }
+.fx-fl .val { position: absolute; left: 4cqi; top: 50%; translate: 0 -50%; font: 500 3.6cqi/1 var(--font-body); color: var(--ink); clip-path: inset(0 100% 0 0); }
+.fx-fl .box:focus-within { border-color: #ff8fb8; }
+.fx-fl .box:focus-within label, .fx-fl .box.filled label { translate: 0 -7.8cqi; scale: .75; color: #ff6fa8; }   /* ラベルが枠線の上へ逃げる */
+/* ---- デモ用の自動再生 ---- */
+.play .fx-fl .box   { animation: fl-border calc(5s / var(--speed)) infinite; }
+.play .fx-fl label  { animation: fl-label  calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-fl .val   { animation: fl-type   calc(5s / var(--speed)) steps(17) infinite; }
+@keyframes fl-border { 0%, 15% { border-color: #e8e0ff; } 20%, 85% { border-color: #ff8fb8; } 95%, 100% { border-color: #e8e0ff; } }
+@keyframes fl-label  { 0%, 15% { translate: 0 -50%; scale: 1; color: #a39fb3; } 22%, 88% { translate: 0 -7.8cqi; scale: .75; color: #ff6fa8; } 95%, 100% { translate: 0 -50%; scale: 1; color: #a39fb3; } }
+@keyframes fl-type   { 0%, 25% { clip-path: inset(0 100% 0 0); } 60%, 88% { clip-path: inset(0 0 0 0); } 95%, 100% { clip-path: inset(0 100% 0 0); } }
+
+/* @@ submit-state */
+.stage-submit { background: #effaf4; }
+.fx-sub { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 36cqi; height: 11cqi; border-radius: 999px; background: var(--ink); color: #fff; display: grid; place-items: center; overflow: hidden; }
+.fx-sub > * { grid-area: 1 / 1; }   /* 3 つを同じ場所に重ねる */
+.fx-sub .t  { font: 700 3.6cqi/1 var(--font-body); }
+.fx-sub .sp { width: 5cqi; height: 5cqi; border: .6cqi solid rgba(255, 255, 255, .35); border-top-color: #fff; border-radius: 50%; opacity: 0; }
+.fx-sub .ok { width: 2cqi; height: 3.6cqi; border-right: .7cqi solid #fff; border-bottom: .7cqi solid #fff; rotate: 45deg; translate: 0 -.5cqi; scale: 0; }
+/* 実装：.loading で幅を縮めてスピナー表示、.done で緑にしてチェック表示 */
+.play .fx-sub     { animation: sub-bg   calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-sub .t  { animation: sub-text calc(5s / var(--speed)) infinite; }
+.play .fx-sub .sp { animation: sub-spin calc(.8s / var(--speed)) linear infinite, sub-spin-show calc(5s / var(--speed)) infinite; }
+.play .fx-sub .ok { animation: sub-ok   calc(5s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; }
+@keyframes sub-bg        { 0%, 20% { background: #4b4a5e; width: 36cqi; } 30%, 55% { background: #4b4a5e; width: 11cqi; } 62%, 88% { background: #6fd3b3; width: 36cqi; } 95%, 100% { background: #4b4a5e; width: 36cqi; } }
+@keyframes sub-text      { 0%, 22% { opacity: 1; } 26%, 95% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes sub-spin      { to { rotate: 360deg; } }
+@keyframes sub-spin-show { 0%, 26% { opacity: 0; } 30%, 55% { opacity: 1; } 58%, 100% { opacity: 0; } }
+@keyframes sub-ok        { 0%, 58% { scale: 0; } 66%, 88% { scale: 1; } 95%, 100% { scale: 0; } }
+
+/* @@ ring-progress */
+.stage-ringprog { background: #fff5f9; }
+.fx-ring-p {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 30cqi; aspect-ratio: 1; border-radius: 50%;
+  background: conic-gradient(#ff6fa8 calc(var(--n) * 1%), #ffd3e3 0);   /* --n % まで塗る */
+  display: grid; place-items: center; counter-reset: n var(--n);
+}
+.fx-ring-p::before { content: ""; position: absolute; inset: 3cqi; border-radius: 50%; background: #fff; }   /* 内側を白で抜いてリングに */
+.fx-ring-p::after  { content: counter(n) "%"; position: relative; font: 700 7cqi/1 var(--font-en); color: var(--ink); }
+.play .fx-ring-p { animation: ring-fill calc(4s / var(--speed)) cubic-bezier(.2, .8, .3, 1) infinite; }
+@keyframes ring-fill { 0%, 10% { --n: 0; } 70%, 100% { --n: 72; } }
+
+/* @@ drawer */
+.stage-drawer { background: #f0f7ff; }
+.fx-dr-page { position: absolute; inset: 0; }
+.fx-dr-page .hd { height: 9cqi; background: #fff; display: flex; align-items: center; padding: 0 4cqi; gap: 2cqi; }
+.fx-dr-page .hd i { width: 5cqi; height: .7cqi; background: var(--ink); border-radius: 1cqi; box-shadow: 0 -1.6cqi 0 var(--ink), 0 1.6cqi 0 var(--ink); }
+.fx-dr-page .bd { padding: 4cqi; display: grid; gap: 2cqi; }
+.fx-dr-page .bd b { display: block; height: 2cqi; border-radius: 1cqi; background: #d7eeff; }
+.fx-dr-page .bd b:nth-child(2) { width: 70%; }
+.fx-dr-shade { position: absolute; inset: 0; background: rgba(75, 74, 94, .45); opacity: 0; transition: opacity .3s; }
+.fx-dr { position: absolute; left: 0; top: 0; bottom: 0; width: 40cqi; background: #fff; box-shadow: 1cqi 0 4cqi rgba(75, 74, 94, .2); translate: -100% 0; padding: 5cqi 4cqi; display: grid; gap: 2.4cqi; align-content: start; transition: translate .4s cubic-bezier(.2, .8, .2, 1); }
+.fx-dr b { display: block; font: 700 3.4cqi/1 var(--font-body); color: var(--ink); opacity: 0; translate: -1cqi 0; }
+.fx-dr b:first-child { color: #ff6fa8; }
+/* 実装：.open で translate: 0 0、shade は opacity: 1 */
+.play .fx-dr       { animation: dr-in    calc(4.5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-dr-shade { animation: dr-shade calc(4.5s / var(--speed)) infinite; }
+.play .fx-dr b     { animation: dr-item  calc(4.5s / var(--speed)) ease-out infinite; animation-delay: calc(var(--i) * .07s / var(--speed)); }
+@keyframes dr-in    { 0%, 12% { translate: -100% 0; } 25%, 75% { translate: 0 0; } 88%, 100% { translate: -100% 0; } }
+@keyframes dr-shade { 0%, 12% { opacity: 0; } 25%, 75% { opacity: 1; } 88%, 100% { opacity: 0; } }
+@keyframes dr-item  { 0%, 22% { opacity: 0; translate: -1cqi 0; } 32%, 75% { opacity: 1; translate: 0 0; } 85%, 100% { opacity: 0; } }
+
+/* @@ theme-switch */
+.stage-theme { background: #fff; }
+.fx-theme { position: absolute; inset: 0; background: #fffaf0; transition: background .5s; }
+.fx-theme .sw { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 30cqi; height: 14cqi; border-radius: 999px; background: #ffe59a; transition: background .5s; }
+.fx-theme .sw i { position: absolute; left: 1.5cqi; top: 1.5cqi; width: 11cqi; height: 11cqi; border-radius: 50%; background: #ffd45e; box-shadow: inset 0 0 0 0 #fff; transition: translate .5s cubic-bezier(.3, 1.3, .5, 1), background .5s, box-shadow .5s; }
+.fx-theme .lbl { position: absolute; left: 50%; top: 74%; translate: -50% 0; font: 700 3.4cqi/1 var(--font-en); letter-spacing: .2em; color: var(--ink); transition: color .5s; }
+/* 実装：html[data-theme="dark"] で各色を切り替え、transition で滑らかに。太陽→月は inset の box-shadow で */
+.play .fx-theme      { animation: th-bg    calc(5s / var(--speed)) ease-in-out infinite; }
+.play .fx-theme .sw  { animation: th-track calc(5s / var(--speed)) ease-in-out infinite; }
+.play .fx-theme .sw i{ animation: th-knob  calc(5s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+.play .fx-theme .lbl { animation: th-lbl   calc(5s / var(--speed)) ease-in-out infinite; }
+@keyframes th-bg    { 0%, 25% { background: #fffaf0; } 40%, 70% { background: #2b2f6b; } 85%, 100% { background: #fffaf0; } }
+@keyframes th-track { 0%, 25% { background: #ffe59a; } 40%, 70% { background: #4b4a8e; } 85%, 100% { background: #ffe59a; } }
+@keyframes th-knob  {
+  0%, 25%   { translate: 0 0;     background: #ffd45e; box-shadow: inset 0 0 0 0 #fff; }
+  40%, 70%  { translate: 16cqi 0; background: #fff6cf; box-shadow: inset -3cqi 1.5cqi 0 #4b4a8e; }   /* 月 */
+  85%, 100% { translate: 0 0;     background: #ffd45e; box-shadow: inset 0 0 0 0 #fff; }
+}
+@keyframes th-lbl   { 0%, 25% { color: #4b4a5e; } 40%, 70% { color: #fff; } 85%, 100% { color: #4b4a5e; } }

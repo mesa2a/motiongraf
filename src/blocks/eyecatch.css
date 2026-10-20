@@ -1,0 +1,30 @@
+.stage-eyecatch { background: #c6d3de; }
+.fx-ec-bg { position: absolute; inset: 0; background: #ffe3ef; clip-path: circle(0% at 50% 50%); }
+.fx-ec-logo { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 1.5cqi; transform: scale(0); }
+.fx-ec-logo strong { font: 700 9cqi/1.15 var(--font-en); letter-spacing: .2em; color: #ff6fa8; text-align: center; }
+.fx-ec-logo small  { font: 700 3cqi/1 var(--font-en); letter-spacing: .4em; color: var(--ink); }
+.fx-ec-dots { position: absolute; left: 50%; bottom: 10%; translate: -50% 0; display: flex; gap: 2cqi; }
+.fx-ec-dots i { width: 3cqi; aspect-ratio: 1; border-radius: 50%; background: #ff8fab; opacity: 0; }
+
+.play .fx-ec-bg                  { animation: ec-wipe calc(4.5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+.play .fx-ec-logo                { animation: ec-logo calc(4.5s / var(--speed)) cubic-bezier(.3, 1.4, .5, 1) infinite; }
+.play .fx-ec-dots i              { animation: ec-dot  calc(4.5s / var(--speed)) infinite; }
+.play .fx-ec-dots i:nth-child(2) { animation-delay: calc(.2s / var(--speed)); }
+.play .fx-ec-dots i:nth-child(3) { animation-delay: calc(.4s / var(--speed)); }
+
+@keyframes ec-wipe {
+  0%, 5%    { clip-path: circle(0% at 50% 50%); }
+  18%, 82%  { clip-path: circle(75% at 50% 50%); }   /* 丸ワイプで開く */
+  95%, 100% { clip-path: circle(0% at 50% 50%); }
+}
+@keyframes ec-logo {
+  0%, 14%   { transform: scale(0) rotate(-10deg); }
+  26%       { transform: scale(1.08) rotate(2deg); }
+  32%, 80%  { transform: scale(1) rotate(0deg); }
+  88%, 100% { transform: scale(0) rotate(0deg); }
+}
+@keyframes ec-dot {
+  0%, 30%   { opacity: 0; translate: 0 1cqi; }
+  36%, 78%  { opacity: 1; translate: 0 0; }
+  84%, 100% { opacity: 0; }
+}

@@ -1,0 +1,10 @@
+.stage-type { background: #fffaf0; }
+.fx-tw { position: absolute; inset: 0; display: grid; place-items: center start; padding-left: 10%; margin: 0; font: 700 7.5cqi/1.3 var(--font-display); color: var(--ink); }
+.fx-tw span { display: inline-block; width: 0; overflow: hidden; white-space: nowrap; border-right: .3cqi solid var(--ink); }
+.play .fx-tw span {
+  animation:
+    tw-type  calc(4.5s / var(--speed)) steps(10) infinite,   /* 10 文字 */
+    tw-caret calc(.7s / var(--speed)) step-end infinite;
+}
+@keyframes tw-type  { 0%, 8% { width: 0; } 55%, 100% { width: 10em; } }   /* 全角 1 文字 = 1em */
+@keyframes tw-caret { 50% { border-color: transparent; } }

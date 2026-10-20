@@ -1,0 +1,12 @@
+.stage-snow { background: linear-gradient(#e4f0fb, #f0f7ff); }
+.fx-snow {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle, #fff 1.2cqi, transparent 1.3cqi) 0 0 / 20cqi 20cqi,
+    radial-gradient(circle, #fff .8cqi,  transparent .9cqi)  7cqi 11cqi / 26cqi 26cqi,
+    radial-gradient(circle, #fff .5cqi,  transparent .6cqi)  13cqi 4cqi / 14cqi 14cqi;
+}
+.fx-snowhill { position: absolute; left: -10%; right: -10%; bottom: -16cqi; height: 26cqi; border-radius: 50%; background: #fff; border-top: .6cqi solid rgba(75, 74, 94, .15); }
+.play .fx-snow { animation: snowfall calc(6s / var(--speed)) linear infinite; }
+/* 各レイヤーをタイル 1 枚分だけ下へ。タイルの大きさが違うので速度差が出る */
+@keyframes snowfall { to { background-position: 0 20cqi, 7cqi 37cqi, 13cqi 18cqi; } }

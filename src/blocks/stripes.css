@@ -1,0 +1,4 @@
+.stage-stripes { background: #fff; }
+.fx-stripes { position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, #ffd3e3 0 4cqi, #fff 4cqi 8cqi) 0 0 / 11.314cqi 100%; }
+.play .fx-stripes { animation: stripes-slide calc(1s / var(--speed)) linear infinite; }
+@keyframes stripes-slide { to { background-position: 11.314cqi 0; } }   /* 8cqi ÷ cos(45deg) */

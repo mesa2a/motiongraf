@@ -1,0 +1,14 @@
+.stage-slices { background: #d7eeff; }
+.fx-slices { position: absolute; inset: 0; display: grid; grid-auto-rows: 1fr; }
+.fx-slices i { background: #ffd3e3; translate: -100% 0; }
+.fx-slices i:nth-child(even) { translate: 100% 0; }
+.fx-slices i:nth-child(odd)  { border-bottom: .3cqi solid var(--ink); }
+.play .fx-slices i {
+  animation: slice-l calc(3.6s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite;
+  animation-delay: calc(var(--i) * .08s / var(--speed));
+}
+.play .fx-slices i:nth-child(even) { animation-name: slice-r; }   /* 偶数段は逆方向 */
+.play.stage-slices .fx-scene.b     { animation: scene-swap calc(3.6s / var(--speed)) steps(1) infinite; }
+@keyframes slice-l { 0%, 8% { translate: -100% 0; } 30%, 62% { translate: 0 0; } 86%, 100% { translate: 100% 0; } }
+@keyframes slice-r { 0%, 8% { translate: 100% 0; }  30%, 62% { translate: 0 0; } 86%, 100% { translate: -100% 0; } }
+@keyframes scene-swap { 0%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }

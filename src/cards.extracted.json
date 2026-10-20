@@ -1,0 +1,774 @@
+{
+  "_common": {
+    "id": "_common",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "共通パーツ",
+    "en": ".stage / .fx-face など",
+    "tags": [
+      "container-type",
+      "radial-gradient",
+      "@property"
+    ],
+    "stage": "",
+    "desc": "すべての演出の土台。<code>.stage</code> は 16:9 の箱で、<code>container-type</code> を指定して <code>cqi</code>（幅の 1%）で寸法を書けるようにしています。主役の「まるちゃん」<code>.fx-face</code> は 1 枚の div に <code>radial-gradient</code> で目を描いたもの。中央寄せは <code>translate: -50% -50%</code> の個別プロパティで行い、動きの <code>rotate</code> や <code>scale</code> と干渉しないようにしています。白フラッシュ、カメラ、画面転換の前後シーン、3D の箱もここにまとめてあります。"
+  },
+  "float": {
+    "id": "float",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "ふわふわ浮遊",
+    "en": "Float",
+    "tags": [
+      "alternate",
+      "ease-in-out",
+      "影を同期"
+    ],
+    "stage": "<div class=\"stage stage-float\" aria-hidden=\"true\">\n  <div class=\"fx-shadow\"></div>\n  <div class=\"fx-face\"></div>\n</div>",
+    "desc": "いちばん基本の「生きてる感」。<code>alternate</code> で往復させ、<code>ease-in-out</code> で両端をゆっくりに。足元の影を逆向きに伸び縮みさせると、浮いている高さが伝わります。"
+  },
+  "blink": {
+    "id": "blink",
+    "tone": "cute",
+    "accent": "peach",
+    "title": "まばたき",
+    "en": "Blink",
+    "tags": [
+      "scale プロパティ",
+      "止め",
+      "二度まばたき"
+    ],
+    "stage": "<div class=\"stage stage-blink\" aria-hidden=\"true\">\n  <div class=\"fx-face no-eyes\"><i class=\"eye l\"></i><i class=\"eye r\"></i></div>\n</div>",
+    "desc": "4 秒のうち動くのは 0.5 秒だけ。あとは「止め」。目を <code>scale: 1 .08</code> で潰し、少し間をおいて二度目を入れると人間っぽくなります。ついでに首を少し傾げる。"
+  },
+  "jelly": {
+    "id": "jelly",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "ぷるぷるプリン",
+    "en": "Jelly",
+    "tags": [
+      "squash &amp; stretch",
+      "transform-origin",
+      "減衰"
+    ],
+    "stage": "<div class=\"stage stage-jelly\" aria-hidden=\"true\">\n  <div class=\"fx-plate\"></div>\n  <div class=\"fx-pudding\"></div>\n  <div class=\"fx-finger\"></div>\n</div>",
+    "desc": "つつかれて、ぷるん。潰れ（横に広がる）と伸び（縦に伸びる）を交互に、振れ幅を小さくしながら繰り返す。<code>transform-origin: bottom</code> にして、お皿に乗ったまま揺れるのがポイント。"
+  },
+  "surprise": {
+    "id": "surprise",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "びっくり！と、はてな？",
+    "en": "Surprise",
+    "tags": [
+      "行き過ぎ",
+      "transform-origin",
+      "text-stroke"
+    ],
+    "stage": "<div class=\"stage stage-surprise\" aria-hidden=\"true\">\n  <div class=\"fx-face\"></div>\n  <div class=\"fx-mark ex\">！</div>\n  <div class=\"fx-mark q\">？</div>\n</div>",
+    "desc": "頭の上に「！」がぽんっと出て、本人も小さく跳ねる。次に「？」が傾いて出て、首をかしげる。記号は <code>transform-origin: bottom</code> で根元から育つように出すと記号っぽさが出ます。"
+  },
+  "sweat": {
+    "id": "sweat",
+    "tone": "cute",
+    "accent": "mint",
+    "title": "汗タラ〜と「…」",
+    "en": "Sweat Drop",
+    "tags": [
+      "ease-in",
+      "nth-child で順番",
+      "border-radius"
+    ],
+    "stage": "<div class=\"stage stage-sweat\" aria-hidden=\"true\">\n  <div class=\"fx-face worried\"></div>\n  <div class=\"fx-drop\"></div>\n  <div class=\"fx-dots\"><i></i><i></i><i></i></div>\n</div>",
+    "desc": "気まずい沈黙。しずくは <code>border-radius: 0 50% 50% 50%</code> を 45° 回した形。<code>ease-in</code> でだんだん速く落ちる。「…」は同じアニメーションを <code>:nth-child</code> でずらして 1 個ずつ出す。"
+  },
+  "bubble": {
+    "id": "bubble",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "吹き出し",
+    "en": "Speech Bubble",
+    "tags": [
+      "transform-origin",
+      "steps()",
+      "clip-path"
+    ],
+    "stage": "<div class=\"stage stage-bubble\" aria-hidden=\"true\">\n  <div class=\"fx-face small\"></div>\n  <div class=\"fx-bubble\"><span class=\"fx-type\">おはよう〜</span></div>\n</div>",
+    "desc": "しっぽの根元を <code>transform-origin</code> にして、吹き出しが口元から膨らむように。文字は <code>clip-path: inset()</code> を <code>steps(5)</code> で 1 文字ずつ開く。幅を動かさないのでレイアウトが走りません。"
+  },
+  "clouds": {
+    "id": "clouds",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "流れる雲",
+    "en": "Drifting Clouds",
+    "tags": [
+      "継ぎ目なしループ",
+      "パララックス",
+      "width: max-content"
+    ],
+    "stage": "<div class=\"stage stage-clouds\" aria-hidden=\"true\">\n  <div class=\"fx-sun\"></div>\n  <div class=\"fx-cloud-row far\"><i></i><i></i><i></i><i></i></div>\n  <div class=\"fx-cloud-row near\"><i></i><i></i><i></i><i></i></div>\n  <div class=\"fx-hill\"></div>\n</div>",
+    "desc": "同じ雲を 2 セット並べた列を <code>translate: -50% 0</code> まで動かすと、継ぎ目なく無限に流れる。遠くの列は小さく・薄く・遅くするだけで奥行きが出る。雲は丸を 3 つ重ねただけ。"
+  },
+  "petals": {
+    "id": "petals",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "舞う花びら",
+    "en": "Falling Petals",
+    "tags": [
+      "親子で分担",
+      "負の delay",
+      "カスタムプロパティ"
+    ],
+    "stage": "<div class=\"stage stage-petals\" aria-hidden=\"true\">\n  <div class=\"fx-petal\" style=\"--x: 8;  --d: 0;   --s: 1\"><i></i></div>\n  <div class=\"fx-petal\" style=\"--x: 24; --d: 2.1; --s: .8\"><i></i></div>\n  <div class=\"fx-petal\" style=\"--x: 38; --d: 4.3; --s: 1.1\"><i></i></div>\n  <div class=\"fx-petal\" style=\"--x: 55; --d: 1.2; --s: .9\"><i></i></div>\n  <div class=\"fx-petal\" style=\"--x: 70; --d: 3.4; --s: 1\"><i></i></div>\n  <div class=\"fx-petal\" style=\"--x: 84; --d: 5.2; --s: .7\"><i></i></div>\n  <div class=\"fx-petal\" style=\"--x: 94; --d: 2.8; --s: 1.2\"><i></i></div>\n  <div class=\"fx-face peek\"></div>\n</div>",
+    "desc": "落下は親、ひらひらは子。1 要素に 2 つの動きを同時に載せると <code>translate</code> が衝突するので、親子で分担します。<code>--d</code> を負の <code>animation-delay</code> にすると、最初から空中にばらけた状態で始まる。"
+  },
+  "eyecatch": {
+    "id": "eyecatch",
+    "tone": "cute",
+    "accent": "lavender",
+    "title": "アイキャッチ",
+    "en": "Eyecatch",
+    "tags": [
+      "clip-path: circle()",
+      "止め",
+      "nth-child"
+    ],
+    "stage": "<div class=\"stage stage-eyecatch\" aria-hidden=\"true\">\n  <div class=\"fx-ec-bg\"></div>\n  <div class=\"fx-ec-logo\">\n    <span class=\"fx-ec-face\"></span>\n    <strong>Aパート<br>おわり</strong>\n  </div>\n  <div class=\"fx-ec-dots\"><i></i><i></i><i></i></div>\n</div>",
+    "desc": "CM 前の例のあれ。<code>clip-path: circle()</code> を 0% から 75% まで広げるだけで丸ワイプ。ロゴは少し行き過ぎて止まり、点が 1 個ずつ灯る。閉じる時は同じ円を縮める。"
+  },
+  "day": {
+    "id": "day",
+    "tone": "cute",
+    "accent": "peach",
+    "title": "一日のうつろい",
+    "en": "Day to Night",
+    "tags": [
+      "公転",
+      "レイヤーの opacity",
+      "translate と transform の併用"
+    ],
+    "stage": "<div class=\"stage stage-day\" aria-hidden=\"true\">\n  <div class=\"fx-sky\"></div>\n  <div class=\"fx-dusk\"></div>\n  <div class=\"fx-night\"></div>\n  <div class=\"fx-stars\"></div>\n  <div class=\"fx-orbit\"><i class=\"sun\"></i><i class=\"moon\"></i></div>\n  <div class=\"fx-town\"></div>\n</div>",
+    "desc": "太陽と月を同じ軸の反対側に置き、軸ごと <code>rotate</code> で 1 周させる。空はグラデーションを直接動かせないので、昼・夕・夜のレイヤーを重ねて <code>opacity</code> だけを切り替える。星は水玉の <code>radial-gradient</code>。"
+  },
+  "dizzy": {
+    "id": "dizzy",
+    "tone": "cute",
+    "accent": "lavender",
+    "title": "ぐるぐる目",
+    "en": "Dizzy",
+    "tags": [
+      "repeating-conic-gradient",
+      "rotate プロパティ",
+      "reverse"
+    ],
+    "stage": "<div class=\"stage stage-dizzy\" aria-hidden=\"true\">\n  <div class=\"fx-face no-eyes dizzy\"><i class=\"eye l\"></i><i class=\"eye r\"></i></div>\n  <div class=\"fx-orbit-stars\"><i>★</i><i>★</i><i>★</i></div>\n</div>",
+    "desc": "目が回っている時のあれ。目を <code>repeating-conic-gradient</code> の風車にして回すだけ。顔は左右にゆらゆら、頭上の星は逆向きに公転。"
+  },
+  "grass": {
+    "id": "grass",
+    "tone": "cute",
+    "accent": "mint",
+    "title": "ゆれる草と蝶",
+    "en": "Swaying Grass",
+    "tags": [
+      "skewX",
+      "負の delay で波",
+      "3 段の入れ子"
+    ],
+    "stage": "<div class=\"stage stage-grass\" aria-hidden=\"true\">\n  <div class=\"fx-grass\">\n    <i style=\"--i:0;  --h:2\"></i><i style=\"--i:1;  --h:6\"></i><i style=\"--i:2;  --h:0\"></i><i style=\"--i:3;  --h:8\"></i>\n    <i style=\"--i:4;  --h:3\"></i><i style=\"--i:5;  --h:7\"></i><i style=\"--i:6;  --h:1\"></i><i style=\"--i:7;  --h:5\"></i>\n    <i style=\"--i:8;  --h:9\"></i><i style=\"--i:9;  --h:2\"></i><i style=\"--i:10; --h:6\"></i><i style=\"--i:11; --h:4\"></i>\n    <i style=\"--i:12; --h:8\"></i><i style=\"--i:13; --h:1\"></i>\n  </div>\n  <div class=\"fx-fly\"><div class=\"fx-butterfly\"><b class=\"wl\"></b><b class=\"wr\"></b></div></div>\n</div>",
+    "desc": "草は根元を支点に <code>skewX</code> で左右へ。隣同士の <code>animation-delay</code> を少しずつ負にずらすと風の波になる。蝶は「横移動」「上下のふわふわ」「羽ばたき」を 3 段の入れ子で分担。"
+  },
+  "fade-up": {
+    "id": "fade-up",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "ふわっと順番に",
+    "en": "Fade Up",
+    "tags": [
+      "opacity + translate",
+      "animation-delay",
+      "ease-out",
+      "",
+      "",
+      ""
+    ],
+    "stage": "<div class=\"stage stage-fadeup\" aria-hidden=\"true\">\n  <ul class=\"fx-list\"><li></li><li></li><li></li></ul>\n</div>",
+    "desc": "リストやカードの登場に。透明度と少しの上移動を組み合わせ、要素ごとに 0.15 秒ずつ遅らせる。退場は小さく上へ抜ける。"
+  },
+  "pop-in": {
+    "id": "pop-in",
+    "tone": "cute",
+    "accent": "peach",
+    "title": "ぽんっと登場",
+    "en": "Pop In",
+    "tags": [
+      "scale プロパティ",
+      "行き過ぎ",
+      "--i で遅延"
+    ],
+    "stage": "<div class=\"stage stage-popin\" aria-hidden=\"true\">\n  <div class=\"fx-pops\"><i style=\"--i:0\"></i><i style=\"--i:1\"></i><i style=\"--i:2\"></i><i style=\"--i:3\"></i><i style=\"--i:4\"></i></div>\n</div>",
+    "desc": "0 から少し大きめ（1.15）まで行ってから 1 に戻る。各要素に <code>--i</code> を振って <code>calc(var(--i) * .1s)</code> で遅らせると、HTML 側だけで順番を決められます。"
+  },
+  "slide-in": {
+    "id": "slide-in",
+    "tone": "cute",
+    "accent": "mint",
+    "title": "スライドイン",
+    "en": "Slide In",
+    "tags": [
+      "translate %",
+      "方向ちがい",
+      "cubic-bezier"
+    ],
+    "stage": "<div class=\"stage stage-slidein\" aria-hidden=\"true\">\n  <div class=\"fx-panel a\"></div>\n  <div class=\"fx-panel b\"></div>\n  <div class=\"fx-panel c\"></div>\n</div>",
+    "desc": "左・右・下からそれぞれ滑り込む。<code>translate</code> の % は自分のサイズ基準なので、「-140%」と書けば大きさを変えても確実に画面外から始まる。減速カーブは <code>cubic-bezier(.2, .9, .3, 1)</code>。"
+  },
+  "spin-in": {
+    "id": "spin-in",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "くるっと回って登場",
+    "en": "Spin In",
+    "tags": [
+      "rotate + scale",
+      "行き過ぎ",
+      "退場は逆回転"
+    ],
+    "stage": "<div class=\"stage stage-spinin\" aria-hidden=\"true\">\n  <div class=\"fx-spincard\">★</div>\n</div>",
+    "desc": "回転と拡大を同時に。登場は -180° から、退場は +180° へ回すと「来た方向と逆に去る」感じになる。バッジやスタンプの登場に。"
+  },
+  "zoom-blur": {
+    "id": "zoom-blur",
+    "tone": "cool",
+    "accent": "lavender",
+    "title": "ズームブラー",
+    "en": "Zoom Blur",
+    "tags": [
+      "filter: blur()",
+      "scale 3 → 1",
+      "opacity"
+    ],
+    "stage": "<div class=\"stage stage-zoom cool\" aria-hidden=\"true\">\n  <div class=\"fx-zoomtext\">ドーン!!</div>\n</div>",
+    "desc": "大きくぼやけた状態から、縮みながらピントが合う。<code>filter: blur()</code> は重めなので、使うのは登場の一瞬だけにして、止まったら <code>blur(0)</code> に戻す。"
+  },
+  "typewriter": {
+    "id": "typewriter",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "タイプライター",
+    "en": "Typewriter",
+    "tags": [
+      "steps()",
+      "width",
+      "カーソル点滅"
+    ],
+    "stage": "<div class=\"stage stage-type\" aria-hidden=\"true\">\n  <p class=\"fx-tw\"><span>きょうも、いい天気。</span></p>\n</div>",
+    "desc": "幅を <code>steps(文字数)</code> で広げる定番の手法。全角文字は 1 文字 = 1em なので、10 文字なら <code>width: 10em</code>。右端の <code>border-right</code> を点滅させるとカーソルになる。"
+  },
+  "kinetic": {
+    "id": "kinetic",
+    "tone": "cool",
+    "accent": "sky",
+    "title": "キネティックタイポ",
+    "en": "Kinetic Type",
+    "tags": [
+      "span 分割",
+      "--i で遅延",
+      "行き過ぎ"
+    ],
+    "stage": "<div class=\"stage stage-kinetic cool\" aria-hidden=\"true\">\n  <div class=\"fx-kinetic-bar\"></div>\n  <div class=\"fx-kinetic\"><span style=\"--i:0\">L</span><span style=\"--i:1\">I</span><span style=\"--i:2\">V</span><span style=\"--i:3\">E</span><span style=\"--i:4\">!</span><span style=\"--i:5\">!</span></div>\n</div>",
+    "desc": "文字を 1 つずつ <code>span</code> にして、下から回転しながら飛び込ませる。<code>--i</code> で 0.07 秒ずつ遅らせるだけで「波」になる。退場は上へ。"
+  },
+  "wave-text": {
+    "id": "wave-text",
+    "tone": "cute",
+    "accent": "mint",
+    "title": "ゆらゆら文字",
+    "en": "Wave Text",
+    "tags": [
+      "alternate",
+      "負の delay",
+      "常時ループ"
+    ],
+    "stage": "<div class=\"stage stage-wavetext\" aria-hidden=\"true\">\n  <div class=\"fx-wavetext\"><span style=\"--i:0\">ゆ</span><span style=\"--i:1\">ら</span><span style=\"--i:2\">ゆ</span><span style=\"--i:3\">ら</span><span style=\"--i:4\">〜</span></div>\n</div>",
+    "desc": "上下の往復を文字ごとに位相ずらし。<code>animation-delay</code> を負にすると最初から波の形で始まる。ロゴやローディング中のテキストに。"
+  },
+  "marker": {
+    "id": "marker",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "マーカーを引く",
+    "en": "Highlight",
+    "tags": [
+      "background-size",
+      "linear-gradient",
+      "no-repeat"
+    ],
+    "stage": "<div class=\"stage stage-marker\" aria-hidden=\"true\">\n  <p class=\"fx-marker\"><span>だいじなところ</span></p>\n</div>",
+    "desc": "文字の下半分だけ色が付くグラデーションを背景にして、<code>background-size</code> を 0% から 100% へ。蛍光ペンで左から引いたように見える。少し傾けるとより手書き風。"
+  },
+  "countup": {
+    "id": "countup",
+    "tone": "cute",
+    "accent": "lavender",
+    "title": "カウントアップ",
+    "en": "Count Up",
+    "tags": [
+      "@property",
+      "counter()",
+      "JS 不要"
+    ],
+    "stage": "<div class=\"stage stage-count\" aria-hidden=\"true\">\n  <div class=\"fx-count\"><small>%</small></div>\n</div>",
+    "desc": "数字を CSS だけで数える小技。<code>@property</code> で <code>--n</code> を整数として登録すると補間できるようになり、それを <code>counter-reset</code> に流し込んで <code>content: counter(n)</code> で表示する。"
+  },
+  "gradient-text": {
+    "id": "gradient-text",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "流れるグラデ文字",
+    "en": "Gradient Text",
+    "tags": [
+      "background-clip: text",
+      "background-position",
+      "継ぎ目なし"
+    ],
+    "stage": "<div class=\"stage stage-gradtext\" aria-hidden=\"true\">\n  <div class=\"fx-gradtext\"><span>COLORFUL</span></div>\n</div>",
+    "desc": "グラデーションを文字で切り抜き、背景位置を流す。両端を同じ色にして <code>background-size: 200%</code> にすると、継ぎ目なくループする。"
+  },
+  "subtitle": {
+    "id": "subtitle",
+    "tone": "cool",
+    "accent": "sky",
+    "title": "サブタイトル",
+    "en": "Episode Title",
+    "tags": [
+      "letter-spacing",
+      "filter: blur()",
+      "レターボックス"
+    ],
+    "stage": "<div class=\"stage stage-subtitle cool\" aria-hidden=\"true\">\n  <div class=\"fx-bar top\"></div>\n  <div class=\"fx-bar bottom\"></div>\n  <div class=\"fx-ep\">\n    <small>EPISODE 03</small>\n    <strong>はじまりの音</strong>\n  </div>\n  <div class=\"fx-rule\"></div>\n</div>",
+    "desc": "黒帯が上下から閉じ、タイトルがぼやけた状態から文字間を詰めながら結像する。<code>letter-spacing</code> と <code>filter: blur()</code> を同時に動かすと「ピントが合う」感じになる。"
+  },
+  "wipe": {
+    "id": "wipe",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "斜めワイプ",
+    "en": "Diagonal Wipe",
+    "tags": [
+      "clip-path: polygon()",
+      "頂点数をそろえる"
+    ],
+    "stage": "<div class=\"stage stage-wipe\" aria-hidden=\"true\">\n  <div class=\"fx-scene a\">A</div>\n  <div class=\"fx-scene b wipe\">B</div>\n</div>",
+    "desc": "シーン B を <code>polygon()</code> で切り抜き、4 つの頂点を左から右へ動かす。頂点の数と順番をそろえておけば、ポリゴン同士はなめらかに補間される。"
+  },
+  "halftone": {
+    "id": "halftone",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "ハーフトーン",
+    "en": "Halftone Wipe",
+    "tags": [
+      "@property",
+      "radial-gradient",
+      "steps(1)"
+    ],
+    "stage": "<div class=\"stage stage-halftone\" aria-hidden=\"true\">\n  <div class=\"fx-scene a\">A</div>\n  <div class=\"fx-scene b swap\">B</div>\n  <div class=\"fx-halftone\"></div>\n</div>",
+    "desc": "網点が膨らんで画面を塗りつぶし、縮みながら次を見せる。<code>@property</code> で登録した <code>--dot</code> をグラデーションの半径に使う。真っ暗な瞬間に <code>steps(1)</code> でシーンを差し替える。"
+  },
+  "blinds": {
+    "id": "blinds",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "ブラインド",
+    "en": "Blinds",
+    "tags": [
+      "scaleX",
+      "transform-origin 切替",
+      "--i で遅延"
+    ],
+    "stage": "<div class=\"stage stage-blinds\" aria-hidden=\"true\">\n  <div class=\"fx-scene a\">A</div>\n  <div class=\"fx-scene b swap\">B</div>\n  <div class=\"fx-blinds\"><i style=\"--i:0\"></i><i style=\"--i:1\"></i><i style=\"--i:2\"></i><i style=\"--i:3\"></i><i style=\"--i:4\"></i><i style=\"--i:5\"></i></div>\n</div>",
+    "desc": "縦の帯を左から順に閉じ、右から順に開く。閉じる時は <code>transform-origin: left</code>、開く時は <code>right</code> に切り替えると往復で違う見え方になる。"
+  },
+  "curtain": {
+    "id": "curtain",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "カーテン",
+    "en": "Curtain",
+    "tags": [
+      "scaleX",
+      "左右の origin",
+      "repeating-linear-gradient"
+    ],
+    "stage": "<div class=\"stage stage-curtain\" aria-hidden=\"true\">\n  <div class=\"fx-scene a\">A</div>\n  <div class=\"fx-scene b swap\">B</div>\n  <div class=\"fx-curtain l\"></div>\n  <div class=\"fx-curtain r\"></div>\n</div>",
+    "desc": "左右から閉じて、また開く。縦縞の背景を <code>scaleX</code> で伸縮させると、布が寄るように見える。同じキーフレームで、支点だけ左右逆にする。"
+  },
+  "slices": {
+    "id": "slices",
+    "tone": "cute",
+    "accent": "peach",
+    "title": "スライス",
+    "en": "Slices",
+    "tags": [
+      "grid-auto-rows",
+      "nth-child(even)",
+      "animation-name 差替"
+    ],
+    "stage": "<div class=\"stage stage-slices\" aria-hidden=\"true\">\n  <div class=\"fx-scene a\">A</div>\n  <div class=\"fx-scene b swap\">B</div>\n  <div class=\"fx-slices\"><i style=\"--i:0\"></i><i style=\"--i:1\"></i><i style=\"--i:2\"></i><i style=\"--i:3\"></i></div>\n</div>",
+    "desc": "横に 4 分割した帯が、奇数段は左から、偶数段は右から滑り込む。偶数段は <code>animation-name</code> だけ差し替えて方向を逆にしている。"
+  },
+  "cutin": {
+    "id": "cutin",
+    "tone": "cool",
+    "accent": "lemon",
+    "title": "カットイン",
+    "en": "Cut-in",
+    "tags": [
+      "skewX",
+      "歪みの打ち消し",
+      "流線ループ"
+    ],
+    "stage": "<div class=\"stage stage-cutin cool\" aria-hidden=\"true\">\n  <div class=\"fx-cutin-bg\"></div>\n  <div class=\"fx-cutin-panel\"><span class=\"fx-cutin-text\">ライブ<em>開演</em></span></div>\n</div>",
+    "desc": "斜めの帯が横切り、文字が遅れて入る。帯は <code>skewX(-18deg)</code>、文字側で <code>skewX(18deg)</code> をかけて歪みを打ち消す。背景の流線はタイル幅を計算して継ぎ目なくループ。"
+  },
+  "focus-lines": {
+    "id": "focus-lines",
+    "tone": "cool",
+    "accent": "lemon",
+    "title": "集中線",
+    "en": "Focus Lines",
+    "tags": [
+      "repeating-conic-gradient",
+      "mask",
+      "steps()"
+    ],
+    "stage": "<div class=\"stage stage-lines cool\" aria-hidden=\"true\">\n  <div class=\"fx-lines\"></div>\n  <div class=\"fx-shout\">ドン!!</div>\n</div>",
+    "desc": "マンガの定番。<code>repeating-conic-gradient</code> で放射線を描き、中心を <code>mask</code> で抜く。<code>steps(3)</code> でコマ落ちさせると手描き感が出る。"
+  },
+  "slash": {
+    "id": "slash",
+    "tone": "cool",
+    "accent": "lavender",
+    "title": "斬撃",
+    "en": "Slash",
+    "tags": [
+      "clip-path: polygon()",
+      "2 枚重ね",
+      "inset() で線を描く"
+    ],
+    "stage": "<div class=\"stage stage-slash cool\" aria-hidden=\"true\">\n  <div class=\"fx-target\"><span class=\"top\">斬</span><span class=\"bottom\">斬</span></div>\n  <div class=\"fx-slash\"></div>\n  <div class=\"fx-flash\"></div>\n</div>",
+    "desc": "光の線が走り、一拍おいて対象が斜めにズレる。同じ文字を 2 枚重ね、<code>polygon()</code> で上下に分割。線は <code>clip-path: inset()</code> で左から右へ描く。"
+  },
+  "shockwave": {
+    "id": "shockwave",
+    "tone": "cool",
+    "accent": "sky",
+    "title": "衝撃波",
+    "en": "Shockwave",
+    "tags": [
+      "nth-child",
+      "animation-delay",
+      "カメラシェイク"
+    ],
+    "stage": "<div class=\"stage stage-shock cool\" aria-hidden=\"true\">\n  <div class=\"fx-cam\">\n    <div class=\"fx-ring\"></div><div class=\"fx-ring\"></div><div class=\"fx-ring\"></div>\n    <div class=\"fx-impact\">衝撃</div>\n  </div>\n</div>",
+    "desc": "文字が奥から叩き込まれ、3 重のリングが広がる。リングは <code>:nth-child</code> でディレイ差をつけるだけ。画面全体を包む <code>.fx-cam</code> を揺らして「カメラ」の揺れを作る。"
+  },
+  "hit": {
+    "id": "hit",
+    "tone": "cool",
+    "accent": "lemon",
+    "title": "ヒット＆シェイク",
+    "en": "Hit &amp; Shake",
+    "tags": [
+      "clip-path",
+      "text-shadow 色ズレ",
+      "drop-shadow"
+    ],
+    "stage": "<div class=\"stage stage-hit cool\" aria-hidden=\"true\">\n  <div class=\"fx-cam\">\n    <div class=\"fx-burst\"></div>\n    <div class=\"fx-bam\">BAM!</div>\n  </div>\n</div>",
+    "desc": "ギザギザの爆発型を <code>polygon()</code> で描き、文字をオーバーシュートで叩き込む。着弾の瞬間だけ <code>text-shadow</code> で色ズレを入れる。<code>clip-path</code> した要素の縁取りは <code>filter: drop-shadow</code> で。"
+  },
+  "henshin": {
+    "id": "henshin",
+    "tone": "cool",
+    "accent": "lavender",
+    "title": "変身フラッシュ",
+    "en": "Transform Flash",
+    "tags": [
+      "box-shadow 発光",
+      "予備動作",
+      "白フラッシュで差替"
+    ],
+    "stage": "<div class=\"stage stage-henshin cool\" aria-hidden=\"true\">\n  <div class=\"fx-rays\"></div>\n  <div class=\"fx-orb\"></div>\n  <div class=\"fx-flash\"></div>\n  <div class=\"fx-star\"></div>\n</div>",
+    "desc": "光球が膨らみ、一瞬縮んでから爆発。白いフラッシュの裏で主役を差し替える。「縮んでから爆発」の予備動作がアニメらしさの鍵。"
+  },
+  "glitch": {
+    "id": "glitch",
+    "tone": "cool",
+    "accent": "pink",
+    "title": "グリッチ",
+    "en": "Glitch",
+    "tags": [
+      "attr()",
+      "clip-path: inset()",
+      "steps(1)"
+    ],
+    "stage": "<div class=\"stage stage-glitch cool\" aria-hidden=\"true\">\n  <div class=\"fx-glitch\" data-text=\"NO SIGNAL\">NO SIGNAL</div>\n</div>",
+    "desc": "<code>::before</code> / <code>::after</code> に <code>content: attr(data-text)</code> で同じ文字を複製し、2 色に分ける。<code>steps(1)</code> で補間を殺し、<code>inset()</code> を飛び飛びに切り替える。"
+  },
+  "sparkle": {
+    "id": "sparkle",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "キラキラ",
+    "en": "Sparkle",
+    "tags": [
+      "4 つ星 polygon",
+      "scale + rotate",
+      "負の delay"
+    ],
+    "stage": "<div class=\"stage stage-sparkle\" aria-hidden=\"true\">\n  <div class=\"fx-face\"></div>\n  <i class=\"fx-spark\" style=\"--x:18; --y:14; --d:0\"></i>\n  <i class=\"fx-spark\" style=\"--x:80; --y:12; --d:.6\"></i>\n  <i class=\"fx-spark\" style=\"--x:72; --y:44; --d:1.1\"></i>\n  <i class=\"fx-spark\" style=\"--x:14; --y:42; --d:.3\"></i>\n  <i class=\"fx-spark\" style=\"--x:50; --y:8;  --d:1.4\"></i>\n  <i class=\"fx-spark\" style=\"--x:86; --y:30; --d:.9\"></i>\n</div>",
+    "desc": "4 つ星を <code>polygon()</code> で描き、0 → 1 → 0 と大きさを変えながら 90° 回す。位置と位相を <code>--x</code> <code>--y</code> <code>--d</code> で HTML 側から指定。"
+  },
+  "confetti": {
+    "id": "confetti",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "紙吹雪",
+    "en": "Confetti",
+    "tags": [
+      "rotateX で裏返る",
+      "--c で色",
+      "負の delay"
+    ],
+    "stage": "<div class=\"stage stage-confetti\" aria-hidden=\"true\">\n  <i class=\"fx-conf\" style=\"--x:6;  --d:0;   --c:#ff8fb8\"></i>\n  <i class=\"fx-conf\" style=\"--x:16; --d:1.2; --c:#ffd45e\"></i>\n  <i class=\"fx-conf\" style=\"--x:27; --d:2.4; --c:#6fbcff\"></i>\n  <i class=\"fx-conf\" style=\"--x:38; --d:.6;  --c:#6fd3b3\"></i>\n  <i class=\"fx-conf\" style=\"--x:50; --d:1.8; --c:#c9b8ff\"></i>\n  <i class=\"fx-conf\" style=\"--x:61; --d:3;   --c:#ff8fb8\"></i>\n  <i class=\"fx-conf\" style=\"--x:72; --d:.3;  --c:#ffd45e\"></i>\n  <i class=\"fx-conf\" style=\"--x:83; --d:2.1; --c:#6fbcff\"></i>\n  <i class=\"fx-conf\" style=\"--x:93; --d:1.5; --c:#6fd3b3\"></i>\n</div>",
+    "desc": "細長い四角を落としながら <code>rotateX</code> で裏返す。3D の <code>perspective</code> がなくても、厚みが 0 になる瞬間ができて紙らしく見える。"
+  },
+  "snow": {
+    "id": "snow",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "雪",
+    "en": "Snow",
+    "tags": [
+      "background 3 層",
+      "background-position",
+      "要素 1 つ"
+    ],
+    "stage": "<div class=\"stage stage-snow\" aria-hidden=\"true\">\n  <div class=\"fx-snow\"></div>\n  <div class=\"fx-snowhill\"></div>\n  <div class=\"fx-face peek\"></div>\n</div>",
+    "desc": "粒の要素を作らず、水玉の <code>radial-gradient</code> を 3 層重ねて <code>background-position</code> を下へ流す。各層をタイル 1 枚分だけ動かすと継ぎ目なし。タイルの大きさが違うので自然に速度差が出る。"
+  },
+  "dots-loader": {
+    "id": "dots-loader",
+    "tone": "cute",
+    "accent": "peach",
+    "title": "ドットローダー",
+    "en": "Dots Loader",
+    "tags": [
+      "alternate",
+      "負の delay",
+      "squash &amp; stretch"
+    ],
+    "stage": "<div class=\"stage stage-dots\" aria-hidden=\"true\">\n  <div class=\"fx-dotsl\"><i style=\"--i:0\"></i><i style=\"--i:1\"></i><i style=\"--i:2\"></i></div>\n</div>",
+    "desc": "3 つの丸を上下に往復させ、位相を 0.2 秒ずつずらす。上で少し縦長、下で少し横長にすると弾んで見える。"
+  },
+  "ring-loader": {
+    "id": "ring-loader",
+    "tone": "cute",
+    "accent": "lavender",
+    "title": "リングローダー",
+    "en": "Ring Loader",
+    "tags": [
+      "border-style",
+      "reverse",
+      "rotate プロパティ"
+    ],
+    "stage": "<div class=\"stage stage-ring\" aria-hidden=\"true\">\n  <div class=\"fx-loop r1\"></div>\n  <div class=\"fx-loop r2\"></div>\n  <div class=\"fx-loop r3\"></div>\n  <div class=\"fx-loop core\"></div>\n</div>",
+    "desc": "<code>dashed</code> / <code>dotted</code> / 上下だけ色を付けた <code>solid</code> の 3 種類の円を、別速度・逆回転で回す。中央寄せは <code>translate</code>、回転は <code>rotate</code> と分けてあるので干渉しない。"
+  },
+  "shimmer": {
+    "id": "shimmer",
+    "tone": "cute",
+    "accent": "lemon",
+    "title": "スケルトン",
+    "en": "Shimmer",
+    "tags": [
+      "background-size 300%",
+      "background-position",
+      "読み込み中"
+    ],
+    "stage": "<div class=\"stage stage-shimmer\" aria-hidden=\"true\">\n  <div class=\"fx-skel\"><i class=\"av\"></i><i class=\"ln\"></i><i class=\"ln\"></i><i class=\"ln s\"></i></div>\n</div>",
+    "desc": "読み込み中のプレースホルダー。幅 300% のグラデーションの中央だけ明るくしておき、<code>background-position</code> で左から右へ通り過ぎさせる。"
+  },
+  "progress": {
+    "id": "progress",
+    "tone": "cute",
+    "accent": "mint",
+    "title": "プログレスバー",
+    "en": "Progress",
+    "tags": [
+      "2 つの animation",
+      "counter()",
+      "縞を流す"
+    ],
+    "stage": "<div class=\"stage stage-progress\" aria-hidden=\"true\">\n  <div class=\"fx-pct\"></div>\n  <div class=\"fx-track\"><div class=\"fx-fill\"></div></div>\n</div>",
+    "desc": "1 つの要素に「伸びる」と「縞が流れる」の 2 つのアニメーションをカンマ区切りで同時に。数字はカウントアップと同じ <code>@property</code> + <code>counter()</code>。"
+  },
+  "toggle": {
+    "id": "toggle",
+    "tone": "cute",
+    "accent": "mint",
+    "title": "トグルスイッチ",
+    "en": "Toggle",
+    "tags": [
+      "background-color",
+      "translate",
+      "行き過ぎ"
+    ],
+    "stage": "<div class=\"stage stage-toggle\" aria-hidden=\"true\">\n  <div class=\"fx-toggle\"><i></i></div>\n</div>",
+    "desc": "ノブの移動と、トラックの色の変化を同じタイミングで。ノブだけ少し行き過ぎるカーブにすると「カチッ」と入る感触が出る。実際の UI では <code>:checked</code> と <code>transition</code> に置き換える。"
+  },
+  "heart": {
+    "id": "heart",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "いいねハート",
+    "en": "Like",
+    "tags": [
+      "疑似要素でハート",
+      "rotate で放射",
+      "background: inherit"
+    ],
+    "stage": "<div class=\"stage stage-heart\" aria-hidden=\"true\">\n  <div class=\"fx-heart\"></div>\n  <div class=\"fx-particles\"><i style=\"--i:0\"></i><i style=\"--i:1\"></i><i style=\"--i:2\"></i><i style=\"--i:3\"></i><i style=\"--i:4\"></i><i style=\"--i:5\"></i></div>\n</div>",
+    "desc": "ハートは四角 + 丸 2 つ。押された瞬間に一度縮んでから大きく弾み、同時に粒が放射状に飛ぶ。粒は <code>rotate: calc(var(--i) * 60deg)</code> で向きを決めて、上に <code>translate</code> するだけ。"
+  },
+  "badge": {
+    "id": "badge",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "通知バッジ",
+    "en": "Badge Pulse",
+    "tags": [
+      "box-shadow 拡散",
+      "rotate 連打",
+      "transform-origin 上"
+    ],
+    "stage": "<div class=\"stage stage-badge\" aria-hidden=\"true\">\n  <div class=\"fx-app\">✉<span class=\"fx-badge\">3</span></div>\n</div>",
+    "desc": "バッジは <code>box-shadow</code> の広がりを 0 から外へ透明にしていくと波紋になる。アイコンは上を支点に小刻みに左右へ振り、だんだん振幅を小さくして止める。"
+  },
+  "gradient-flow": {
+    "id": "gradient-flow",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "ゆらめくグラデーション",
+    "en": "Gradient Flow",
+    "tags": [
+      "background-size 400%",
+      "継ぎ目なし",
+      "linear"
+    ],
+    "stage": "<div class=\"stage stage-gradbg\" aria-hidden=\"true\">\n  <div class=\"fx-gradbg\"></div>\n  <div class=\"fx-label\">GRADIENT</div>\n</div>",
+    "desc": "両端が同じ色の横グラデーションを 400% 幅にして流す。<code>background-position</code> の % は「要素とタイルの差」基準なので、1 周 = -133.33% になる点に注意。"
+  },
+  "stripes": {
+    "id": "stripes",
+    "tone": "cute",
+    "accent": "peach",
+    "title": "流れる縞",
+    "en": "Stripes",
+    "tags": [
+      "repeating-linear-gradient",
+      "タイル幅の計算",
+      "linear"
+    ],
+    "stage": "<div class=\"stage stage-stripes\" aria-hidden=\"true\">\n  <div class=\"fx-stripes\"></div>\n  <div class=\"fx-label\">STRIPES</div>\n</div>",
+    "desc": "斜め縞を横に流すとき、タイル幅を「周期 ÷ cos(角度)」にすると端が継ぎ目なく繋がる。45° で周期 8cqi なら 11.314cqi。"
+  },
+  "twinkle": {
+    "id": "twinkle",
+    "tone": "cute",
+    "accent": "lavender",
+    "title": "星のまたたき",
+    "en": "Twinkle",
+    "tags": [
+      "opacity 3 層",
+      "負の delay",
+      "radial-gradient"
+    ],
+    "stage": "<div class=\"stage stage-twinkle\" aria-hidden=\"true\">\n  <div class=\"fx-starlayer s1\"></div>\n  <div class=\"fx-starlayer s2\"></div>\n  <div class=\"fx-starlayer s3\"></div>\n  <div class=\"fx-moon\"></div>\n</div>",
+    "desc": "水玉の層を 3 枚、位置とタイルの大きさを変えて重ね、それぞれの <code>opacity</code> を位相ずらしで明滅させる。粒ごとに要素を作らなくても星空になる。"
+  },
+  "waves": {
+    "id": "waves",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "波",
+    "en": "Waves",
+    "tags": [
+      "border-radius 42%",
+      "rotate",
+      "半透明の重ね"
+    ],
+    "stage": "<div class=\"stage stage-waves\" aria-hidden=\"true\">\n  <div class=\"fx-face afloat\"></div>\n  <div class=\"fx-water w1\"></div>\n  <div class=\"fx-water w2\"></div>\n</div>",
+    "desc": "巨大な角丸四角（<code>border-radius: 42%</code>）をゆっくり回すと、上の縁が波打って見える定番。2 枚を逆回転で重ねると複雑に。まるちゃんは浮き輪気分。"
+  },
+  "bubbles": {
+    "id": "bubbles",
+    "tone": "cute",
+    "accent": "sky",
+    "title": "浮かぶ泡",
+    "en": "Bubbles",
+    "tags": [
+      "親子で分担",
+      "--s で大きさ",
+      "負の delay"
+    ],
+    "stage": "<div class=\"stage stage-bubbles\" aria-hidden=\"true\">\n  <div class=\"fx-bub\" style=\"--x:10; --s:6;  --d:0\"><i></i></div>\n  <div class=\"fx-bub\" style=\"--x:28; --s:4;  --d:1.6\"><i></i></div>\n  <div class=\"fx-bub\" style=\"--x:45; --s:8;  --d:3.1\"><i></i></div>\n  <div class=\"fx-bub\" style=\"--x:60; --s:3;  --d:.8\"><i></i></div>\n  <div class=\"fx-bub\" style=\"--x:74; --s:5;  --d:2.3\"><i></i></div>\n  <div class=\"fx-bub\" style=\"--x:88; --s:7;  --d:4\"><i></i></div>\n</div>",
+    "desc": "花びらの逆。親が上昇、子が左右に揺れる。ハイライトは <code>radial-gradient</code> を左上に寄せるだけ。"
+  },
+  "flip-card": {
+    "id": "flip-card",
+    "tone": "cute",
+    "accent": "peach",
+    "title": "カードフリップ",
+    "en": "Flip Card",
+    "tags": [
+      "backface-visibility",
+      "preserve-3d",
+      "perspective"
+    ],
+    "stage": "<div class=\"stage stage-flip\" aria-hidden=\"true\">\n  <div class=\"fx-persp\">\n    <div class=\"fx-flip\">\n      <div class=\"face front\">？</div>\n      <div class=\"face back\">★</div>\n    </div>\n  </div>\n</div>",
+    "desc": "表と裏を重ね、裏は最初から <code>rotateY(180deg)</code> しておく。親を回すと入れ替わる。<code>backface-visibility: hidden</code> で裏向きの面を消すのを忘れずに。"
+  },
+  "cube": {
+    "id": "cube",
+    "tone": "cute",
+    "accent": "lavender",
+    "title": "回る立方体",
+    "en": "Cube",
+    "tags": [
+      "translateZ",
+      "6 面",
+      "preserve-3d"
+    ],
+    "stage": "<div class=\"stage stage-cube\" aria-hidden=\"true\">\n  <div class=\"fx-persp\">\n    <div class=\"fx-cube\"><i class=\"f1\">1</i><i class=\"f2\">2</i><i class=\"f3\">3</i><i class=\"f4\">4</i><i class=\"f5\">5</i><i class=\"f6\">6</i></div>\n  </div>\n</div>",
+    "desc": "6 枚の面を、それぞれ回してから <code>translateZ(半分の幅)</code> で押し出す。親に <code>transform-style: preserve-3d</code> がないと全部ぺちゃんこになる。"
+  },
+  "flap": {
+    "id": "flap",
+    "tone": "cute",
+    "accent": "pink",
+    "title": "日めくり",
+    "en": "Page Flip",
+    "tags": [
+      "transform-origin: top",
+      "rotateX",
+      "backface-visibility"
+    ],
+    "stage": "<div class=\"stage stage-flap\" aria-hidden=\"true\">\n  <div class=\"fx-persp\">\n    <div class=\"fx-cal\">\n      <div class=\"page next\">13</div>\n      <div class=\"page cur\">12</div>\n    </div>\n  </div>\n</div>",
+    "desc": "上辺を軸に <code>rotateX(-180deg)</code> でめくる。裏面を消しておくと、90° を越えた瞬間に下の次のページだけが残る。"
+  }
+}

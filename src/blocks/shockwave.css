@@ -1,0 +1,29 @@
+.stage-shock { background: #10142a; }
+.fx-ring {
+  position: absolute; left: 50%; top: 50%; width: 16cqi; aspect-ratio: 1;
+  border: 1cqi solid #3ef2ff; border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0); opacity: 0;
+}
+.fx-ring:nth-child(2) { border-color: #fff; }
+.fx-ring:nth-child(3) { border-color: #ff4fa3; }
+.fx-impact {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font: 400 22cqi/1 var(--font-cool); color: #fff;
+  -webkit-text-stroke: .5cqi #3ef2ff; paint-order: stroke fill;
+  transform: scale(3); opacity: 0;
+}
+.play .fx-ring              { animation: ring calc(2.6s / var(--speed)) cubic-bezier(.1, .7, .3, 1) infinite; }
+.play .fx-ring:nth-child(2) { animation-delay: calc(.12s / var(--speed)); }
+.play .fx-ring:nth-child(3) { animation-delay: calc(.24s / var(--speed)); }
+.play .fx-impact            { animation: impact calc(2.6s / var(--speed)) cubic-bezier(.6, 0, .2, 1) infinite; }
+.play.stage-shock .fx-cam   { animation: shake calc(2.6s / var(--speed)) infinite; }   /* カメラを揺らす */
+@keyframes ring   { 0%, 20% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 70%, 100% { transform: translate(-50%, -50%) scale(7); opacity: 0; } }
+@keyframes impact { 0% { transform: scale(3); opacity: 0; } 20%, 85% { transform: scale(1); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
+@keyframes shake {
+  0%, 19%, 36%, 100% { transform: none; }
+  21% { transform: translate(-2cqi, 1cqi) rotate(-1deg); }
+  24% { transform: translate(2cqi, -1cqi) rotate(1deg); }
+  27% { transform: translate(-1.5cqi, -1cqi); }
+  30% { transform: translate(1cqi, 1cqi); }
+  33% { transform: translate(-.5cqi, .5cqi); }
+}

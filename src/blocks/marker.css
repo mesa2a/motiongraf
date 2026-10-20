@@ -1,0 +1,12 @@
+.stage-marker { background: #fff5e8; }
+.fx-marker { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font: 700 9cqi/1.4 var(--font-display); color: var(--ink); }
+.fx-marker span {
+  padding: 0 .2em; rotate: -1.5deg;
+  background: linear-gradient(transparent 45%, #fff0b8 45% 90%, transparent 90%) no-repeat 0 0 / 0% 100%;
+}
+.play .fx-marker span { animation: marker-draw calc(3.6s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+@keyframes marker-draw {
+  0%, 12%   { background-size: 0% 100%;   opacity: 1; }
+  45%, 80%  { background-size: 100% 100%; opacity: 1; }   /* 左から引く */
+  92%, 100% { background-size: 100% 100%; opacity: 0; }
+}

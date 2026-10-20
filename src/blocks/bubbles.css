@@ -1,0 +1,7 @@
+.stage-bubbles { background: linear-gradient(#d7eeff, #6fbcff); }
+.fx-bub { position: absolute; bottom: -10cqi; left: calc(var(--x) * 1cqi); width: calc(var(--s) * 1cqi); aspect-ratio: 1; }
+.fx-bub i { display: block; width: 100%; height: 100%; border-radius: 50%; border: .5cqi solid rgba(255, 255, 255, .9); background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .8), rgba(255, 255, 255, .1) 60%); }
+.play .fx-bub   { animation: rise     calc(5s / var(--speed)) linear infinite;              animation-delay: calc(var(--d) * -1s / var(--speed)); }
+.play .fx-bub i { animation: bub-sway calc(1.6s / var(--speed)) ease-in-out infinite alternate; animation-delay: calc(var(--d) * -.5s / var(--speed)); }
+@keyframes rise     { from { translate: 0 0; opacity: 1; } 90% { opacity: 1; } to { translate: 0 -70cqi; opacity: 0; } }
+@keyframes bub-sway { from { translate: -2cqi 0; } to { translate: 2cqi 0; } }

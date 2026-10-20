@@ -1,0 +1,20 @@
+.stage-subtitle { background: linear-gradient(180deg, #1b2a4a, #0e1220 60%); }
+.fx-bar { position: absolute; left: 0; right: 0; height: 18%; background: #000; transform: scaleY(0); }
+.fx-bar.top    { top: 0;    transform-origin: top; }
+.fx-bar.bottom { bottom: 0; transform-origin: bottom; }
+.fx-ep { position: absolute; inset: 0; display: grid; place-content: center; gap: 2cqi; text-align: center; color: #fff; }
+.fx-ep small  { font: 400 4cqi/1 var(--font-cool-en); letter-spacing: .5em; color: #ffe14d; opacity: 0; }
+.fx-ep strong { font: 400 9cqi/1.2 var(--font-cool); letter-spacing: 1em; white-space: nowrap; opacity: 0; filter: blur(2cqi); }
+.fx-rule { position: absolute; left: 25%; right: 25%; top: 50%; margin-top: 12cqi; height: .3cqi; background: #fff; transform: scaleX(0); }
+.play .fx-bar       { animation: bar-in   calc(5s / var(--speed)) cubic-bezier(.7, 0, .2, 1) infinite; }
+.play .fx-ep small  { animation: ep-small calc(5s / var(--speed)) infinite; }
+.play .fx-ep strong { animation: ep-title calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-rule      { animation: ep-rule  calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+@keyframes bar-in   { 0% { transform: scaleY(0); } 10%, 86% { transform: scaleY(1); } 96%, 100% { transform: scaleY(0); } }
+@keyframes ep-small { 0%, 8% { opacity: 0; translate: 0 1cqi; } 18%, 84% { opacity: 1; translate: 0 0; } 92%, 100% { opacity: 0; } }
+@keyframes ep-title {
+  0%, 15%   { opacity: 0; letter-spacing: 1em;   filter: blur(2cqi); }
+  38%, 84%  { opacity: 1; letter-spacing: .15em; filter: blur(0); }   /* ピントが合う */
+  92%, 100% { opacity: 0; letter-spacing: .15em; filter: blur(0); }
+}
+@keyframes ep-rule  { 0%, 30% { transform: scaleX(0); } 42%, 84% { transform: scaleX(1); } 92%, 100% { transform: scaleX(1); opacity: 0; } }

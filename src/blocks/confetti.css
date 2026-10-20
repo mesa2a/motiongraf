@@ -1,0 +1,10 @@
+.stage-confetti { background: #fffaf0; }
+.fx-conf { position: absolute; top: -6cqi; left: calc(var(--x) * 1cqi); width: 2.6cqi; height: 4cqi; border-radius: .4cqi; background: var(--c, #ff8fb8); }
+.play .fx-conf {
+  animation: conf-fall calc(3.5s / var(--speed)) linear infinite;
+  animation-delay: calc(var(--d) * -1s / var(--speed));
+}
+@keyframes conf-fall {
+  from { translate: 0 0;      transform: rotateX(0) rotateZ(0); }
+  to   { translate: 2cqi 66cqi; transform: rotateX(900deg) rotateZ(180deg); }   /* rotateX で裏返りながら落ちる */
+}

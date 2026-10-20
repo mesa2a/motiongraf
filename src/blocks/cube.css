@@ -1,0 +1,11 @@
+.stage-cube { background: #e8e0ff; }
+.fx-cube { position: relative; width: 18cqi; height: 18cqi; transform-style: preserve-3d; transform: rotateX(-20deg); }
+.fx-cube i { position: absolute; inset: 0; display: grid; place-items: center; border: .3cqi solid var(--ink); font: 700 8cqi/1 var(--font-en); color: var(--ink); background: #ffd3e3; }
+.fx-cube .f1 { transform: translateZ(9cqi); }                                  /* 面を 9cqi（半分）押し出す */
+.fx-cube .f2 { transform: rotateY(90deg)  translateZ(9cqi); background: #fff4cc; }
+.fx-cube .f3 { transform: rotateY(180deg) translateZ(9cqi); background: #d9f5ec; }
+.fx-cube .f4 { transform: rotateY(-90deg) translateZ(9cqi); background: #d7eeff; }
+.fx-cube .f5 { transform: rotateX(90deg)  translateZ(9cqi); background: #fff; }
+.fx-cube .f6 { transform: rotateX(-90deg) translateZ(9cqi); background: #d9d4e6; }
+.play .fx-cube { animation: cube-spin calc(6s / var(--speed)) linear infinite; }
+@keyframes cube-spin { from { transform: rotateX(-20deg) rotateY(0); } to { transform: rotateX(-20deg) rotateY(360deg); } }

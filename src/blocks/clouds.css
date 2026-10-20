@@ -1,0 +1,25 @@
+.stage-clouds { background: linear-gradient(#cfe9ff, #eaf6ff); }
+.fx-sun {
+  position: absolute; right: 10%; top: 12%; width: 14cqi; aspect-ratio: 1; border-radius: 50%;
+  background: #ffd45e; box-shadow: 0 0 0 2cqi rgba(255, 240, 184, .5), 0 0 0 4cqi rgba(255, 240, 184, .25);
+}
+.fx-hill {
+  position: absolute; left: -10%; right: -10%; bottom: -14cqi; height: 24cqi;
+  border-radius: 50%; background: #c6efdc;
+}
+/* 2 セット並べる。padding-right を gap と同じにすると、幅のちょうど半分が 1 周期になる */
+.fx-cloud-row { position: absolute; left: 0; display: flex; gap: 20cqi; padding-right: 20cqi; width: max-content; }
+.fx-cloud-row.far  { top: 6%;  scale: .6; transform-origin: left top; opacity: .75; }
+.fx-cloud-row.near { top: 30%; }
+.fx-cloud-row i { position: relative; display: block; width: 24cqi; height: 8cqi; margin-top: 7cqi; border-radius: 8cqi; background: #fff; }
+.fx-cloud-row i:nth-child(even) { margin-top: 1cqi; }
+.fx-cloud-row i::before, .fx-cloud-row i::after { content: ""; position: absolute; bottom: 3cqi; border-radius: 50%; background: #fff; }
+.fx-cloud-row i::before { left: 4cqi;  width: 10cqi; height: 10cqi; }
+.fx-cloud-row i::after  { left: 11cqi; width: 7cqi;  height: 7cqi; }
+
+.play .fx-cloud-row.far  { animation: drift calc(16s / var(--speed)) linear infinite; }   /* 遠い雲は遅く */
+.play .fx-cloud-row.near { animation: drift calc(9s  / var(--speed)) linear infinite; }
+.play .fx-sun            { animation: sun-breathe calc(3s / var(--speed)) ease-in-out infinite alternate; }
+
+@keyframes drift       { to { translate: -50% 0; } }
+@keyframes sun-breathe { to { box-shadow: 0 0 0 3cqi rgba(255, 240, 184, .5), 0 0 0 6cqi rgba(255, 240, 184, .25); } }

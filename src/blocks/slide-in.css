@@ -1,0 +1,12 @@
+.stage-slidein { background: #effaf4; }
+.fx-panel { position: absolute; width: 42cqi; height: 15cqi; border-radius: 3cqi; border: .3cqi solid var(--ink); }
+.fx-panel.a { left: 8%;  top: 12%; background: #ffd3e3; translate: -140% 0; }
+.fx-panel.b { right: 8%; top: 38%; background: #fff4cc; translate: 140% 0; }
+.fx-panel.c { left: 29%; top: 64%; background: #d7eeff; translate: 0 240%; }
+.play .fx-panel.a { animation: slide-a calc(3.4s / var(--speed)) cubic-bezier(.2, .9, .3, 1) infinite; }
+.play .fx-panel.b { animation: slide-b calc(3.4s / var(--speed)) cubic-bezier(.2, .9, .3, 1) infinite; animation-delay: calc(.12s / var(--speed)); }
+.play .fx-panel.c { animation: slide-c calc(3.4s / var(--speed)) cubic-bezier(.2, .9, .3, 1) infinite; animation-delay: calc(.24s / var(--speed)); }
+
+@keyframes slide-a { 0%, 5% { translate: -140% 0; } 22%, 72% { translate: 0 0; } 88%, 100% { translate: -140% 0; } }
+@keyframes slide-b { 0%, 5% { translate: 140% 0; }  22%, 72% { translate: 0 0; } 88%, 100% { translate: 140% 0; } }
+@keyframes slide-c { 0%, 5% { translate: 0 240%; }  22%, 72% { translate: 0 0; } 88%, 100% { translate: 0 240%; } }

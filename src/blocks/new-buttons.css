@@ -1,0 +1,82 @@
+/* @@ btn-fill */
+.stage-btnfill { background: #fff5f9; }
+.fx-btn.fill { transition: color .35s; }
+.fx-btn.fill::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #ff8fb8; translate: -101% 0; transition: translate .35s cubic-bezier(.2, .8, .2, 1); }
+.fx-btn.fill:hover { color: #fff; }               /* 実装はこの 2 行だけ */
+.fx-btn.fill:hover::before { translate: 0 0; }
+/* ---- デモ用の自動再生（実装では不要） ---- */
+.play .fx-btn.fill         { animation: btn-fill-text calc(3s / var(--speed)) infinite; }
+.play .fx-btn.fill::before { animation: btn-fill-bg   calc(3s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+@keyframes btn-fill-bg   { 0%, 15% { translate: -101% 0; } 35%, 65% { translate: 0 0; } 85%, 100% { translate: 101% 0; } }
+@keyframes btn-fill-text { 0%, 20% { color: #ff6fa8; } 35%, 65% { color: #fff; } 80%, 100% { color: #ff6fa8; } }
+
+/* @@ btn-shine */
+.stage-btnshine { background: #f4f0ff; }
+.fx-btn.shine { color: #fff; border: 0; background: linear-gradient(135deg, #ff8fb8, #c9b8ff); box-shadow: 0 2cqi 5cqi rgba(255, 143, 184, .4); }
+.fx-btn.shine::after {                     /* 斜めの光 */
+  content: ""; position: absolute; top: -50%; bottom: -50%; left: 0; width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent);
+  rotate: 20deg; translate: -200% 0;
+}
+.fx-btn.shine:hover::after { transition: translate .6s; translate: 500% 0; }
+/* ---- デモ用の自動再生 ---- */
+.play .fx-btn.shine::after { animation: btn-shine calc(2.4s / var(--speed)) ease-in-out infinite; }
+@keyframes btn-shine { 0%, 20% { translate: -200% 0; } 55%, 100% { translate: 500% 0; } }
+
+/* @@ btn-arrow */
+.stage-btnarrow { background: #effaf4; }
+.fx-btn.arrow { color: #fff; border: 0; background: #4b4a5e; gap: 2cqi; transition: background .3s; }
+.fx-btn.arrow b { display: inline-block; transition: translate .3s; }
+.fx-btn.arrow:hover { background: #ff6fa8; }
+.fx-btn.arrow:hover b { translate: 1.2cqi 0; }     /* 矢印だけ少し前へ */
+/* ---- デモ用の自動再生 ---- */
+.play .fx-btn.arrow   { animation: btn-arrow-bg calc(2.6s / var(--speed)) infinite; }
+.play .fx-btn.arrow b { animation: btn-arrow    calc(2.6s / var(--speed)) cubic-bezier(.3, 1.4, .5, 1) infinite; }
+@keyframes btn-arrow    { 0%, 25% { translate: 0 0; } 40%, 65% { translate: 1.4cqi 0; } 80%, 100% { translate: 0 0; } }
+@keyframes btn-arrow-bg { 0%, 25% { background: #4b4a5e; } 40%, 65% { background: #ff6fa8; } 80%, 100% { background: #4b4a5e; } }
+
+/* @@ btn-gradient-border */
+.stage-btngb { background: #fff; }
+.fx-btn.gb {
+  --a: 0deg; color: var(--ink); border: .5cqi solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,                                        /* 内側は白 */
+    conic-gradient(from var(--a), #ff8fb8, #ffe59a, #9fe3cd, #8fd0ff, #c9b8ff, #ff8fb8) border-box;   /* 枠だけグラデ */
+}
+.play .fx-btn.gb { animation: gb-spin calc(3s / var(--speed)) linear infinite; }
+@keyframes gb-spin { to { --a: 360deg; } }   /* @property で角度として登録してあるので回せる */
+
+/* @@ link-underline */
+.stage-links { background: #fff; }
+.fx-links { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; gap: 7cqi; font: 700 4.4cqi/1 var(--font-body); color: var(--ink); }
+.fx-links a { position: relative; padding: 1cqi 0; }
+.fx-links a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: .5cqi; border-radius: 1cqi; background: #ff8fb8;
+  transform: scaleX(0); transform-origin: right; transition: transform .3s;
+}
+.fx-links a:hover::after { transform: scaleX(1); transform-origin: left; }   /* 入る時は左から伸び、抜ける時は右へ縮む */
+/* ---- デモ用の自動再生 ---- */
+.play .fx-links a::after { animation: ul-grow calc(3.6s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-links a:nth-child(2)::after { animation-delay: calc(1.2s / var(--speed)); }
+.play .fx-links a:nth-child(3)::after { animation-delay: calc(2.4s / var(--speed)); }
+@keyframes ul-grow {
+  0%, 5%    { transform: scaleX(0); transform-origin: left; }
+  12%, 25%  { transform: scaleX(1); transform-origin: left; }
+  26%       { transform-origin: right; }
+  33%, 100% { transform: scaleX(0); transform-origin: right; }
+}
+
+/* @@ nav-indicator */
+.stage-navind { background: #f4f0ff; }
+.fx-nav {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+  display: grid; grid-template-columns: repeat(4, 18cqi); padding: 1cqi; border-radius: 999px;
+  background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12);
+}
+.fx-nav span { position: relative; z-index: 1; text-align: center; padding: 2.4cqi 0; font: 700 3.6cqi/1 var(--font-body); color: var(--ink); }
+.fx-nav i { position: absolute; left: 1cqi; top: 1cqi; bottom: 1cqi; width: 18cqi; border-radius: 999px; background: linear-gradient(135deg, #ff8fb8, #c9b8ff); transition: translate .4s cubic-bezier(.3, 1.2, .4, 1); }
+/* 実装：選択中の index に合わせて translate: calc(index * 100%) 0 を付ける */
+.play .fx-nav i    { animation: nav-slide  calc(4.8s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+.play .fx-nav span { animation: nav-active calc(4.8s / var(--speed)) infinite; animation-delay: calc(var(--i) * 1.2s / var(--speed)); }
+@keyframes nav-slide  { 0%, 20% { translate: 0 0; } 25%, 45% { translate: 100% 0; } 50%, 70% { translate: 200% 0; } 75%, 95% { translate: 300% 0; } 100% { translate: 0 0; } }
+@keyframes nav-active { 0%, 20% { color: #fff; } 25%, 100% { color: #4b4a5e; } }

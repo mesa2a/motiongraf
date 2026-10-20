@@ -1,0 +1,4 @@
+.stage-gradbg { background: #fff; }
+.fx-gradbg { position: absolute; inset: 0; background: linear-gradient(90deg, #ffd3e3, #fff4cc, #d9f5ec, #d7eeff, #e8e0ff, #ffd3e3) 0 0 / 400% 100%; }
+.play .fx-gradbg { animation: grad-bg calc(8s / var(--speed)) linear infinite; }
+@keyframes grad-bg { to { background-position: -133.333% 0; } }   /* size 400% のとき 1 周 = -133.33% */

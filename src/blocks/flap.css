@@ -1,0 +1,11 @@
+.stage-flap { background: #fffaf0; }
+.fx-cal { position: relative; width: 26cqi; height: 30cqi; }
+.fx-cal .page {
+  position: absolute; inset: 0; display: grid; place-items: center; padding-top: 5cqi;
+  border-radius: 3cqi; border: .3cqi solid var(--ink); background: #fff;
+  font: 700 14cqi/1 var(--font-en); color: var(--ink);
+}
+.fx-cal .page::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 22%; background: #ff8fb8; border-bottom: .3cqi solid var(--ink); border-radius: 2.3cqi 2.3cqi 0 0; }
+.fx-cal .cur { transform-origin: top center; backface-visibility: hidden; }   /* 上辺を軸にめくる */
+.play .fx-cal .cur { animation: page-flip calc(3s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes page-flip { 0%, 30% { transform: rotateX(0); } 65%, 100% { transform: rotateX(-180deg); } }

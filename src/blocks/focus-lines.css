@@ -1,0 +1,24 @@
+.stage-lines { background: #171a2b; }
+.fx-lines {
+  position: absolute; inset: -60%;
+  background: repeating-conic-gradient(#fff 0 1deg, transparent 1deg 6deg);
+  -webkit-mask: radial-gradient(circle, transparent 20%, #000 55%);
+          mask: radial-gradient(circle, transparent 20%, #000 55%);
+  opacity: .85;
+}
+.fx-shout {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font: 400 24cqi/1 var(--font-cool); color: #ffe14d;
+  -webkit-text-stroke: .6cqi #171a2b; paint-order: stroke fill;
+  text-shadow: 1.4cqi 1.4cqi 0 #ff4fa3;
+  transform: scale(0);
+}
+.play .fx-lines { animation: lines-jitter calc(.5s / var(--speed)) steps(3) infinite; }   /* steps でコマ落ち */
+.play .fx-shout { animation: shout-pop calc(2.4s / var(--speed)) cubic-bezier(.2, 1.5, .4, 1) infinite; }
+@keyframes lines-jitter { to { transform: rotate(6deg); } }
+@keyframes shout-pop {
+  0%       { transform: scale(0) rotate(-20deg); opacity: 1; }
+  18%      { transform: scale(1.1) rotate(-6deg); }
+  28%, 82% { transform: scale(1) rotate(-6deg); opacity: 1; }
+  100%     { transform: scale(1.5) rotate(-6deg); opacity: 0; }
+}

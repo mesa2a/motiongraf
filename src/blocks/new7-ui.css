@@ -1,0 +1,141 @@
+/* @@ datepicker */
+.stage-dp { background: #f4f0ff; }
+.fx-dp { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 50cqi; border-radius: 2.5cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; }
+.fx-dp .hd { display: flex; justify-content: space-between; align-items: center; padding: 2cqi 3cqi; font: 700 3.2cqi/1 var(--font-en); color: var(--ink); }
+.fx-dp .hd b { color: #ff6fa8; }
+.fx-dp .hd .t { display: grid; }
+.fx-dp .hd .t span { grid-area: 1 / 1; }
+.fx-dp .hd .t span:nth-child(2) { opacity: 0; }
+.fx-dp .months { position: relative; height: 22cqi; overflow: hidden; }   /* 窓 */
+.fx-dp .m { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: .6cqi; padding: 1cqi 3cqi; align-content: start; }
+.fx-dp .m i { height: 3cqi; border-radius: 1cqi; background: #eef0f8; }
+.fx-dp .m i.sel { background: #ff6fa8; }
+.fx-dp .m:nth-child(2) { translate: 100% 0; }
+.fx-dp .m:nth-child(2) i { background: #f6eeff; }
+.fx-dp .m:nth-child(2) i.sel { background: #c9b8ff; }
+/* 実装：月のグリッドを 2 枚用意し、translate で入れ替える */
+.play .fx-dp .m:nth-child(1)    { animation: dp-out   calc(4s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-dp .m:nth-child(2)    { animation: dp-in    calc(4s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-dp .t span:nth-child(1) { animation: dp-t1  calc(4s / var(--speed)) steps(1) infinite; }
+.play .fx-dp .t span:nth-child(2) { animation: dp-t2  calc(4s / var(--speed)) steps(1) infinite; }
+.play .fx-dp .hd b.nx           { animation: dp-tap   calc(4s / var(--speed)) infinite; }
+@keyframes dp-out { 0%, 25% { translate: 0 0; } 45%, 80% { translate: -100% 0; } 95%, 100% { translate: 0 0; } }
+@keyframes dp-in  { 0%, 25% { translate: 100% 0; } 45%, 80% { translate: 0 0; } 95%, 100% { translate: 100% 0; } }
+@keyframes dp-t1  { 0%, 34% { opacity: 1; } 35%, 94% { opacity: 0; } 95%, 100% { opacity: 1; } }
+@keyframes dp-t2  { 0%, 34% { opacity: 0; } 35%, 94% { opacity: 1; } 95%, 100% { opacity: 0; } }
+@keyframes dp-tap { 0%, 22%, 30%, 100% { scale: 1; } 25% { scale: .8; } }
+
+/* @@ notif-stack */
+.stage-notif { background: #f0f7ff; }
+.fx-nt { position: absolute; right: 4cqi; top: 4cqi; width: 40cqi; }
+.fx-nt .n { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 2cqi; padding: 2.2cqi 3cqi; border-radius: 2cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .16); font: 700 3cqi/1.3 var(--font-body); color: var(--ink); translate: 0 -150%; opacity: 0; }
+.fx-nt .n i { width: 4cqi; height: 4cqi; border-radius: 50%; background: var(--c); flex: none; }
+/* 新しい通知が上に入り、前のものが下へ押し下げられる。1 本のキーフレームを 1 秒ずつずらして共有 */
+.play .fx-nt .n { animation: notif-life calc(6s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; animation-delay: calc(var(--i) * 1s / var(--speed)); }
+@keyframes notif-life {
+  0%        { translate: 0 -150%; opacity: 0; }
+  5%, 16%   { translate: 0 0;     opacity: 1; }    /* 1 段目 */
+  22%, 33%  { translate: 0 115%;  opacity: 1; }    /* 2 段目へ */
+  39%, 48%  { translate: 0 230%;  opacity: 1; }    /* 3 段目へ */
+  55%, 100% { translate: 0 260%;  opacity: 0; }    /* 消える */
+}
+
+/* @@ pull-refresh */
+.stage-pull { background: #f4f0ff; }
+.fx-pr-phone { position: absolute; left: 50%; top: 6%; translate: -50% 0; width: 36cqi; height: 60cqi; border-radius: 4cqi; background: #fff; border: .8cqi solid var(--ink); overflow: hidden; }
+.fx-pr-spin { position: absolute; left: 50%; top: 2cqi; width: 5cqi; height: 5cqi; translate: -50% 0; border-radius: 50%; border: .6cqi solid #e8e0ff; border-top-color: #ff6fa8; opacity: 0; }
+.fx-pr-list { padding: 3cqi; display: grid; gap: 2cqi; }
+.fx-pr-list .it { height: 9cqi; border-radius: 2cqi; background: #eef0f8; }
+.fx-pr-list .it.new { background: #ffd3e3; height: 0; margin-bottom: -2cqi; opacity: 0; }   /* 更新で増える項目 */
+/* 実装：タッチ移動量で translate、離したら読み込み → 完了で戻す */
+.play .fx-pr-list     { animation: pr-pull calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-pr-spin     { animation: pr-spin calc(.8s / var(--speed)) linear infinite, pr-show calc(5s / var(--speed)) infinite; }
+.play .fx-pr-list .new{ animation: pr-new  calc(5s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+@keyframes pr-pull { 0%, 10% { translate: 0 0; } 25%, 60% { translate: 0 8cqi; } 75%, 100% { translate: 0 0; } }
+@keyframes pr-spin { to { rotate: 360deg; } }
+@keyframes pr-show { 0%, 18% { opacity: 0; } 25%, 60% { opacity: 1; } 70%, 100% { opacity: 0; } }
+@keyframes pr-new  { 0%, 68% { height: 0; margin-bottom: -2cqi; opacity: 0; } 80%, 92% { height: 9cqi; margin-bottom: 0; opacity: 1; } 100% { height: 9cqi; margin-bottom: 0; opacity: 0; } }
+
+/* @@ bottom-sheet */
+.stage-sheet { background: #f0f7ff; }
+.fx-sh-page { position: absolute; inset: 0; padding: 5cqi; display: grid; gap: 2cqi; align-content: start; }
+.fx-sh-page b { display: block; height: 2cqi; border-radius: 1cqi; background: #d7eeff; }
+.fx-sh-page b:nth-child(2) { width: 70%; }
+.fx-sh-shade { position: absolute; inset: 0; background: rgba(75, 74, 94, .4); opacity: 0; }
+.fx-sh { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; border-radius: 3cqi 3cqi 0 0; background: #fff; box-shadow: 0 -1cqi 4cqi rgba(75, 74, 94, .15); translate: 0 100%; padding: 4cqi 4cqi 0; display: grid; gap: 2cqi; align-content: start; }
+.fx-sh::before { content: ""; width: 8cqi; height: .8cqi; border-radius: 1cqi; background: #e8e0ff; margin: 0 auto 1cqi; }   /* つまみ */
+.fx-sh b { display: block; height: 2.4cqi; border-radius: 1cqi; background: #f6eeff; }
+.fx-sh b:first-of-type { width: 50%; background: #c9b8ff; }
+/* 実装：.open で translate: 0 0。スワイプ量で途中の位置に止めるとスナップに */
+.play .fx-sh       { animation: sh-up    calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-sh-shade { animation: sh-shade calc(5s / var(--speed)) infinite; }
+@keyframes sh-up    { 0%, 12% { translate: 0 100%; } 28%, 45% { translate: 0 45%; } 55%, 78% { translate: 0 0; } 92%, 100% { translate: 0 100%; } }   /* 半分で一度止まって、全開 */
+@keyframes sh-shade { 0%, 12% { opacity: 0; } 28%, 78% { opacity: 1; } 92%, 100% { opacity: 0; } }
+
+/* @@ swipe-delete */
+.stage-swipe { background: #fff; }
+.fx-sd { position: absolute; left: 14%; right: 14%; top: 50%; translate: 0 -50%; display: grid; gap: 1.5cqi; }
+.fx-sd .row { display: grid; grid-template-rows: 1fr; }
+.fx-sd .row > div { min-height: 0; overflow: hidden; position: relative; border-radius: 2cqi; }
+.fx-sd .bg { position: absolute; inset: 0; background: #ff6fa8; display: flex; justify-content: flex-end; align-items: center; padding-right: 3cqi; color: #fff; font: 700 3cqi/1 var(--font-body); }
+.fx-sd .it { position: relative; height: 9cqi; border-radius: 2cqi; background: #f6f5f3; display: flex; align-items: center; padding: 0 3cqi; gap: 2cqi; font: 700 3.2cqi/1 var(--font-body); color: var(--ink); }
+.fx-sd .it i { width: 4cqi; height: 4cqi; border-radius: 50%; background: #c9b8ff; }
+/* 実装：タッチ移動で translate、閾値を超えたら削除して高さを 0fr へ */
+.play .fx-sd .row.target .it { animation: sd-slide calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+.play .fx-sd .row.target     { animation: sd-collapse calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+@keyframes sd-slide    { 0%, 15% { translate: 0 0; } 30%, 50% { translate: -34% 0; } 58%, 100% { translate: -120% 0; } }
+@keyframes sd-collapse { 0%, 60% { grid-template-rows: 1fr; opacity: 1; } 72%, 90% { grid-template-rows: 0fr; opacity: 0; } 100% { grid-template-rows: 1fr; opacity: 1; } }
+
+/* @@ reorder */
+.stage-reorder { background: #f4f0ff; }
+.fx-ro { position: absolute; left: 20%; right: 20%; top: 50%; translate: 0 -50%; display: grid; gap: 1.5cqi; }
+.fx-ro .it { height: 9cqi; border-radius: 2cqi; background: #fff; box-shadow: 0 .5cqi 1.5cqi rgba(75, 74, 94, .1); display: flex; align-items: center; gap: 2cqi; padding: 0 3cqi; font: 700 3.2cqi/1 var(--font-body); color: var(--ink); }
+.fx-ro .it::before { content: "⋮⋮"; color: #c9b8ff; letter-spacing: -.2em; }   /* 持ち手 */
+/* 実装：ドラッグ中の要素は scale と影を強め、入れ替わる相手は translate で席を譲る */
+.play .fx-ro .it.drag  { animation: ro-drag  calc(5s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+.play .fx-ro .it.shift { animation: ro-shift calc(5s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+@keyframes ro-drag  { 0%, 15% { translate: 0 0; scale: 1; box-shadow: 0 .5cqi 1.5cqi rgba(75, 74, 94, .1); } 22% { scale: 1.04; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .22); } 45%, 60% { translate: 0 -10.5cqi; scale: 1.04; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .22); } 66%, 85% { translate: 0 -10.5cqi; scale: 1; box-shadow: 0 .5cqi 1.5cqi rgba(75, 74, 94, .1); } 95%, 100% { translate: 0 0; scale: 1; } }
+@keyframes ro-shift { 0%, 30% { translate: 0 0; } 45%, 85% { translate: 0 10.5cqi; } 95%, 100% { translate: 0 0; } }
+
+/* @@ pager-fly */
+.stage-pager2 { background: #fff; }
+.fx-pg { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; align-items: center; gap: 1.5cqi; }
+.fx-pg b { width: 7cqi; height: 7cqi; border-radius: 50%; display: grid; place-items: center; font: 700 3.2cqi/1 var(--font-en); color: var(--ink); }
+.fx-pg .arr { color: #ff6fa8; }
+.fx-pg .nums { position: relative; display: flex; gap: 1.5cqi; }
+.fx-pg .nums i { position: absolute; left: 0; top: 0; width: 7cqi; height: 7cqi; border-radius: 50%; background: #ff6fa8; z-index: -1; }   /* 動く丸 */
+.fx-pg .nums b { position: relative; z-index: 1; transition: color .3s; }
+/* 実装：現在ページの index に合わせて丸を translate、文字色を白に */
+.play .fx-pg .nums i   { animation: pg-move   calc(6s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+.play .fx-pg .nums b   { animation: pg-active calc(6s / var(--speed)) infinite; animation-delay: calc(var(--i) * 1.2s / var(--speed)); }
+.play .fx-pg .arr.r    { animation: pg-tap    calc(1.2s / var(--speed)) infinite; }
+@keyframes pg-move   { 0%, 16% { translate: 0 0; } 20%, 36% { translate: 8.5cqi 0; } 40%, 56% { translate: 17cqi 0; } 60%, 76% { translate: 25.5cqi 0; } 80%, 96% { translate: 34cqi 0; } 100% { translate: 0 0; } }
+@keyframes pg-active { 0%, 16% { color: #fff; } 20%, 100% { color: #4b4a5e; } }
+@keyframes pg-tap    { 0%, 10%, 20%, 100% { scale: 1; } 15% { scale: .8; } }
+
+/* @@ long-press */
+.stage-longpress { background: #fff5f9; }
+.fx-lp { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 22cqi; height: 22cqi; border-radius: 50%; display: grid; place-items: center; --n: 0;
+  background: conic-gradient(#ff6fa8 calc(var(--n) * 1%), #ffd3e3 0); }   /* 外周のゲージ */
+.fx-lp .core { width: 18cqi; height: 18cqi; border-radius: 50%; background: #fff; display: grid; place-items: center; font: 700 3cqi/1.3 var(--font-body); color: var(--ink); text-align: center; }
+.fx-lp .core .ok { position: absolute; width: 3cqi; height: 5.5cqi; border-right: .8cqi solid #fff; border-bottom: .8cqi solid #fff; rotate: 45deg; translate: 0 -.6cqi; scale: 0; }
+/* 実装：pointerdown で --n を 0 → 100 に 1.5 秒で、pointerup で中断 */
+.play .fx-lp       { animation: lp-fill calc(4s / var(--speed)) infinite; }
+.play .fx-lp .core { animation: lp-core calc(4s / var(--speed)) infinite; }
+.play .fx-lp .ok   { animation: lp-ok   calc(4s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; }
+@keyframes lp-fill { 0%, 15% { --n: 0; scale: 1; } 18% { scale: .94; } 52% { --n: 100; scale: .94; } 56%, 80% { --n: 100; scale: 1; } 90%, 100% { --n: 0; scale: 1; } }
+@keyframes lp-core { 0%, 52% { background: #fff; color: #4b4a5e; } 56%, 80% { background: #6fd3b3; color: transparent; } 90%, 100% { background: #fff; color: #4b4a5e; } }
+@keyframes lp-ok   { 0%, 54% { scale: 0; } 62%, 80% { scale: 1; } 88%, 100% { scale: 0; } }
+
+/* @@ magnetic */
+.stage-magnet { background: #f0f7ff; }
+.fx-mg { position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 3.4cqi 7cqi; border-radius: 999px; background: var(--ink); color: #fff; font: 700 4cqi/1 var(--font-body); }
+.fx-mg span { display: inline-block; }
+.fx-cursor { position: absolute; left: 50%; top: 50%; width: 3cqi; height: 3cqi; margin: -1.5cqi; border-radius: 50%; border: .5cqi solid #ff6fa8; background: rgba(255, 111, 168, .3); }
+/* 実装：JS でボタン中心からのマウス距離を取り、ボタンを 0.25 倍、文字を 0.4 倍だけ寄せる */
+.play .fx-cursor   { animation: mg-cursor calc(6s / var(--speed)) ease-in-out infinite; }
+.play .fx-mg       { animation: mg-btn    calc(6s / var(--speed)) ease-in-out infinite; }
+.play .fx-mg span  { animation: mg-text   calc(6s / var(--speed)) ease-in-out infinite; }
+@keyframes mg-cursor { 0%, 100% { translate: -18cqi -8cqi; } 30% { translate: 16cqi -6cqi; } 60% { translate: 12cqi 9cqi; } 80% { translate: -14cqi 8cqi; } }
+@keyframes mg-btn    { 0%, 100% { translate: calc(-50% - 4.5cqi) calc(-50% - 2cqi); } 30% { translate: calc(-50% + 4cqi) calc(-50% - 1.5cqi); } 60% { translate: calc(-50% + 3cqi) calc(-50% + 2.2cqi); } 80% { translate: calc(-50% - 3.5cqi) calc(-50% + 2cqi); } }
+@keyframes mg-text   { 0%, 100% { translate: -2.5cqi -1cqi; } 30% { translate: 2.2cqi -.8cqi; } 60% { translate: 1.7cqi 1.2cqi; } 80% { translate: -2cqi 1.1cqi; } }

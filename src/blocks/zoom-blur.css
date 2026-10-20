@@ -1,0 +1,13 @@
+.stage-zoom { background: #171a2b; }
+.fx-zoomtext {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font: 400 16cqi/1 var(--font-cool); color: #ff4fa3;
+  -webkit-text-stroke: .5cqi #fff; paint-order: stroke fill;
+  transform: scale(3); opacity: 0; filter: blur(2cqi);
+}
+.play .fx-zoomtext { animation: zoom-in calc(3s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+@keyframes zoom-in {
+  0%, 5%    { transform: scale(3);  opacity: 0; filter: blur(2cqi); }   /* 大きくぼやけた状態から */
+  22%, 78%  { transform: scale(1);  opacity: 1; filter: blur(0); }
+  92%, 100% { transform: scale(.6); opacity: 0; filter: blur(1cqi); }
+}

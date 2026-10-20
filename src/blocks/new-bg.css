@@ -1,0 +1,55 @@
+/* @@ aurora */
+.stage-aurora { background: #fff; }
+.fx-aurora { position: absolute; inset: 0; filter: blur(5cqi); }   /* 親でまとめてぼかす */
+.fx-aurora i { position: absolute; width: 50cqi; aspect-ratio: 1; border-radius: 50%; opacity: .8; }
+.fx-aurora i:nth-child(1) { left: -10%;  top: -30%;    background: #ff9ec4; }
+.fx-aurora i:nth-child(2) { right: -10%; top: -20%;    background: #8fd0ff; }
+.fx-aurora i:nth-child(3) { left: 20%;   bottom: -50%; background: #c9b8ff; }
+.fx-aurora i:nth-child(4) { right: 15%;  bottom: -40%; background: #9fe3cd; }
+.play .fx-aurora i { animation: aurora-move calc(9s / var(--speed)) ease-in-out infinite alternate; }
+.play .fx-aurora i:nth-child(2) { animation-delay: calc(-3s / var(--speed)); animation-direction: alternate-reverse; }
+.play .fx-aurora i:nth-child(3) { animation-delay: calc(-5s / var(--speed)); }
+.play .fx-aurora i:nth-child(4) { animation-delay: calc(-7s / var(--speed)); animation-direction: alternate-reverse; }
+@keyframes aurora-move { from { translate: 0 0; scale: 1; } to { translate: 20cqi 14cqi; scale: 1.25; } }
+
+/* @@ blob */
+.stage-blob { background: #fff5f9; }
+.fx-blob {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 40cqi; aspect-ratio: 1;
+  background: linear-gradient(135deg, #ff9ec4, #c9b8ff 60%, #8fd0ff);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  box-shadow: 0 3cqi 8cqi rgba(201, 184, 255, .5);
+}
+.play .fx-blob { animation: blob-morph calc(8s / var(--speed)) ease-in-out infinite, blob-spin calc(20s / var(--speed)) linear infinite; }
+@keyframes blob-morph {   /* border-radius の 8 値を変えるだけで形が流れる */
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  33%      { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  66%      { border-radius: 50% 60% 30% 60% / 40% 30% 60% 50%; }
+}
+@keyframes blob-spin { to { rotate: 360deg; } }
+
+/* @@ grid-move */
+.stage-gridbg { background: #f4f0ff; }
+.fx-gridbg {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(201, 184, 255, .55) .3cqi, transparent .3cqi) 0 0 / 6cqi 6cqi,
+    linear-gradient(0deg,  rgba(201, 184, 255, .55) .3cqi, transparent .3cqi) 0 0 / 6cqi 6cqi;
+  -webkit-mask: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+          mask: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+}
+.play .fx-gridbg { animation: grid-slide calc(2s / var(--speed)) linear infinite; }
+@keyframes grid-slide { to { background-position: 6cqi 6cqi, 6cqi 6cqi; } }   /* タイル 1 枚分動かすと継ぎ目なし */
+
+/* @@ marquee */
+.stage-marquee { background: #fff; }
+.fx-marquee {
+  position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; overflow: hidden;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+          mask: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);   /* 両端をふわっと消す */
+}
+.fx-marquee .track { display: flex; gap: 3cqi; padding-right: 3cqi; width: max-content; }   /* 同じ内容を 2 セット並べる */
+.fx-marquee b { padding: 2cqi 3.6cqi; border-radius: 999px; background: #fff0f6; color: #ff6fa8; font: 700 3.4cqi/1 var(--font-body); white-space: nowrap; }
+.fx-marquee b:nth-child(even) { background: #e8e0ff; color: #7c5fd6; }
+.play .fx-marquee .track { animation: marquee calc(10s / var(--speed)) linear infinite; }
+@keyframes marquee { to { translate: -50% 0; } }   /* ちょうど 1 セット分で繋がる */

@@ -1,0 +1,32 @@
+.stage-cutin { background: #12001f; }
+.fx-cutin-bg {
+  position: absolute; inset: 0;
+  /* タイル幅 12cqi = 周期 6cqi ÷ cos(60deg)。端が継ぎ目なくループする */
+  background: repeating-linear-gradient(-30deg, #1d0a33 0 3cqi, #12001f 3cqi 6cqi) 0 0 / 12cqi 100%;
+}
+.fx-cutin-panel {
+  position: absolute; left: -10%; right: -10%; top: 32%; height: 36%;
+  display: grid; place-items: center; overflow: hidden;
+  background: #ff4fa3; border-block: 1cqi solid #fff;
+  transform: skewX(-18deg) translateX(-120%);
+}
+.fx-cutin-text {
+  font: 400 11cqi/1 var(--font-cool); color: #fff; letter-spacing: .05em;
+  transform: skewX(18deg) translateX(60%);   /* 親の歪みを打ち消す */
+  opacity: 0;
+}
+.fx-cutin-text em { font-style: normal; color: #ffe14d; }
+.play .fx-cutin-bg    { animation: stripes-run calc(.6s / var(--speed)) linear infinite; }
+.play .fx-cutin-panel { animation: cutin-panel calc(3.2s / var(--speed)) cubic-bezier(.2, .9, .2, 1) infinite; }
+.play .fx-cutin-text  { animation: cutin-text  calc(3.2s / var(--speed)) cubic-bezier(.2, .9, .2, 1) infinite; }
+@keyframes stripes-run { to { background-position: 12cqi 0; } }
+@keyframes cutin-panel {
+  0%        { transform: skewX(-18deg) translateX(-120%); }
+  15%, 75%  { transform: skewX(-18deg) translateX(0); }
+  90%, 100% { transform: skewX(-18deg) translateX(120%); }
+}
+@keyframes cutin-text {
+  0%, 10%   { transform: skewX(18deg) translateX(60%);  opacity: 0; }
+  25%, 72%  { transform: skewX(18deg) translateX(0);    opacity: 1; }
+  85%, 100% { transform: skewX(18deg) translateX(-60%); opacity: 0; }
+}

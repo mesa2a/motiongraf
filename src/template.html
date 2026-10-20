@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS MOTION GRAPHICS — Web デザインのための CSS モーション {{COUNT}} 選</title>
+<meta name="description" content="JavaScript 不要。Web デザインでそのまま使える CSS モーション {{COUNT}} 本。見出しの登場、ボタンのホバー、カードや画像、スクロール連動、ナビやモーダルなどの UI、画面転換、背景、エフェクト。コードをコピーしてそのまま使えます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&family=Dela+Gothic+One&family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<!--
+  演出の CSS はこの <style> に全部入っています（src/blocks/*.css から生成）。
+  「/* @@ id */」が区切りで、各カードの「コード」はここから自動で切り出されます。
+  編集は src/ 以下を直して `node src/build.js` を実行してください。
+-->
+<style id="motions-src">
+{{STYLE}}
+</style>
+</head>
+<body>
+<a class="skip" href="#catalog">本文へスキップ</a>
+<div class="scroll-progress" aria-hidden="true"></div>
+
+<header class="site-head">
+  <a class="logo" href="#top">
+    <span class="logo-mark" aria-hidden="true"></span>
+    <span class="logo-text">CSS MOTION</span>
+  </a>
+  <nav class="site-nav" aria-label="ページ内リンク">
+    <a href="#catalog">カタログ</a>
+    <a href="#tips">コツ</a>
+    <a href="#usage">使い方</a>
+  </nav>
+  <label class="speed">
+    <span>SPEED</span>
+    <select id="speed" aria-label="再生速度">
+      <option value="0.5">0.5×</option>
+      <option value="1" selected>1.0×</option>
+      <option value="2">2.0×</option>
+    </select>
+  </label>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero" aria-label="イントロダクション">
+  <div class="hero-deco" aria-hidden="true">
+    <i class="deco flower" style="--x:10; --y:24; --c:#f8cdd6; --s:1.2; --d:0;  --t:7"></i>
+    <i class="deco flower" style="--x:86; --y:20; --c:#f9e2ac; --s:1;   --d:2;  --t:8"></i>
+    <i class="deco flower" style="--x:78; --y:72; --c:#c4ecdd; --s:1.2; --d:1;  --t:9"></i>
+    <i class="deco spark"  style="--x:26; --y:38; --c:#fff;    --s:1.1; --d:0"></i>
+    <i class="deco spark"  style="--x:72; --y:44; --c:#f9e2ac; --s:1;   --d:1.2"></i>
+    <i class="deco spark"  style="--x:16; --y:70; --c:#fff;    --s:.9;  --d:2"></i>
+    <i class="deco dot"    style="--x:62; --y:14; --c:#fff;    --d:1"></i>
+    <i class="deco dot"    style="--x:40; --y:80; --c:#f8cdd6; --d:3"></i>
+  </div>
+  <div class="hero-inner">
+    <p class="hero-ep">
+      <span class="hero-ep-en">EPISODE 01</span>
+      <span class="hero-ep-ja">Web デザインのための CSS モーション集</span>
+    </p>
+    <h1 class="hero-title">
+      <span class="line l1"><b style="--i:0; --r:-4; --o:1">C</b><b style="--i:1; --r:3; --o:-1">S</b><b style="--i:2; --r:-2; --o:0">S</b></span>
+      <span class="line l2"><b style="--i:3; --r:-3; --o:0">M</b><b style="--i:4; --r:2; --o:1">O</b><b style="--i:5; --r:-2; --o:-1">T</b><b style="--i:6; --r:4; --o:0">I</b><b style="--i:7; --r:-3; --o:1">O</b><b style="--i:8; --r:2; --o:-1">N</b></span>
+      <span class="line l3"><b style="--i:9; --r:3; --o:0">G</b><b style="--i:10; --r:-2; --o:1">R</b><b style="--i:11; --r:2; --o:-1">A</b><b style="--i:12; --r:-4; --o:0">P</b><b style="--i:13; --r:3; --o:1">H</b><b style="--i:14; --r:-2; --o:-1">I</b><b style="--i:15; --r:2; --o:0">C</b><b style="--i:16; --r:-3; --o:1">S</b></span>
+    </h1>
+    <p class="hero-sub">CSS MOTION GRAPHICS</p>
+    <p class="hero-lead">JavaScript に頼らない。<em>transform と @keyframes</em> だけで作る、<br class="pc">Web サイトでそのまま使えるモーション <span data-count>{{COUNT}}</span> 本。コピーして貼るだけ。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#catalog">カタログを見る</a>
+      <a class="btn btn-ghost" href="#usage">使い方</a>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">ゆっくりどうぞ<span>↓</span></div>
+</section>
+
+<!-- ============ CATALOG ============ -->
+<section id="catalog" class="section">
+  <div class="sec-head">
+    <span class="sec-scene">EPISODE 01</span>
+    <h2 class="sec-title">Catalog<small>モーションカタログ</small></h2>
+    <p class="sec-lead">全 <span data-count>{{COUNT}}</span> 本、7 カテゴリ。親要素に <code>.play</code> を付けるだけで動きます。各カードの「コード」ボタンで HTML と CSS を表示・コピーできます。ホバー系は、実装では <code>:hover</code> と <code>transition</code> の部分だけ使えば OK です。</p>
+  </div>
+
+  <nav class="cat-nav" aria-label="カテゴリ">
+{{CATNAV}}
+  </nav>
+
+  <!-- 共通パーツ -->
+  <article class="card card-common" data-id="_common" style="--accent: var(--lemon)">
+    <header class="card-head">
+      <span class="card-no star">★</span>
+      <h3 class="card-title">共通パーツ<small>.stage / .fx-btn など</small></h3>
+      <ul class="card-tags"><li>container-type</li><li>cqi</li><li>@property</li></ul>
+    </header>
+    <div class="card-body">
+      <div class="stage" aria-hidden="true">
+        <div class="fx-label">.stage 16 : 9</div>
+      </div>
+      <p class="card-desc">すべての演出の土台。<code>.stage</code> は 16:9 の箱で、<code>container-type</code> を指定して <code>cqi</code>（箱の幅の 1%）で寸法を書けるようにしています。自分のサイトで使う時は <code>cqi</code> を <code>px</code> や <code>rem</code> に読み替えてください（1cqi ≒ 箱の幅 ÷ 100）。白フラッシュ、カメラ、画面転換の前後シーン、3D の箱、デモ用のボタン・ダミー写真・小カードもここにまとめてあります。</p>
+    </div>
+  </article>
+
+{{CATALOG}}
+</section>
+
+<!-- ============ TIPS ============ -->
+<section id="tips" class="section section-alt">
+  <div class="sec-head">
+    <span class="sec-scene">EPISODE 02</span>
+    <h2 class="sec-title">Tips<small>動きを作るコツ</small></h2>
+    <p class="sec-lead">カタログ全体で繰り返し使っている考え方を 6 つにまとめました。</p>
+  </div>
+  <div class="tips">
+    <article class="tip" style="--accent: var(--sky)">
+      <span class="tip-no">01</span>
+      <h3>ホバーは transition、登場は animation</h3>
+      <p>状態の変化（<code>:hover</code>、<code>.open</code>）は <code>transition</code>、勝手に動くもの（ループ、登場）は <code>@keyframes</code>。デモの「自動再生」の部分は実装では不要です。</p>
+      <code>.btn:hover::before { translate: 0 0; }</code>
+    </article>
+    <article class="tip" style="--accent: var(--peach)">
+      <span class="tip-no">02</span>
+      <h3>行き過ぎてから戻る</h3>
+      <p>出てくる時に少し大きくなってから戻る。第 2 引数が 1 を超える <code>cubic-bezier</code> で作れる。1.3 で上品、1.6 でコミカル。</p>
+      <code>cubic-bezier(.3, 1.3, .5, 1)</code>
+    </article>
+    <article class="tip" style="--accent: var(--lemon)">
+      <span class="tip-no">03</span>
+      <h3>ずらす</h3>
+      <p>複数の要素は同時に動かさず、<code>--i</code> を振って <code>animation-delay</code> を少しずつ変える。負の delay なら最初から途中の状態で始められる。</p>
+      <code>animation-delay: calc(var(--i) * .08s);</code>
+    </article>
+    <article class="tip" style="--accent: var(--mint)">
+      <span class="tip-no">04</span>
+      <h3>継ぎ目なくループさせる</h3>
+      <p>2 セット並べて半分だけ動かす（マーキー、雲）、タイル 1 枚分だけ動かす（グリッド、雪）、両端を同じ色にする（グラデ）。ループの瞬間が見えなければ無限に見える。</p>
+      <code>@keyframes marquee { to { translate: -50% 0; } }</code>
+    </article>
+    <article class="tip" style="--accent: var(--pink)">
+      <span class="tip-no">05</span>
+      <h3>隠れている瞬間に差し替える</h3>
+      <p>画面転換や画像の出現は「覆う → 差し替える → 開く」。差し替えは <code>steps(1)</code> の opacity や <code>clip-path</code> の切り替えで一瞬に。</p>
+      <code>animation: scene-swap 4s steps(1) infinite;</code>
+    </article>
+    <article class="tip" style="--accent: var(--lavender)">
+      <span class="tip-no">06</span>
+      <h3>動かすのは 4 つだけ</h3>
+      <p><code>transform</code>・<code>opacity</code>・<code>clip-path</code>・<code>filter</code> はレイアウトを走らせない。高さ auto を動かしたい時は <code>grid-template-rows: 0fr → 1fr</code>。スクロール連動は <code>animation-timeline</code>。</p>
+      <code>translate: -50% -50%; rotate: 5deg;</code>
+    </article>
+  </div>
+</section>
+
+<!-- ============ USAGE ============ -->
+<section id="usage" class="section">
+  <div class="sec-head">
+    <span class="sec-scene">EPISODE 03</span>
+    <h2 class="sec-title">How to use<small>使い方</small></h2>
+    <p class="sec-lead">コピーして貼るだけ。JavaScript はクラスを付け外しする数行で済みます。</p>
+  </div>
+  <ol class="steps">
+    <li class="step">
+      <span class="step-no">1</span>
+      <div>
+        <h3>HTML と CSS をコピーする</h3>
+        <p>各カードの「コード」を開くと、先頭のコメントに HTML、その下に CSS が出ます。白フラッシュやデモ用ボタンなど共通の土台を使う演出は、いちばん上の「共通パーツ」の CSS も一緒に貼ってください。寸法の <code>cqi</code> は、自分のサイトでは <code>px</code> や <code>rem</code> に読み替えると扱いやすくなります。フォントは Google Fonts の <a href="https://fonts.google.com/specimen/Noto+Sans+JP" target="_blank" rel="noopener">Noto Sans JP</a> と <a href="https://fonts.google.com/specimen/Arvo" target="_blank" rel="noopener">Arvo</a>、かっこいい側は Dela Gothic One と Bebas Neue を使っています。</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-no">2</span>
+      <div>
+        <h3><code>.play</code> を付けて再生する（ループ系・登場系）</h3>
+        <p>アニメーションは <code>.stage.play</code> の下だけで定義されています。表示されたタイミングで付けるなら IntersectionObserver を使います。もう一度再生したいときは、クラスを外して強制リフローしてから付け直します。ホバー系は <code>.play</code> 不要で、<code>:hover</code> のルールだけ残せば動きます。</p>
+<pre><code class="lang-js">const io = new IntersectionObserver(entries =&gt; {
+  for (const e of entries) e.target.classList.toggle('play', e.isIntersecting);
+}, { threshold: 0.25 });
+document.querySelectorAll('.stage').forEach(s =&gt; io.observe(s));
+
+// もういちど
+function replay(stage) {
+  stage.classList.remove('play');
+  void stage.offsetWidth;        // 強制リフローでアニメーションをリセット
+  stage.classList.add('play');
+}</code></pre>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-no">3</span>
+      <div>
+        <h3>速度調整と、動きが苦手な人への配慮</h3>
+        <p>すべての <code>animation-duration</code> は <code>calc(時間 / var(--speed))</code> になっているので、<code>--speed: 2</code> にすれば倍速になります。OS で「視差効果を減らす」を選んでいる人には自動再生しないようにしましょう。このページは、その設定のときは「もういちど」を押した場合だけ再生します。</p>
+<pre><code class="lang-css">.stage { --speed: 1; }           /* 2 で倍速、.5 で半速 */
+
+@media (prefers-reduced-motion: reduce) {
+  .stage.play * { animation-play-state: paused; }   /* 自動再生を止める */
+}</code></pre>
+      </div>
+    </li>
+  </ol>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <span class="foot-mark" aria-hidden="true"></span>
+  <p class="foot-title">THE END</p>
+  <p>すべての演出は HTML と CSS のみで動いています。JavaScript はクラスの付け外しとコードの表示・コピーにだけ使っています。</p>
+  <p class="foot-small">フォント: Arvo / Noto Sans JP / Dela Gothic One / Bebas Neue / JetBrains Mono（Google Fonts）</p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

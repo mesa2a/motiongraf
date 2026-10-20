@@ -1,0 +1,9 @@
+.stage-wavetext { background: #d9f5ec; }
+.fx-wavetext { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; gap: .05em; font: 700 12cqi/1 var(--font-display); color: var(--ink); }
+.fx-wavetext span { display: inline-block; }
+.fx-wavetext span:nth-child(even) { color: #ff8fb8; }
+.play .fx-wavetext span {
+  animation: wave-y calc(.9s / var(--speed)) ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -.14s / var(--speed));   /* 負の delay で位相をずらす */
+}
+@keyframes wave-y { from { translate: 0 -2cqi; rotate: -4deg; } to { translate: 0 2cqi; rotate: 4deg; } }

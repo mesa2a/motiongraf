@@ -1,0 +1,8 @@
+.stage-gradtext { background: #fff; }
+.fx-gradtext { position: absolute; inset: 0; display: grid; place-items: center; font: 700 15cqi/1 var(--font-en); letter-spacing: .03em; }
+.fx-gradtext span {
+  background: linear-gradient(90deg, #ff8fb8, #ffd45e, #6fd3b3, #6fbcff, #c9b8ff, #ff8fb8) 0 0 / 200% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.play .fx-gradtext span { animation: grad-flow calc(3s / var(--speed)) linear infinite; }
+@keyframes grad-flow { to { background-position: -200% 0; } }   /* 両端が同じ色なので継ぎ目なし */

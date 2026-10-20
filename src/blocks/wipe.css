@@ -1,0 +1,8 @@
+.stage-wipe { background: #d7eeff; }
+.fx-scene.b.wipe { clip-path: polygon(0 0, 0 0, -20% 100%, -20% 100%); }
+.play .fx-scene.b.wipe { animation: wipe-diag calc(4s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes wipe-diag {
+  0%, 8%    { clip-path: polygon(0 0, 0 0, -20% 100%, -20% 100%); }         /* 左端に畳まれている */
+  32%, 62%  { clip-path: polygon(0 0, 120% 0, 100% 100%, -20% 100%); }     /* 全面 */
+  86%, 100% { clip-path: polygon(120% 0, 120% 0, 100% 100%, 100% 100%); }  /* 右へ抜ける */
+}

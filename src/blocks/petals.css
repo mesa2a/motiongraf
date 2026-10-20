@@ -1,0 +1,14 @@
+.stage-petals { background: linear-gradient(#e6f3ff, #fff1f7); }
+.fx-petal { position: absolute; top: -8cqi; left: calc(var(--x) * 1cqi); scale: var(--s, 1); }
+.fx-petal i { display: block; width: 4cqi; height: 5cqi; background: #ffb7d2; border-radius: 60% 0 60% 0; }
+
+.play .fx-petal {                                  /* 親：落ちる */
+  animation: fall calc(6s / var(--speed)) linear infinite;
+  animation-delay: calc(var(--d) * -1s / var(--speed));     /* 負の delay で途中から */
+}
+.play .fx-petal i {                                /* 子：ひらひら */
+  animation: sway calc(1.4s / var(--speed)) ease-in-out infinite alternate;
+  animation-delay: calc(var(--d) * -.3s / var(--speed));
+}
+@keyframes fall { from { translate: 0 0; } to { translate: 0 70cqi; } }
+@keyframes sway { from { translate: -3cqi 0; rotate: 20deg; } to { translate: 3cqi 0; rotate: 80deg; } }

@@ -1,0 +1,105 @@
+/* @@ slide-over */
+.stage-slideover { background: #d7eeff; }
+.fx-scene.b.over { translate: 100% 0; box-shadow: -2cqi 0 6cqi rgba(75, 74, 94, .2); }
+.play .fx-scene.a.under { animation: under-push calc(4s / var(--speed)) cubic-bezier(.7, 0, .2, 1) infinite; }
+.play .fx-scene.b.over  { animation: over-in    calc(4s / var(--speed)) cubic-bezier(.7, 0, .2, 1) infinite; }
+@keyframes over-in    { 0%, 10% { translate: 100% 0; } 30%, 65% { translate: 0 0; } 85%, 100% { translate: 100% 0; } }
+@keyframes under-push { 0%, 10% { translate: 0 0; scale: 1; filter: brightness(1); } 30%, 65% { translate: -20% 0; scale: .94; filter: brightness(.85); } 85%, 100% { translate: 0 0; scale: 1; filter: brightness(1); } }   /* 下のページは少し奥へ */
+
+/* @@ zoom-trans */
+.stage-zoomtrans { background: #fff; }
+.fx-scene.b.zin { opacity: 0; scale: 1.15; }
+.play .fx-scene.a.zout { animation: z-out calc(4s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+.play .fx-scene.b.zin  { animation: z-in  calc(4s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes z-out { 0%, 15% { scale: 1; opacity: 1; filter: blur(0); }  35%, 70% { scale: .9; opacity: 0; filter: blur(1cqi); } 90%, 100% { scale: 1; opacity: 1; filter: blur(0); } }   /* 旧：縮んでぼける */
+@keyframes z-in  { 0%, 15% { scale: 1.15; opacity: 0; }                 35%, 70% { scale: 1; opacity: 1; }                       90%, 100% { scale: 1.15; opacity: 0; } }                 /* 新：大きい状態から等倍へ */
+
+/* @@ crossfade */
+.stage-xfade { background: #fff; }
+.fx-xf { position: absolute; inset: 14% 10%; border-radius: 3cqi; overflow: hidden; }
+.fx-xf .ph { position: absolute; inset: 0; opacity: 0; }
+.fx-xf .ph:nth-child(2) { filter: hue-rotate(60deg); }
+.fx-xf .ph:nth-child(3) { filter: hue-rotate(-80deg); }
+.play .fx-xf .ph { animation: xfade calc(9s / var(--speed)) ease-in-out infinite; animation-delay: calc(var(--i) * 3s / var(--speed)); }   /* 3 枚 × 3 秒 */
+@keyframes xfade { 0% { opacity: 0; } 8%, 33% { opacity: 1; } 41%, 100% { opacity: 0; } }   /* 次の 0〜8% と前の 33〜41% が重なってクロスフェード */
+
+/* @@ tiles */
+.stage-tiles { background: #d7eeff; }
+.fx-tiles { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); }
+.fx-tiles i { background: #ff9ec4; scale: 0; }
+.play .fx-tiles i { animation: tile-pop calc(4s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; animation-delay: calc(var(--i) * .05s / var(--speed)); }   /* --i = 行 + 列 で斜めに広がる */
+.play.stage-tiles .fx-scene.b { animation: scene-swap calc(4s / var(--speed)) steps(1) infinite; }
+@keyframes tile-pop   { 0%, 8% { scale: 0; } 25%, 60% { scale: 1.02; } 75%, 100% { scale: 0; } }
+@keyframes scene-swap { 0%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }
+
+/* @@ dots-bg */
+.stage-dotsbg { background: #fff5f9; }
+.fx-dotsbg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle, #ffb7d2 1cqi,  transparent 1.1cqi) 0 0 / 8cqi 8cqi,
+    radial-gradient(circle, #c9b8ff .6cqi, transparent .7cqi)  4cqi 4cqi / 8cqi 8cqi;   /* 半分ずらした 2 層 */
+}
+.play .fx-dotsbg { animation: dots-slide calc(4s / var(--speed)) linear infinite; }
+@keyframes dots-slide { to { background-position: 8cqi 8cqi, 12cqi 12cqi; } }   /* 各層をタイル 1 枚分 */
+
+/* @@ bokeh */
+.stage-bokeh { background: linear-gradient(#fff0f6, #e8e0ff); }
+.fx-bokeh {
+  position: absolute; bottom: -12cqi; left: calc(var(--x) * 1cqi); width: calc(var(--s) * 1cqi); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, .95), rgba(255, 255, 255, .25) 70%, transparent 72%);
+  filter: blur(calc(var(--b, 0) * 1cqi));   /* 奥の玉ほどぼかす */
+}
+.play .fx-bokeh { animation: bokeh-rise calc(8s / var(--speed)) linear infinite; animation-delay: calc(var(--d) * -1s / var(--speed)); }
+@keyframes bokeh-rise { 0% { translate: 0 0; opacity: 0; } 15% { opacity: .9; } 85% { opacity: .9; } 100% { translate: 3cqi -72cqi; opacity: 0; } }
+
+/* @@ wave-divider */
+.stage-wavediv { background: #fff; }
+.fx-wd-top { position: absolute; left: 0; right: 0; top: 0; height: 50%; background: #ffd3e3; }
+.fx-wd {
+  position: absolute; left: 0; right: 0; top: 50%; height: 8cqi; translate: 0 -50%;
+  background:
+    radial-gradient(8cqi at 50% 0,    #ffd3e3 98%, transparent 100%) 0 100% / 16cqi 8cqi repeat-x,   /* 下向きの山 */
+    radial-gradient(8cqi at 50% 100%, #fff    98%, transparent 100%) 8cqi 0 / 16cqi 8cqi repeat-x;   /* 半周期ずらした上向きの谷 */
+}
+.fx-wd-text { position: absolute; left: 50%; top: 24%; translate: -50% -50%; font: 700 4cqi/1 var(--font-en); letter-spacing: .2em; color: #fff; }
+.play .fx-wd { animation: wave-flow calc(3s / var(--speed)) linear infinite; }
+@keyframes wave-flow { to { background-position: 16cqi 100%, 24cqi 0; } }   /* 1 周期分動かすと継ぎ目なし */
+
+/* @@ confetti-burst */
+.stage-cburst { background: #fff; }
+.fx-cb { position: absolute; left: 50%; top: 55%; width: 0; height: 0; }
+/* 向きは transform の rotate() で決め、その後ろの translateY() で「回した向き」に飛ばす（translate プロパティだと回転前の座標で動いてしまう） */
+.fx-cb i { position: absolute; left: -1.3cqi; top: -2cqi; width: 2.6cqi; height: 4cqi; border-radius: .5cqi; background: var(--c); transform: rotate(calc(var(--i) * 30deg)) translateY(0); scale: 0; }   /* 12 方向 */
+.fx-cb-btn { position: absolute; left: 50%; top: 55%; translate: -50% -50%; padding: 2.6cqi 5cqi; border-radius: 999px; background: var(--ink); color: #fff; font: 700 3.4cqi/1 var(--font-body); }
+.play .fx-cb i    { animation: cb-fly   calc(2.8s / var(--speed)) cubic-bezier(.1, .8, .3, 1) infinite; }
+.play .fx-cb-btn  { animation: cb-press calc(2.8s / var(--speed)) infinite; }
+@keyframes cb-fly {
+  0%, 20%   { scale: 0;  opacity: 1; transform: rotate(calc(var(--i) * 30deg)) translateY(0); }
+  25%       { scale: 1; }
+  70%, 100% { scale: .6; opacity: 0; transform: rotate(calc(var(--i) * 30deg)) translateY(calc(var(--r) * -1cqi)); }   /* --r = 飛ぶ距離 */
+}
+@keyframes cb-press { 0%, 18% { scale: 1; } 22% { scale: .93; } 28%, 100% { scale: 1; } }
+
+/* @@ stamp */
+.stage-stamp { background: #fffaf0; }
+.fx-stamp {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 2cqi 4cqi;
+  border: 1cqi solid #ff5b8a; border-radius: 2cqi; color: #ff5b8a;
+  font: 400 11cqi/1 var(--font-cool); letter-spacing: .1em; white-space: nowrap;
+  rotate: -12deg; scale: 3; opacity: 0;
+  -webkit-mask: radial-gradient(circle, #000 60%, rgba(0, 0, 0, .55)); mask: radial-gradient(circle, #000 60%, rgba(0, 0, 0, .55));   /* かすれ */
+}
+.play .fx-stamp              { animation: stamp-slam  calc(3.5s / var(--speed)) cubic-bezier(.6, 0, .2, 1) infinite; }
+.play.stage-stamp .fx-cam    { animation: stamp-shake calc(3.5s / var(--speed)) infinite; }
+@keyframes stamp-slam  { 0%, 15% { scale: 3; opacity: 0; } 25% { scale: .95; opacity: 1; } 30%, 80% { scale: 1; opacity: 1; } 92%, 100% { scale: 1; opacity: 0; } }
+@keyframes stamp-shake { 0%, 24%, 34%, 100% { translate: 0 0; } 26% { translate: -1cqi .6cqi; } 30% { translate: .8cqi -.5cqi; } }
+
+/* @@ neon */
+.stage-neon { background: #0b0c16; }
+.fx-neon { position: absolute; inset: 0; display: grid; place-items: center; font: 400 18cqi/1 var(--font-cool-en); letter-spacing: .12em; color: #fff; text-shadow: 0 0 .5cqi #fff, 0 0 2cqi #ff4fa3, 0 0 4cqi #ff4fa3, 0 0 8cqi #ff4fa3; }
+.play .fx-neon { animation: neon-flicker calc(3s / var(--speed)) infinite; }
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 .5cqi #fff, 0 0 2cqi #ff4fa3, 0 0 4cqi #ff4fa3, 0 0 8cqi #ff4fa3; }
+  20%, 22%, 55%                     { opacity: .4; text-shadow: none; }   /* 一瞬だけ消える */
+}
