@@ -1,0 +1,76 @@
+/* @@ fab-expand */
+.stage-fabx { background: #d7eeff; }
+.fx-scene.b.fabb { background: #ff6fa8; color: #fff; opacity: 0; }
+.fx-fabx { position: absolute; right: 8%; bottom: 12%; width: 11cqi; height: 11cqi; border-radius: 50%; background: #ff6fa8; box-shadow: 0 1.5cqi 4cqi rgba(255, 111, 168, .4); display: grid; place-items: center; color: #fff; font: 400 6cqi/1 var(--font-en); }
+/* 実装：クリックでボタンを scale(24) まで拡大し、覆い切ったら次の画面を opacity で出す。ボタンの色 = 次画面の背景色にする */
+.play .fx-fabx          { animation: fab-grow calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+.play .fx-scene.b.fabb { animation: fab-page calc(5s / var(--speed)) ease infinite; }
+.play .fx-fabx span      { animation: fab-icon calc(5s / var(--speed)) ease infinite; }   /* 拡大中は + を消す */
+@keyframes fab-icon { 0%, 16% { opacity: 1; } 22%, 90% { opacity: 0; } 96%, 100% { opacity: 1; } }
+@keyframes fab-grow { 0%, 14% { scale: 1; } 17% { scale: .9; } 40%, 78% { scale: 24; } 92%, 100% { scale: 1; } }
+@keyframes fab-page { 0%, 36% { opacity: 0; } 44%, 76% { opacity: 1; } 80%, 100% { opacity: 0; } }
+
+/* @@ card-pull */
+.stage-cpull { background: #2e2d3d; perspective: 120cqi; }
+.fx-scene.a.pullback { transform-origin: 50% 50%; }
+.fx-scene.b.pullin { transform: translateX(110%) rotateY(-14deg); box-shadow: -3cqi 0 8cqi rgba(0, 0, 0, .3); border-radius: 2cqi 0 0 2cqi; }
+/* 実装：現在の画面を少し奥に引っ込め、次の画面をカードのように右から引き出す */
+.play .fx-scene.a.pullback { animation: cpull-a calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+.play .fx-scene.b.pullin   { animation: cpull-b calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes cpull-a { 0%, 14% { transform: scale(1) translateX(0); filter: brightness(1); border-radius: 0; } 40%, 70% { transform: scale(.86) translateX(-10%) rotateY(6deg); filter: brightness(.6); border-radius: 2cqi; } 94%, 100% { transform: scale(1) translateX(0); filter: brightness(1); border-radius: 0; } }
+@keyframes cpull-b { 0%, 18% { transform: translateX(110%) rotateY(-14deg); } 44%, 68% { transform: translateX(0) rotateY(0deg); } 92%, 100% { transform: translateX(110%) rotateY(-14deg); } }
+
+/* @@ page-tear */
+.stage-tear { background: #ffe3ef; }
+.fx-tear-b { position: absolute; inset: 0; display: grid; place-items: center; font: 700 14cqi/1 var(--font-en); color: var(--ink); background: #ffe3ef; scale: .94; }
+.fx-tear { position: absolute; inset: 0; display: grid; place-items: center; font: 700 14cqi/1 var(--font-en); color: var(--ink); background: #d7eeff; filter: drop-shadow(0 0 .8cqi rgba(75, 74, 94, .25)); }
+.fx-tear.l { clip-path: polygon(0 0, 52% 0, 48% 12%, 53% 24%, 47% 36%, 52% 48%, 48% 60%, 53% 72%, 47% 84%, 52% 100%, 0 100%); transform-origin: 0 100%; }   /* ギザギザの左半分 */
+.fx-tear.r { clip-path: polygon(52% 0, 100% 0, 100% 100%, 52% 100%, 47% 84%, 53% 72%, 48% 60%, 52% 48%, 47% 36%, 53% 24%, 48% 12%); transform-origin: 100% 100%; }   /* 右半分 */
+/* 実装：現在の画面を 2 枚複製して同じギザギザで切り、左右に倒して落とす */
+.play .fx-tear.l  { animation: tear-l calc(5s / var(--speed)) cubic-bezier(.5, 0, .8, .4) infinite; }
+.play .fx-tear.r  { animation: tear-r calc(5s / var(--speed)) cubic-bezier(.5, 0, .8, .4) infinite; }
+.play .fx-tear-b  { animation: tear-b calc(5s / var(--speed)) ease infinite; }
+@keyframes tear-l { 0%, 18% { translate: 0 0; rotate: 0deg; opacity: 1; } 20% { translate: -.6cqi 0; } 22% { translate: .4cqi 0; } 24% { translate: -.5cqi 0; rotate: 0deg; opacity: 1; } 50%, 88% { translate: -14% 16%; rotate: -10deg; opacity: 0; } 92%, 100% { translate: 0 0; rotate: 0deg; opacity: 1; } }
+@keyframes tear-r { 0%, 18% { translate: 0 0; rotate: 0deg; opacity: 1; } 20% { translate: .6cqi 0; } 22% { translate: -.4cqi 0; } 24% { translate: .5cqi 0; rotate: 0deg; opacity: 1; } 50%, 88% { translate: 14% 16%; rotate: 10deg; opacity: 0; } 92%, 100% { translate: 0 0; rotate: 0deg; opacity: 1; } }
+@keyframes tear-b { 0%, 24% { scale: .94; } 50%, 88% { scale: 1; } 92%, 100% { scale: .94; } }
+
+/* @@ text-trail */
+.stage-trail { background: #15141f; }
+.fx-trail { position: absolute; inset: 0; display: grid; place-items: center; font: 400 20cqi/1 var(--font-cool-en); letter-spacing: .06em; }
+.fx-trail i { grid-area: 1 / 1; font-style: normal; color: #fff; translate: -22cqi 0; }
+.fx-trail i[style] { color: #ff6fa8; opacity: calc(1 - var(--i) * .2); z-index: -1; }   /* 残像。--i が大きいほど薄く、遅れて動く */
+/* 実装：同じ文字を 4 枚重ねて、同じアニメーションを --i × 60ms ずつ遅らせる */
+.play .fx-trail i { animation: trail-move calc(1.4s / var(--speed)) ease-in-out infinite alternate; animation-delay: calc(var(--i, 0) * .06s / var(--speed)); }
+@keyframes trail-move { from { translate: -22cqi 0; } to { translate: 22cqi 0; } }
+
+/* @@ glass-block */
+.stage-glass { background: #fff0f6; }
+.fx-glass-bg { position: absolute; inset: 0; display: grid; place-items: center; font: 700 15cqi/1 var(--font-en); color: var(--ink); }
+.fx-glass-bg::before { content: ""; position: absolute; left: 12%; top: 18%; width: 22cqi; height: 22cqi; border-radius: 50%; background: #8fd0ff; }
+.fx-glass-bg::after  { content: ""; position: absolute; right: 14%; bottom: 14%; width: 20cqi; height: 20cqi; border-radius: 20%; background: #c9b8ff; rotate: 20deg; }
+.fx-glass { position: absolute; left: 50%; top: 50%; width: 30cqi; height: 36cqi; margin: -18cqi 0 0 -15cqi; border-radius: 4cqi; background: rgba(255, 255, 255, .22); border: .3cqi solid rgba(255, 255, 255, .7); box-shadow: 0 2cqi 6cqi rgba(75, 74, 94, .15);
+  -webkit-backdrop-filter: blur(1.4cqi) saturate(1.5); backdrop-filter: blur(1.4cqi) saturate(1.5); }   /* 後ろをぼかして曇りガラスに */
+.fx-glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(120deg, rgba(255, 255, 255, .55), transparent 40%, transparent 60%, rgba(255, 255, 255, .25)); }   /* 反射のハイライト */
+/* 実装：backdrop-filter の要素を動かすだけ。背景は何でもよい */
+.play .fx-glass { animation: glass-slide calc(5s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes glass-slide { from { translate: -26cqi 0; rotate: -4deg; } to { translate: 26cqi 0; rotate: 4deg; } }
+
+/* @@ extrude-text */
+.stage-extrude { background: #15141f; }
+.fx-ext { position: absolute; inset: 0; display: grid; place-items: center; perspective: 120cqi; }
+.fx-ext b { font: 400 22cqi/1 var(--font-cool-en); letter-spacing: .06em; color: #ff6fa8; transform: rotateY(-20deg) rotateX(8deg);
+  text-shadow: .2cqi .2cqi 0 #c24b7f, .4cqi .4cqi 0 #b0436f, .6cqi .6cqi 0 #9e3b63, .8cqi .8cqi 0 #8c3357, 1cqi 1cqi 0 #7a2b4b, 1.2cqi 1.2cqi 0 #68233f, 1.4cqi 1.4cqi 0 #561b33, 1.6cqi 1.6cqi 0 #441327, 1.8cqi 1.8cqi 0 #320b1b, 3cqi 3cqi 3cqi rgba(0, 0, 0, .5); }   /* 少しずつ暗い影を積んで厚みにする */
+/* 実装：text-shadow を段々に積む。向きは rotateY / rotateX で揺らす */
+.play .fx-ext b { animation: ext-sway calc(4s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes ext-sway { from { transform: rotateY(-24deg) rotateX(8deg); } to { transform: rotateY(24deg) rotateX(-6deg); } }
+
+/* @@ vignette-pulse */
+.stage-vig { background: #1b1a26; }
+.fx-vig { position: absolute; inset: 0; display: grid; place-items: center; font: 400 12cqi/1 var(--font-cool-en); letter-spacing: .2em; color: #ff5c7a; }
+.fx-vig::before { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 22cqi 8cqi rgba(255, 60, 90, .7); opacity: .2; pointer-events: none; }   /* 画面端の赤いビネット */
+.fx-vig b { position: relative; }
+/* 実装：警告状態のあいだだけ ::before の opacity を脈打たせる */
+.play .fx-vig::before { animation: vig-pulse calc(1.2s / var(--speed)) ease-in-out infinite; }
+.play .fx-vig b       { animation: vig-text  calc(1.2s / var(--speed)) ease-in-out infinite; }
+@keyframes vig-pulse { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+@keyframes vig-text  { 0%, 100% { scale: 1; opacity: .7; } 50% { scale: 1.04; opacity: 1; } }

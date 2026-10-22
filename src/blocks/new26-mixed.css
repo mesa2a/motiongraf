@@ -1,0 +1,47 @@
+/* @@ btn-split-text */
+.stage-splitbtn { background: #fff5f9; }
+.fx-sptxt { position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 3.4cqi 7cqi; border-radius: 999px; background: var(--ink); color: #fff; font: 700 4cqi/1 var(--font-en); letter-spacing: .14em; display: grid; cursor: pointer; }
+.fx-sptxt span { grid-area: 1 / 1; transition: translate .35s cubic-bezier(.3, 1.3, .4, 1); }
+.fx-sptxt .top { clip-path: inset(0 0 50% 0); }   /* 上半分 */
+.fx-sptxt .bot { clip-path: inset(50% 0 0 0); color: #ff8fb8; }   /* 下半分（色を変える） */
+/* 本番：hover で上半分を左、下半分を右へ少しずらす */
+.fx-sptxt:hover .top, .fx-sptxt.open .top { translate: -.8cqi 0; }
+.fx-sptxt:hover .bot, .fx-sptxt.open .bot { translate: .8cqi 0; }
+/* デモ用の自動再生 */
+.play .fx-sptxt .top { animation: sptxt-top calc(4s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+.play .fx-sptxt .bot { animation: sptxt-bot calc(4s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+@keyframes sptxt-top { 0%, 25% { translate: 0 0; } 35%, 70% { translate: -.8cqi 0; } 80%, 100% { translate: 0 0; } }
+@keyframes sptxt-bot { 0%, 25% { translate: 0 0; } 35%, 70% { translate: .8cqi 0; } 80%, 100% { translate: 0 0; } }
+
+/* @@ card-row-tilt */
+.stage-rowtilt { background: #f4f0ff; perspective: 120cqi; }
+.fx-rowtilt { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; gap: 2cqi; transform-style: preserve-3d; }
+.fx-rowtilt .c { width: 18cqi; height: 26cqi; border-radius: 2.5cqi; background: linear-gradient(135deg, var(--c1), var(--c2)); box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .16); transform: rotateY(calc(var(--k) * 38deg)); }   /* --k は中央からの距離（-2 〜 2） */
+/* 実装：横スクロール量から各カードの中央からの距離を求め、rotateY に掛ける。デモでは列ごと流して --k を 1 ずつずらす */
+.play .fx-rowtilt { animation: rowtilt-track calc(8s / var(--speed)) ease-in-out infinite alternate; }
+.play .fx-rowtilt .c { animation: rowtilt-card calc(8s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes rowtilt-track { from { translate: calc(-50% + 20cqi) -50%; } to { translate: calc(-50% - 20cqi) -50%; } }
+@keyframes rowtilt-card  { from { transform: rotateY(calc((var(--k) + 1) * 38deg)); } to { transform: rotateY(calc((var(--k) - 1) * 38deg)); } }
+
+/* @@ shutter-trans */
+.stage-shutter { background: #d7eeff; }
+.fx-shutter { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+.fx-shutter i { position: absolute; left: 0; top: 0; width: 120cqi; height: 120cqi; margin: -60cqi; background: #2e2d3d; clip-path: polygon(50% 50%, 100% 50%, 100% 0, 50% 0); transform: rotate(calc(var(--i) * 60deg)) translate(60cqi, -60cqi); }   /* 6 枚の羽根（90° の扇を 60° おきに重ねる）。閉じると中心を覆う */
+.fx-scene.b.shutterb { opacity: 0; }
+/* 実装：羽根の translate を 0 にすると閉じる。閉じ切ったら中身を差し替えて開く */
+.play .fx-shutter i      { animation: shutter-blade calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; animation-delay: calc(var(--i) * .03s / var(--speed)); }
+.play .fx-scene.b.shutterb { animation: shutter-b calc(5s / var(--speed)) steps(1) infinite; }
+@keyframes shutter-blade { 0%, 12% { transform: rotate(calc(var(--i) * 60deg)) translate(60cqi, -60cqi); } 34%, 54% { transform: rotate(calc(var(--i) * 60deg)) translate(0, 0); } 76%, 100% { transform: rotate(calc(var(--i) * 60deg)) translate(60cqi, -60cqi); } }
+@keyframes shutter-b { 0%, 43% { opacity: 0; } 44%, 100% { opacity: 1; } }
+
+/* @@ lens-magnify */
+.stage-lens { background: #fff; }
+.fx-lens { position: absolute; inset: 0; display: grid; place-items: center; }
+.fx-lens .t { font: 700 11cqi/1 var(--font-en); color: var(--ink); letter-spacing: .04em; white-space: nowrap; }
+.fx-lens .glass { position: absolute; left: 50%; top: 50%; width: 22cqi; height: 22cqi; margin: -11cqi; border-radius: 50%; overflow: hidden; border: .6cqi solid rgba(255, 255, 255, .9); box-shadow: 0 1.5cqi 4cqi rgba(75, 74, 94, .25), inset 0 0 2cqi rgba(255, 255, 255, .6); background: #fff; --lx: 0cqi; translate: var(--lx) 0; }
+.fx-lens .glass .t { position: absolute; left: 50%; top: 50%; translate: calc(-50% - var(--lx) * 1.6) -50%; scale: 1.6; color: #ff6fa8; }   /* レンズの中は同じ文字を 1.6 倍にして、レンズの移動ぶん逆に動かす */
+.fx-lens .glass::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(135deg, rgba(255, 255, 255, .55), transparent 45%); }
+@property --lx { syntax: "<length>"; inherits: true; initial-value: 0px; }
+/* 実装：pointermove でレンズの位置を --lx（--ly）に入れる。中の文字は同じ量だけ逆方向に、倍率を掛けて動かす */
+.play .fx-lens .glass { animation: lens-move calc(6s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes lens-move { from { --lx: -24cqi; } to { --lx: 24cqi; } }

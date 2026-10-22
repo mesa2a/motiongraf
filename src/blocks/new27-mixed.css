@@ -1,0 +1,73 @@
+/* @@ flag-text */
+.stage-flag { background: #eaf6ff; }
+.fx-flag { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; font: 700 14cqi/1 var(--font-en); color: var(--ink); letter-spacing: .02em; }
+.fx-flag b { display: block; }
+/* 文字ごとに上下と傾きを波の位相でずらすと、旗が風にはためくように見える */
+.play .fx-flag b { animation: flag-wave calc(1.6s / var(--speed)) ease-in-out infinite; animation-delay: calc(var(--i) * -.12s / var(--speed)); }
+@keyframes flag-wave { 0%, 100% { translate: 0 -1.2cqi; rotate: -4deg; } 50% { translate: 0 1.2cqi; rotate: 4deg; } }
+
+/* @@ volume-meter */
+.stage-vumeter { background: #15141f; }
+.fx-vu { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; align-items: flex-end; gap: 1.4cqi; height: 30cqi; }
+.fx-vu i { width: 4cqi; height: 100%; border-radius: 1cqi; background: linear-gradient(to top, #6fd3b3 0 55%, #f5c542 55% 80%, #ff5c7a 80%) bottom / 100% 100%; transform-origin: 50% 100%; scale: 1 var(--l, .3); }   /* 緑→黄→赤を下から見せる */
+.fx-vu i::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to top, transparent 0 1.6cqi, #15141f 1.6cqi 2cqi); }   /* 目盛りの切れ目 */
+.fx-vu i { position: relative; }
+/* 実装：音量に応じて各バーの --l（0〜1）を更新。デモでは --i ごとに違う周期で揺らす */
+.play .fx-vu i { animation: vu-bounce calc(var(--t) * 1s / var(--speed)) ease-in-out infinite alternate; animation-delay: calc(var(--i) * -.17s / var(--speed)); }
+@keyframes vu-bounce { 0% { scale: 1 .18; } 35% { scale: 1 .55; } 60% { scale: 1 .35; } 100% { scale: 1 var(--peak, .9); } }
+
+/* @@ emoji-reaction */
+.stage-emoji { background: #fff5f9; }
+.fx-emo { position: absolute; left: 50%; top: 56%; translate: -50% -50%; display: grid; justify-items: center; gap: 2cqi; }
+.fx-emo .msg { padding: 2.2cqi 3.2cqi; border-radius: 3cqi 3cqi 3cqi .8cqi; background: #fff; box-shadow: 0 1cqi 3cqi rgba(75, 74, 94, .1); font: 700 2.8cqi/1 var(--font-body); color: var(--ink); }
+.fx-emo .pick { display: flex; gap: 1cqi; padding: 1cqi 1.4cqi; border-radius: 999px; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .16); transform-origin: 50% 100%; scale: 0; }
+.fx-emo .pick i { font-size: 4cqi; line-height: 1; font-style: normal; scale: 0; }
+.fx-emo .pick i.on { scale: 1; }
+.fx-emo .re { position: absolute; left: 50%; top: 100%; translate: -50% 0; margin-top: -1cqi; padding: .6cqi 1.4cqi; border-radius: 999px; background: #fff0f6; border: .3cqi solid #ff8fb8; font: 700 2.2cqi/1 var(--font-en); color: var(--ink); scale: 0; }   /* 付いたリアクション */
+/* 実装：長押し／ホバーでピッカーを下から弾ませ、絵文字は --i で順に出す。選ぶと吹き出しの下にリアクションが付く */
+.play .fx-emo .pick     { animation: emo-pick calc(6s / var(--speed)) cubic-bezier(.3, 1.4, .4, 1) infinite; }
+.play .fx-emo .pick i   { animation: emo-item calc(6s / var(--speed)) cubic-bezier(.3, 1.6, .5, 1) infinite; animation-delay: calc(var(--i) * .06s / var(--speed)); }
+.play .fx-emo .pick i.sel { animation: emo-sel  calc(6s / var(--speed)) cubic-bezier(.3, 1.6, .5, 1) infinite; }
+.play .fx-emo .re       { animation: emo-re   calc(6s / var(--speed)) cubic-bezier(.3, 1.6, .5, 1) infinite; }
+@keyframes emo-pick { 0%, 12% { scale: 0; } 20%, 56% { scale: 1; } 62%, 100% { scale: 0; } }
+@keyframes emo-item { 0%, 16% { scale: 0; } 24%, 56% { scale: 1; } 60%, 100% { scale: 0; } }
+@keyframes emo-sel  { 0%, 16% { scale: 0; } 24%, 44% { scale: 1; } 50%, 56% { scale: 1.5; } 60%, 100% { scale: 0; } }
+@keyframes emo-re   { 0%, 58% { scale: 0; } 66%, 90% { scale: 1; } 96%, 100% { scale: 0; } }
+
+/* @@ snow-pile */
+.stage-snowpile { background: linear-gradient(#1f2140, #3a3d66); }
+.fx-snowp { position: absolute; inset: 0; overflow: hidden; }
+.fx-snowp .flake { position: absolute; left: var(--x); top: -3cqi; width: var(--s); height: var(--s); border-radius: 50%; background: #fff; opacity: .9; }
+.fx-snowp .pile { position: absolute; left: -5%; right: -5%; bottom: 0; height: 12cqi; border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: #fff; transform-origin: 50% 100%; scale: 1 0; }   /* 積もる雪 */
+.fx-snowp .pile.b { left: 20%; right: 30%; height: 8cqi; }
+.fx-snowp .tree { position: absolute; left: 70%; bottom: 4cqi; width: 10cqi; height: 16cqi; background: #2b2f55; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.fx-snowp .tree::after { content: ""; position: absolute; left: 50%; top: 20%; width: 5cqi; height: 2cqi; margin-left: -2.5cqi; border-radius: 50%; background: #fff; scale: 0; }   /* 木に乗る雪 */
+/* 実装：雪は落とすだけ。積もりは scaleY をゆっくり 0 → 1 に（周期を長くして「積もっていく」感じに） */
+.play .fx-snowp .flake { animation: sp-fall calc(var(--t) * 1s / var(--speed)) linear infinite; animation-delay: calc(var(--d) * -1s / var(--speed)); }
+.play .fx-snowp .pile  { animation: sp-pile calc(12s / var(--speed)) ease-in-out infinite; }
+.play .fx-snowp .pile.b { animation-delay: calc(-1.5s / var(--speed)); }
+.play .fx-snowp .tree::after { animation: sp-tree calc(12s / var(--speed)) cubic-bezier(.3, 1.3, .5, 1) infinite; }
+@keyframes sp-fall { from { translate: 0 0; } to { translate: calc(var(--w, 4) * 1cqi) 60cqi; } }
+@keyframes sp-pile { 0%, 8% { scale: 1 0; } 70%, 90% { scale: 1 1; } 100% { scale: 1 0; } }
+@keyframes sp-tree { 0%, 30% { scale: 0; } 50%, 90% { scale: 1; } 100% { scale: 0; } }
+
+/* @@ crane-fold */
+.stage-crane { background: #ffe3ef; perspective: 120cqi; }
+.fx-crane { position: absolute; inset: 0; transform-style: preserve-3d; }
+.fx-crane .q { position: absolute; width: 50%; height: 50%; background: #d7eeff; display: grid; place-items: center; font: 700 10cqi/1 var(--font-en); color: var(--ink); backface-visibility: hidden; }   /* 画面を 4 つに分けた紙 */
+.fx-crane .q.tl { left: 0; top: 0; transform-origin: 100% 100%; }
+.fx-crane .q.tr { left: 50%; top: 0; transform-origin: 0 100%; }
+.fx-crane .q.bl { left: 0; top: 50%; transform-origin: 100% 0; }
+.fx-crane .q.br { left: 50%; top: 50%; transform-origin: 0 0; }
+.fx-scene.b.craneb { opacity: 0; }
+/* 実装：4 枚を中心の角を軸に順に裏返して畳む（折り紙）。畳み終わったら次の画面を出す */
+.play .fx-crane .q.tl { animation: crane-tl calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+.play .fx-crane .q.tr { animation: crane-tr calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; animation-delay: calc(.15s / var(--speed)); }
+.play .fx-crane .q.bl { animation: crane-bl calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; animation-delay: calc(.3s / var(--speed)); }
+.play .fx-crane .q.br { animation: crane-br calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; animation-delay: calc(.45s / var(--speed)); }
+.play .fx-scene.b.craneb { animation: crane-b calc(5s / var(--speed)) ease infinite; }
+@keyframes crane-tl { 0%, 14% { transform: rotate3d(1, -1, 0, 0deg); } 40%, 78% { transform: rotate3d(1, -1, 0, 180deg); } 94%, 100% { transform: rotate3d(1, -1, 0, 0deg); } }
+@keyframes crane-tr { 0%, 14% { transform: rotate3d(1, 1, 0, 0deg); } 40%, 78% { transform: rotate3d(1, 1, 0, 180deg); } 94%, 100% { transform: rotate3d(1, 1, 0, 0deg); } }
+@keyframes crane-bl { 0%, 14% { transform: rotate3d(1, 1, 0, 0deg); } 40%, 78% { transform: rotate3d(1, 1, 0, -180deg); } 94%, 100% { transform: rotate3d(1, 1, 0, 0deg); } }
+@keyframes crane-br { 0%, 14% { transform: rotate3d(1, -1, 0, 0deg); } 40%, 78% { transform: rotate3d(1, -1, 0, -180deg); } 94%, 100% { transform: rotate3d(1, -1, 0, 0deg); } }
+@keyframes crane-b  { 0%, 30% { opacity: 0; } 42%, 80% { opacity: 1; } 92%, 100% { opacity: 0; } }

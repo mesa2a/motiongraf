@@ -1,0 +1,167 @@
+/* @@ btn-undo */
+.stage-undo { background: #f4f0ff; }
+.fx-ud { position: absolute; left: 50%; bottom: 10%; translate: -50% 0; display: flex; align-items: center; gap: 3cqi; padding: 2.4cqi 3cqi 2.4cqi 4cqi; border-radius: 2cqi; background: var(--ink); color: #fff; font: 700 3cqi/1 var(--font-body); white-space: nowrap; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .25); }
+.fx-ud .msg { display: grid; }
+.fx-ud .msg span { grid-area: 1 / 1; }
+.fx-ud .msg span:nth-child(2) { opacity: 0; }
+.fx-ud .btn { display: inline-flex; align-items: center; gap: 1.5cqi; padding: 1.4cqi 2.4cqi; border-radius: 999px; background: rgba(255, 255, 255, .14); color: #ffb3cf; }
+.fx-ud .ring { position: relative; width: 5cqi; height: 5cqi; border-radius: 50%; --a: 360deg; --n: 5; counter-reset: n var(--n);
+  background: conic-gradient(#ffb3cf var(--a), rgba(255, 255, 255, .2) 0); }   /* 残り時間の弧 */
+.fx-ud .ring::before { content: ""; position: absolute; inset: .7cqi; border-radius: 50%; background: #5a5970; }
+.fx-ud .ring::after  { content: counter(n); position: absolute; inset: 0; display: grid; place-items: center; font: 700 2.4cqi/1 var(--font-en); color: #fff; }
+/* 実装：表示時に setTimeout(5s) で確定、「取り消す」で clearTimeout して元に戻す */
+.play .fx-ud       { animation: ud-toast calc(7s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+.play .fx-ud .ring { animation: ud-count calc(7s / var(--speed)) linear infinite; }
+.play .fx-ud .btn  { animation: ud-btn   calc(7s / var(--speed)) infinite; }
+.play .fx-ud .msg span:nth-child(1) { animation: ud-m1 calc(7s / var(--speed)) steps(1) infinite; }
+.play .fx-ud .msg span:nth-child(2) { animation: ud-m2 calc(7s / var(--speed)) steps(1) infinite; }
+@keyframes ud-toast { 0% { translate: -50% 150%; } 8%, 60% { translate: -50% 0; background: #4b4a5e; } 64%, 86% { translate: -50% 0; background: #3f9f80; } 94%, 100% { translate: -50% 150%; background: #3f9f80; } }
+@keyframes ud-count { 0%, 8% { --a: 360deg; --n: 5; } 60%, 100% { --a: 120deg; --n: 2; } }   /* 5 → 2 まで減ったところでクリック */
+@keyframes ud-btn   { 0%, 58% { scale: 1; opacity: 1; } 60% { scale: .9; } 62%, 100% { scale: 1; opacity: 0; } }
+@keyframes ud-m1    { 0%, 61% { opacity: 1; } 62%, 100% { opacity: 0; } }
+@keyframes ud-m2    { 0%, 61% { opacity: 0; } 62%, 100% { opacity: 1; } }
+
+/* @@ segmented */
+.stage-seg { background: #fff; }
+.fx-seg { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; grid-template-columns: repeat(3, 16cqi); padding: .8cqi; border-radius: 999px; background: #eef0f8; }
+.fx-seg i { position: absolute; left: .8cqi; top: .8cqi; width: 16cqi; height: calc(100% - 1.6cqi); border-radius: 999px; background: #fff; box-shadow: 0 .8cqi 2.4cqi rgba(75, 74, 94, .14); }   /* 動く白いつまみ */
+.fx-seg b { position: relative; padding: 2.2cqi 0; text-align: center; font: 700 3cqi/1 var(--font-body); color: var(--ink-soft); }
+/* 実装：選択 index に合わせて i を translate、選ばれた b に .on */
+.play .fx-seg i { animation: seg-move calc(6s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+.play .fx-seg b { animation: seg-on calc(6s / var(--speed)) infinite; animation-delay: calc(var(--i) * 2s / var(--speed)); }
+@keyframes seg-move { 0%, 30% { translate: 0 0; } 34%, 64% { translate: 16cqi 0; } 68%, 97% { translate: 32cqi 0; } 100% { translate: 0 0; } }
+@keyframes seg-on   { 0%, 1% { color: #9a9ab0; } 2%, 30% { color: #4b4a5e; scale: 1; } 31% { scale: .92; } 34%, 100% { color: #9a9ab0; scale: 1; } }
+
+/* @@ like-burst */
+.stage-likeb { background: #fff5f9; }
+.fx-lb { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; align-items: center; gap: 2.5cqi; padding: 2.4cqi 4cqi; border-radius: 999px; background: #fff; box-shadow: 0 1.5cqi 4cqi rgba(75, 74, 94, .12); }
+.fx-lb .heart { position: relative; font: 700 6cqi/1 var(--font-en); color: #d9d5e6; }
+.fx-lb .heart::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10cqi; height: 10cqi; margin: -5cqi; border-radius: 50%; border: .6cqi solid #ff6fa8; scale: 0; opacity: 0; }   /* タップの波紋 */
+.fx-lb .num { position: relative; min-width: 8cqi; font: 700 4.4cqi/1 var(--font-en); color: var(--ink); --n: 12; counter-reset: n var(--n); }
+.fx-lb .num::before { content: counter(n); }
+.fx-lb .up { position: absolute; left: 20%; top: 20%; font: 700 2.8cqi/1 var(--font-en); color: #ff6fa8; opacity: 0; }
+.fx-lb .up::before { content: "+1"; }
+/* 実装：クリックごとに count++、「+1」の要素を生成して animationend で削除 */
+.play .fx-lb .heart        { animation: lb-heart calc(4s / var(--speed)) infinite; }
+.play .fx-lb .heart::after { animation: lb-ring  calc(4s / var(--speed)) infinite; }
+.play .fx-lb .num          { animation: lb-num   calc(4s / var(--speed)) infinite; }
+.play .fx-lb .up           { animation: lb-up    calc(4s / var(--speed)) ease-out infinite; animation-delay: calc(var(--i) * .8s / var(--speed)); }
+@keyframes lb-heart { 0%, 14% { color: #d9d5e6; scale: 1; } 15% { color: #ff6fa8; scale: 1.35; } 22% { scale: 1; } 35% { scale: 1.35; } 42% { scale: 1; } 55% { scale: 1.35; } 62%, 90% { scale: 1; color: #ff6fa8; } 96%, 100% { color: #d9d5e6; } }
+@keyframes lb-ring  { 0%, 14%, 34%, 54% { scale: 0; opacity: 1; } 28%, 48%, 68%, 100% { scale: 1.3; opacity: 0; } }
+@keyframes lb-num   { 0%, 14% { --n: 12; scale: 1; } 15% { --n: 13; scale: 1.25; } 22% { scale: 1; } 34% { --n: 13; } 35% { --n: 14; scale: 1.25; } 42% { scale: 1; } 54% { --n: 14; } 55% { --n: 15; scale: 1.25; } 62%, 92% { --n: 15; scale: 1; } 93%, 100% { --n: 12; } }
+@keyframes lb-up    { 0%, 14% { opacity: 0; translate: 0 0; } 16% { opacity: 1; } 36%, 100% { opacity: 0; translate: 1cqi -12cqi; } }
+
+/* @@ btn-play-pause */
+.stage-playpause { background: #f0f7ff; }
+.fx-pp { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 18cqi; height: 18cqi; border-radius: 50%; background: #ff6fa8; display: flex; align-items: center; justify-content: center; gap: 1.6cqi; box-shadow: 0 1.5cqi 4cqi rgba(255, 111, 168, .35); }
+.fx-pp::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: .6cqi solid #ff6fa8; opacity: 0; }   /* 再生中の波紋 */
+.fx-pp i { width: 2.6cqi; height: 8cqi; background: #fff; }
+.fx-pp i:first-child { clip-path: polygon(0 0, 100% 24%, 100% 76%, 0 100%); translate: 1.2cqi 0; }   /* 三角の左半分 */
+.fx-pp i:last-child  { clip-path: polygon(0 24%, 100% 50%, 100% 50%, 0 76%); translate: -1.2cqi 0; }  /* 三角の右半分 */
+/* 実装：.playing で 2 本とも長方形の polygon にして棒を離す（点の数をそろえると補間される） */
+.play .fx-pp { animation: pp-tap calc(5s / var(--speed)) infinite; }
+.play .fx-pp::before { animation: pp-ring calc(5s / var(--speed)) ease-out infinite; }
+.play .fx-pp i:first-child { animation: pp-l calc(5s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-pp i:last-child  { animation: pp-r calc(5s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+@keyframes pp-tap  { 0%, 18%, 24%, 68%, 74%, 100% { scale: 1; } 21%, 71% { scale: .9; } }
+@keyframes pp-ring { 0%, 22% { scale: 1; opacity: 0; } 24% { opacity: .8; } 44%, 100% { scale: 1.6; opacity: 0; } }
+@keyframes pp-l { 0%, 20% { clip-path: polygon(0 0, 100% 24%, 100% 76%, 0 100%); translate: 1.2cqi 0; } 30%, 70% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); translate: 0 0; } 80%, 100% { clip-path: polygon(0 0, 100% 24%, 100% 76%, 0 100%); translate: 1.2cqi 0; } }
+@keyframes pp-r { 0%, 20% { clip-path: polygon(0 24%, 100% 50%, 100% 50%, 0 76%); translate: -1.2cqi 0; } 30%, 70% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); translate: 0 0; } 80%, 100% { clip-path: polygon(0 24%, 100% 50%, 100% 50%, 0 76%); translate: -1.2cqi 0; } }
+
+/* @@ btn-split-share */
+.stage-share { background: #fff5f9; }
+.fx-sp { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center; }
+.fx-sp > * { grid-area: 1 / 1; }
+.fx-sp .pill { padding: 3.2cqi 7cqi; border-radius: 999px; background: #fff; border: .4cqi solid #ff8fb8; color: #ff6fa8; font: 700 4cqi/1 var(--font-body); white-space: nowrap; }
+.fx-sp i { width: 10cqi; height: 10cqi; border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center; font: 700 3.6cqi/1 var(--font-en); font-style: normal; scale: 0; }
+/* 実装：クリックで .open。アイコンは --i × 距離の translate、ボタン本体は scaleX で消す */
+.play .fx-sp .pill { animation: sp-pill calc(5s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-sp i     { animation: sp-icon calc(5s / var(--speed)) cubic-bezier(.3, 1.4, .4, 1) infinite; animation-delay: calc(var(--d) * .07s / var(--speed)); }
+@keyframes sp-pill { 0%, 16% { scale: 1; opacity: 1; } 19% { scale: .94; } 28%, 80% { scale: .3 1; opacity: 0; } 90%, 100% { scale: 1; opacity: 1; } }
+@keyframes sp-icon { 0%, 20% { scale: 0; translate: 0 0; } 32%, 78% { scale: 1; translate: calc(var(--i) * 14cqi) 0; } 86%, 100% { scale: 0; translate: 0 0; } }
+
+/* @@ copy-feedback */
+.stage-copy { background: #f4f0ff; }
+.fx-cp { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; align-items: center; gap: 3cqi; padding: 2.4cqi 2.4cqi 2.4cqi 4cqi; border-radius: 2cqi; background: #2e2d3d; color: #fff; font: 400 3cqi/1 var(--font-mono, monospace); white-space: nowrap; }
+.fx-cp .k { color: #ffb3cf; }
+.fx-cp .btn { position: relative; width: 8cqi; height: 8cqi; border-radius: 1.5cqi; background: rgba(255, 255, 255, .1); display: grid; place-items: center; }
+.fx-cp .btn > * { grid-area: 1 / 1; }
+.fx-cp .ic { position: relative; width: 3.6cqi; height: 3.6cqi; }
+.fx-cp .ic::before, .fx-cp .ic::after { content: ""; position: absolute; width: 2.6cqi; height: 2.6cqi; border: .5cqi solid #fff; border-radius: .5cqi; }   /* 重なった 2 枚の四角 */
+.fx-cp .ic::before { left: 0; bottom: 0; background: #2e2d3d; z-index: 1; }
+.fx-cp .ic::after  { right: 0; top: 0; }
+.fx-cp .ok { width: 1.6cqi; height: 3.2cqi; border-right: .7cqi solid #6fd3b3; border-bottom: .7cqi solid #6fd3b3; rotate: 45deg; translate: 0 -.4cqi; scale: 0; }
+.fx-cp .tip { position: absolute; left: 50%; bottom: calc(100% + 2.2cqi); translate: -50% 0; padding: 1.4cqi 2.2cqi; border-radius: 1.2cqi; background: #6fd3b3; color: #fff; font: 700 2.4cqi/1 var(--font-body); white-space: nowrap; opacity: 0; }
+.fx-cp .tip::after { content: ""; position: absolute; left: 50%; top: 100%; margin-left: -1cqi; border: 1cqi solid transparent; border-top-color: #6fd3b3; }
+/* 実装：navigator.clipboard.writeText() の成功で .done を 1.5 秒付ける */
+.play .fx-cp .btn { animation: cp-tap calc(5s / var(--speed)) infinite; }
+.play .fx-cp .ic  { animation: cp-ic  calc(5s / var(--speed)) infinite; }
+.play .fx-cp .ok  { animation: cp-ok  calc(5s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; }
+.play .fx-cp .tip { animation: cp-tip calc(5s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+@keyframes cp-tap { 0%, 18%, 24%, 100% { scale: 1; background: rgba(255, 255, 255, .1); } 21% { scale: .85; background: rgba(255, 255, 255, .25); } }
+@keyframes cp-ic  { 0%, 22% { scale: 1; opacity: 1; } 28%, 72% { scale: .4; opacity: 0; } 78%, 100% { scale: 1; opacity: 1; } }
+@keyframes cp-ok  { 0%, 24% { scale: 0; } 32%, 70% { scale: 1; } 76%, 100% { scale: 0; } }
+@keyframes cp-tip { 0%, 24% { opacity: 0; translate: -50% 1.5cqi; } 32%, 70% { opacity: 1; translate: -50% 0; } 78%, 100% { opacity: 0; translate: -50% 1.5cqi; } }
+
+/* @@ tag-input */
+.stage-tags { background: #fff; }
+.fx-tg { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 60cqi; display: flex; align-items: center; gap: 1.2cqi; padding: 1.6cqi; border-radius: 2cqi; border: .5cqi solid #d9d5e6; background: #fff; }
+.fx-tg .chip { display: inline-flex; align-items: center; gap: .8cqi; max-width: 24cqi; padding: 1.4cqi 1.6cqi 1.4cqi 2.2cqi; border-radius: 999px; background: #f4f0ff; color: var(--ink); font: 700 2.8cqi/1 var(--font-body); white-space: nowrap; overflow: hidden; }
+.fx-tg .chip i { width: 3cqi; height: 3cqi; border-radius: 50%; display: grid; place-items: center; font: 400 2.6cqi/1 var(--font-en); font-style: normal; color: #9a9ab0; }
+.fx-tg .chip.new { max-width: 0; padding-inline: 0; margin-right: -1.2cqi; }
+.fx-tg .q { width: 0; overflow: hidden; white-space: nowrap; font: 400 2.8cqi/1 var(--font-body); color: var(--ink); border-right: .4cqi solid #ff6fa8; }
+/* 実装：Enter で入力値を chip に変換、× で .removing を付けて animationend 後に削除 */
+.play .fx-tg          { animation: tg-focus calc(7s / var(--speed)) infinite; }
+.play .fx-tg .q       { animation: tg-type  calc(7s / var(--speed)) steps(5, end) infinite, tg-caret calc(.9s / var(--speed)) steps(2) infinite; }
+.play .fx-tg .chip.new { animation: tg-new   calc(7s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+.play .fx-tg .chip.del { animation: tg-del   calc(7s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-tg .chip.del i { animation: tg-x   calc(7s / var(--speed)) infinite; }
+@keyframes tg-focus { 0%, 8% { border-color: #d9d5e6; } 12%, 88% { border-color: #ff6fa8; } 94%, 100% { border-color: #d9d5e6; } }
+@keyframes tg-type  { 0%, 14% { width: 0; } 34%, 36% { width: 9.5cqi; } 37%, 100% { width: 0; } }
+@keyframes tg-caret { to { border-color: transparent; } }
+@keyframes tg-new   { 0%, 36% { max-width: 0; padding-inline: 0; margin-right: -1.2cqi; scale: .6; } 44%, 92% { max-width: 24cqi; padding-inline: 2.2cqi 1.6cqi; margin-right: 0; scale: 1; } 96%, 100% { max-width: 0; padding-inline: 0; margin-right: -1.2cqi; scale: .6; } }
+@keyframes tg-del   { 0%, 58% { max-width: 24cqi; padding-inline: 2.2cqi 1.6cqi; margin-right: 0; opacity: 1; scale: 1; } 61% { scale: .92; } 70%, 92% { max-width: 0; padding-inline: 0; margin-right: -1.2cqi; opacity: 0; scale: .6; } 96%, 100% { max-width: 24cqi; padding-inline: 2.2cqi 1.6cqi; margin-right: 0; opacity: 1; scale: 1; } }
+@keyframes tg-x     { 0%, 54% { background: transparent; color: #9a9ab0; } 56%, 100% { background: #ffe3ef; color: #ff6fa8; } }
+
+/* @@ command-palette */
+.stage-cmd { background: #fff; }
+.fx-cmd-shade { position: absolute; inset: 0; background: rgba(75, 74, 94, .35); opacity: 0; }
+.fx-cmd { position: absolute; left: 50%; top: 12%; translate: -50% 0; width: 58cqi; border-radius: 2.5cqi; background: #fff; box-shadow: 0 3cqi 8cqi rgba(75, 74, 94, .25); overflow: hidden; opacity: 0; }
+.fx-cmd .in { display: flex; align-items: center; gap: 2cqi; padding: 2.6cqi 3cqi; border-bottom: .3cqi solid #eef0f8; font: 400 3cqi/1 var(--font-body); color: var(--ink); }
+.fx-cmd .in::before { content: ">"; color: #ff6fa8; font: 700 3cqi/1 var(--font-en); }
+.fx-cmd .in .q { width: 0; overflow: hidden; white-space: nowrap; border-right: .4cqi solid #ff6fa8; }
+.fx-cmd .in .kbd { margin-left: auto; padding: .8cqi 1.2cqi; border-radius: .8cqi; background: #eef0f8; font: 700 2cqi/1 var(--font-en); color: var(--ink-soft); }
+.fx-cmd .ls { padding: 1.2cqi; display: grid; }
+.fx-cmd .ls b { display: grid; grid-template-rows: 1fr; overflow: hidden; }   /* 行の高さを 1fr → 0fr で畳む */
+.fx-cmd .ls b span { min-height: 0; display: flex; align-items: center; gap: 1.6cqi; padding: 1.6cqi 2cqi; border-radius: 1.2cqi; font: 400 2.8cqi/1 var(--font-body); color: var(--ink); }
+.fx-cmd .ls b span::before { content: ""; width: 2.4cqi; height: 2.4cqi; border-radius: .6cqi; background: #d9d5e6; }
+.fx-cmd .ls b.hit span::before { background: #ff8fb8; }
+/* 実装：Ctrl/⌘+K で開く。input ごとに一致しない行に .x を付けて grid-template-rows: 0fr に */
+.play .fx-cmd-shade  { animation: cmd-shade calc(7s / var(--speed)) infinite; }
+.play .fx-cmd        { animation: cmd-open  calc(7s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+.play .fx-cmd .in .q { animation: cmd-type  calc(7s / var(--speed)) steps(3, end) infinite, cmd-caret calc(.9s / var(--speed)) steps(2) infinite; }
+.play .fx-cmd .ls b.x        { animation: cmd-x   calc(7s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-cmd .ls b.hit:first-child span { animation: cmd-sel calc(7s / var(--speed)) infinite; }
+@keyframes cmd-shade { 0%, 6% { opacity: 0; } 14%, 84% { opacity: 1; } 92%, 100% { opacity: 0; } }
+@keyframes cmd-open  { 0%, 6% { opacity: 0; translate: -50% -6cqi; scale: .96; } 16%, 84% { opacity: 1; translate: -50% 0; scale: 1; } 92%, 100% { opacity: 0; translate: -50% -3cqi; scale: .98; } }
+@keyframes cmd-type  { 0%, 24% { width: 0; } 40%, 100% { width: 6cqi; } }
+@keyframes cmd-caret { to { border-color: transparent; } }
+@keyframes cmd-x     { 0%, 42% { grid-template-rows: 1fr; opacity: 1; } 52%, 100% { grid-template-rows: 0fr; opacity: 0; } }
+@keyframes cmd-sel   { 0%, 50% { background: transparent; } 56%, 100% { background: #fff0f6; } }
+
+/* @@ typing-indicator */
+.stage-typing { background: #f4f0ff; }
+.fx-ti-me { position: absolute; right: 14%; top: 16%; padding: 2.2cqi 3.2cqi; border-radius: 3cqi 3cqi .8cqi 3cqi; background: #ff8fb8; color: #fff; font: 700 2.8cqi/1 var(--font-body); }
+.fx-ti { position: absolute; left: 14%; top: 50%; width: 14cqi; height: 9cqi; border-radius: 3cqi 3cqi 3cqi .8cqi; background: #fff; box-shadow: 0 1.5cqi 4cqi rgba(75, 74, 94, .12); display: grid; grid-template-columns: 100%; place-items: center; transform-origin: 0 100%; opacity: 0; overflow: hidden; }   /* 列幅を吹き出しに固定（本文の幅で広がらないように） */
+.fx-ti .dots { display: flex; gap: 1.2cqi; grid-area: 1 / 1; }
+.fx-ti .dots i { width: 2cqi; height: 2cqi; border-radius: 50%; background: #c9b8ff; }
+.fx-ti span { grid-area: 1 / 1; white-space: nowrap; font: 700 2.8cqi/1 var(--font-body); color: var(--ink); opacity: 0; }
+/* 実装：typing イベントで吹き出し（点）を出し、メッセージ受信で同じ要素の幅を広げて本文に差し替え */
+.play .fx-ti         { animation: ti-bubble calc(6s / var(--speed)) cubic-bezier(.3, 1.3, .4, 1) infinite; }
+.play .fx-ti .dots   { animation: ti-dots   calc(6s / var(--speed)) infinite; }
+.play .fx-ti .dots i { animation: ti-bounce calc(.9s / var(--speed)) ease-in-out infinite; animation-delay: calc(var(--i) * .15s / var(--speed)); }
+.play .fx-ti span    { animation: ti-text   calc(6s / var(--speed)) infinite; }
+@keyframes ti-bubble { 0%, 8% { opacity: 0; scale: .4; width: 14cqi; } 14%, 50% { opacity: 1; scale: 1; width: 14cqi; } 58%, 90% { width: 38cqi; opacity: 1; } 96%, 100% { opacity: 0; width: 38cqi; } }
+@keyframes ti-dots   { 0%, 50% { opacity: 1; } 55%, 100% { opacity: 0; } }
+@keyframes ti-bounce { 0%, 60%, 100% { translate: 0 0; } 30% { translate: 0 -1.6cqi; } }
+@keyframes ti-text   { 0%, 54% { opacity: 0; translate: 0 1cqi; } 62%, 100% { opacity: 1; translate: 0 0; } }

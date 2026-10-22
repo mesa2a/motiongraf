@@ -1,0 +1,76 @@
+/* @@ cloud-shadows */
+.stage-cshadow { background: #f3efe4; }
+.fx-cshadow { position: absolute; inset: 0; overflow: hidden; }
+.fx-cshadow .ground { position: absolute; inset: 0; background: linear-gradient(#fbf7ec, #efe9d8); }
+.fx-cshadow .ground::before { content: ""; position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 44cqi; padding: 3cqi 4cqi; border-radius: 2cqi; background: #fff; font: 700 5cqi/1 var(--font-en); color: var(--ink); text-align: center; content: "Sunny Day"; box-shadow: 0 1cqi 3cqi rgba(90, 70, 40, .1); }
+.fx-cshadow .sh { position: absolute; top: var(--y); left: -60cqi; width: var(--w); height: calc(var(--w) * .45); border-radius: 50%; background: rgba(70, 60, 50, .16); filter: blur(2.4cqi); mix-blend-mode: multiply; }   /* 雲の影（ぼかした楕円） */
+/* 雲の影は左から右へ。幅の違う 3 つを別の速度で流すと、ゆっくり明るさが変わる */
+.play .fx-cshadow .sh { animation: cshadow-drift calc(var(--t) * 1s / var(--speed)) linear infinite; animation-delay: calc(var(--d) * -1s / var(--speed)); }
+@keyframes cshadow-drift { from { translate: 0 0; } to { translate: 170cqi 0; } }
+
+/* @@ vinyl-rings */
+.stage-vinyl { background: #f4f0ff; }
+.fx-vinyl { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 60cqi; height: 60cqi; border-radius: 50%;
+  background: repeating-radial-gradient(circle, #2e2d3d 0 .5cqi, #3a3950 .5cqi .9cqi); box-shadow: 0 2cqi 6cqi rgba(75, 74, 94, .3); }   /* 溝 */
+.fx-vinyl::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0 40deg, rgba(255, 255, 255, .22) 60deg, transparent 80deg, transparent 220deg, rgba(255, 255, 255, .18) 240deg, transparent 260deg); }   /* 回る反射 */
+.fx-vinyl::after { content: "SIDE A"; position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 20cqi; height: 20cqi; border-radius: 50%; background: #ff8fb8; display: grid; place-items: center; font: 700 2.4cqi/1 var(--font-en); letter-spacing: .14em; color: #fff; box-shadow: inset 0 0 0 .6cqi #fff; }   /* ラベル */
+/* 盤は溝だけだと回転が見えないので、反射とラベルを一緒に回す */
+.play .fx-vinyl { animation: vinyl-spin calc(6s / var(--speed)) linear infinite; }
+@keyframes vinyl-spin { to { rotate: 360deg; } }
+
+/* @@ menu-cascade */
+.stage-casc { background: #fff; }
+.fx-casc { position: absolute; left: 14%; top: 14%; width: 26cqi; border-radius: 1.8cqi; background: #fff; box-shadow: 0 2cqi 6cqi rgba(75, 74, 94, .18); padding: 1cqi; }
+.fx-casc b, .fx-casc .sub b { position: relative; display: flex; align-items: center; height: 6cqi; padding: 0 2cqi; border-radius: 1.2cqi; font: 400 2.6cqi/1 var(--font-body); color: var(--ink); }
+.fx-casc b.has::after { content: "›"; margin-left: auto; color: var(--ink-soft); }
+.fx-casc .sub { position: absolute; left: calc(100% - .4cqi); top: 0; width: 26cqi; border-radius: 1.8cqi; background: #fff; box-shadow: 0 2cqi 6cqi rgba(75, 74, 94, .18); padding: 1cqi; opacity: 0; translate: -1cqi 0; transform-origin: 0 20%; scale: .96; }   /* 2 段目は親の右に */
+.fx-casc .sub .sub { top: 6cqi; }   /* 3 段目 */
+.fx-casc i.hl { position: absolute; left: 1cqi; right: 1cqi; top: 1cqi; height: 6cqi; border-radius: 1.2cqi; background: #fff0f6; opacity: 0; z-index: 0; }
+.fx-casc b { z-index: 1; }
+/* 実装：hover で .sub を opacity 1 / translate 0 に。親を離れても少し残す（transition-delay）と斜めに動かしやすい */
+.play .fx-casc > i.hl        { animation: casc-hl1 calc(7s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-casc .s1         { animation: casc-open calc(7s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+.play .fx-casc .s1 > i.hl  { animation: casc-hl2 calc(7s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-casc .s1 .s2     { animation: casc-open2 calc(7s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+@keyframes casc-hl1  { 0%, 8% { opacity: 0; translate: 0 0; } 12%, 20% { opacity: 1; translate: 0 0; } 26%, 80% { opacity: 1; translate: 0 6cqi; } 86%, 100% { opacity: 0; translate: 0 6cqi; } }
+@keyframes casc-open { 0%, 28% { opacity: 0; translate: -1cqi 0; scale: .96; } 34%, 80% { opacity: 1; translate: 0 0; scale: 1; } 86%, 100% { opacity: 0; translate: -1cqi 0; scale: .96; } }
+@keyframes casc-hl2  { 0%, 40% { opacity: 0; translate: 0 0; } 44%, 50% { opacity: 1; translate: 0 0; } 56%, 80% { opacity: 1; translate: 0 6cqi; } 86%, 100% { opacity: 0; translate: 0 6cqi; } }
+@keyframes casc-open2 { 0%, 58% { opacity: 0; translate: -1cqi 0; scale: .96; } 64%, 80% { opacity: 1; translate: 0 0; scale: 1; } 86%, 100% { opacity: 0; translate: -1cqi 0; scale: .96; } }
+
+/* @@ swatch-pick */
+.stage-swatch { background: #fff5f9; }
+.fx-swatch { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; gap: 2.4cqi; justify-items: center; }
+.fx-swatch .prev { width: 20cqi; height: 20cqi; border-radius: 3cqi; background: var(--c, #ff8fb8); box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .16); }
+.fx-swatch .row { display: flex; gap: 2cqi; }
+.fx-swatch .row i { position: relative; width: 6cqi; height: 6cqi; border-radius: 50%; background: var(--c); }
+.fx-swatch .row i::before { content: ""; position: absolute; inset: -1cqi; border-radius: 50%; border: .5cqi solid var(--c); opacity: 0; scale: .7; }   /* 選択の輪 */
+.fx-swatch .row i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 1.4cqi; height: 2.4cqi; margin: -1.5cqi 0 0 -.7cqi; border-right: .5cqi solid #fff; border-bottom: .5cqi solid #fff; rotate: 45deg; opacity: 0; }   /* チェック */
+/* 実装：クリックした色に .on（輪とチェック）を付け、プレビューの --c を差し替える。色は transition で混ざる */
+.play .fx-swatch .prev { animation: swatch-prev calc(6s / var(--speed)) ease infinite; }
+.play .fx-swatch .row i::before { animation: swatch-ring calc(6s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; animation-delay: calc(var(--i) * 1.5s / var(--speed)); }
+.play .fx-swatch .row i::after  { animation: swatch-chk  calc(6s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; animation-delay: calc(var(--i) * 1.5s / var(--speed)); }
+@keyframes swatch-prev { 0%, 22% { background: #ff8fb8; } 27%, 47% { background: #8fd0ff; } 52%, 72% { background: #c9b8ff; } 77%, 97% { background: #6fd3b3; } 100% { background: #ff8fb8; } }
+@keyframes swatch-ring { 0%, 2% { opacity: 0; scale: .7; } 6%, 22% { opacity: 1; scale: 1; } 27%, 100% { opacity: 0; scale: .7; } }
+@keyframes swatch-chk  { 0%, 2% { opacity: 0; scale: 0; } 6%, 22% { opacity: 1; scale: 1; } 27%, 100% { opacity: 0; scale: 0; } }
+
+/* @@ load-more */
+.stage-lmore { background: #f4f0ff; }
+.fx-lmore { position: absolute; left: 50%; top: 6%; translate: -50% 0; width: 56cqi; display: grid; gap: 1.6cqi; }
+.fx-lmore .it { height: 8cqi; border-radius: 1.6cqi; background: #fff; box-shadow: 0 1cqi 3cqi rgba(75, 74, 94, .08); display: flex; align-items: center; gap: 1.6cqi; padding: 0 2cqi; }
+.fx-lmore .it::before { content: ""; width: 4.6cqi; height: 4.6cqi; border-radius: 50%; background: var(--c, #c9b8ff); }
+.fx-lmore .it::after { content: ""; flex: 1; height: 1.6cqi; border-radius: 1cqi; background: #eef0f8; max-width: 60%; }
+.fx-lmore .it.new { display: grid; grid-template-rows: 0fr; overflow: hidden; height: auto; padding: 0; box-shadow: none; background: transparent; }   /* 追加分は高さ 0 から */
+.fx-lmore .it.new > div { min-height: 0; }
+.fx-lmore .it.new > div > i { display: flex; align-items: center; gap: 1.6cqi; height: 8cqi; padding: 0 2cqi; border-radius: 1.6cqi; background: #fff; box-shadow: 0 1cqi 3cqi rgba(75, 74, 94, .08); }
+.fx-lmore .it.new > div > i::before { content: ""; width: 4.6cqi; height: 4.6cqi; border-radius: 50%; background: var(--c); }
+.fx-lmore .it.new > div > i::after { content: ""; flex: 1; height: 1.6cqi; border-radius: 1cqi; background: #eef0f8; max-width: 60%; }
+.fx-lmore .sk { height: 8cqi; border-radius: 1.6cqi; background: linear-gradient(90deg, #eceaf3 25%, #f7f6fb 50%, #eceaf3 75%) 0 0 / 200% 100%; opacity: 0; }   /* 読み込み中のスケルトン */
+.fx-lmore .btn { justify-self: center; padding: 1.8cqi 4cqi; border-radius: 999px; border: .4cqi solid #c9b8ff; color: #7b6ab3; font: 700 2.4cqi/1 var(--font-body); background: #fff; }
+/* 実装：クリックでスケルトンを出し、fetch 後に項目を grid-template-rows: 0fr → 1fr で伸ばして差し替える */
+.play .fx-lmore .btn    { animation: lmore-btn  calc(6s / var(--speed)) ease infinite; }
+.play .fx-lmore .sk     { animation: lmore-sk   calc(6s / var(--speed)) ease infinite, lmore-shine calc(1.2s / var(--speed)) linear infinite; }
+.play .fx-lmore .it.new { animation: lmore-grow calc(6s / var(--speed)) cubic-bezier(.3, 1, .4, 1) infinite; animation-delay: calc(var(--i) * .12s / var(--speed)); }
+@keyframes lmore-btn   { 0%, 14% { scale: 1; opacity: 1; } 17% { scale: .92; } 20%, 100% { scale: 1; opacity: 1; } }
+@keyframes lmore-sk    { 0%, 18% { opacity: 0; } 22%, 50% { opacity: 1; } 54%, 100% { opacity: 0; } }
+@keyframes lmore-shine { to { background-position: -200% 0; } }
+@keyframes lmore-grow  { 0%, 52% { grid-template-rows: 0fr; opacity: 0; } 62%, 92% { grid-template-rows: 1fr; opacity: 1; } 98%, 100% { grid-template-rows: 0fr; opacity: 0; } }

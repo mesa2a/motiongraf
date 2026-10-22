@@ -1,0 +1,89 @@
+/* @@ sticky-image */
+.stage-simg { background: #f4f0ff; }
+.fx-simg { position: absolute; inset: 8% 12%; border-radius: 2.5cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
+.fx-simg .img { position: relative; margin: 2.5cqi; }
+.fx-simg .img i { position: absolute; inset: 0; border-radius: 2cqi; background: linear-gradient(135deg, var(--c1), var(--c2)); opacity: 0; }
+.fx-simg .img i:first-child { opacity: 1; }
+.fx-simg .txt { overflow: hidden; }
+.fx-simg .txt > div { padding: 2.5cqi 2.5cqi 2.5cqi 0; display: grid; gap: 1.4cqi; align-content: start; }
+.fx-simg .txt b { display: block; height: 1.4cqi; border-radius: 1cqi; background: #eef0f8; }
+.fx-simg .txt b.h { height: 3cqi; width: 60%; background: var(--c); margin-top: 6cqi; }
+.fx-simg .txt b.h:first-child { margin-top: 0; }
+.fx-simg .txt b.s { width: 70%; }
+/* 本番：画像の列を position: sticky; top: 0 にし、IntersectionObserver で今の見出しに合う画像を opacity 1 にする */
+.play .fx-simg .txt > div { animation: simg-scroll calc(8s / var(--speed)) ease-in-out infinite; }
+.play .fx-simg .img i:nth-child(1) { animation: simg-l0 calc(8s / var(--speed)) ease infinite; }
+.play .fx-simg .img i:nth-child(2) { animation: simg-l1 calc(8s / var(--speed)) ease infinite; }
+.play .fx-simg .img i:nth-child(3) { animation: simg-l2 calc(8s / var(--speed)) ease infinite; }
+@keyframes simg-scroll { 0%, 12% { translate: 0 0; } 32%, 46% { translate: 0 -24cqi; } 66%, 92% { translate: 0 -48cqi; } 100% { translate: 0 -48cqi; } }
+@keyframes simg-l0 { 0%, 24% { opacity: 1; } 34%, 100% { opacity: 0; } }
+@keyframes simg-l1 { 0%, 24% { opacity: 0; } 34%, 58% { opacity: 1; } 68%, 100% { opacity: 0; } }
+@keyframes simg-l2 { 0%, 58% { opacity: 0; } 68%, 100% { opacity: 1; } }
+
+/* @@ scroll-marquee-speed */
+.stage-smq { background: #fff; }
+@property --sy { syntax: "<length>"; inherits: true; initial-value: 0px; }
+.fx-smq { position: absolute; inset: 0; overflow: hidden; --sy: 0px; }
+.fx-smq .pg { position: absolute; left: 8%; right: 12%; top: 0; padding: 4cqi 0; display: grid; gap: 2.5cqi; translate: 0 calc(var(--sy) * -1); }   /* 本文はスクロール量ぶん上へ */
+.fx-smq .pg b { display: block; height: 9cqi; border-radius: 1.8cqi; background: #f4f0ff; }
+.fx-smq .mq { white-space: nowrap; font: 700 8cqi/1 var(--font-en); color: #ff8fb8; translate: calc(var(--sy) * -2.4) 0; }   /* マーキーはスクロール量 × 2.4 だけ横へ */
+.fx-smq .track { position: absolute; right: 4%; top: 6%; bottom: 6%; width: 1.2cqi; border-radius: 1cqi; background: #eef0f8; }
+.fx-smq .thumb { position: absolute; left: 0; right: 0; top: calc(var(--sy) * 1.1); height: 10cqi; border-radius: 1cqi; background: #c9b8ff; }
+/* 本番：animation-timeline: scroll() で --sy をスクロール位置に結びつけるか、scroll イベントで --sy を更新する */
+.play .fx-smq { animation: smq-scroll calc(7s / var(--speed)) ease-in-out infinite; }
+@keyframes smq-scroll { 0%, 10% { --sy: 0px; } 32%, 46% { --sy: 12cqi; } 66%, 80% { --sy: 30cqi; } 100% { --sy: 0px; } }
+
+/* @@ section-bg-change */
+.stage-sbg { background: #f0f7ff; }
+.fx-sbg { position: absolute; left: 50%; top: 8%; translate: -50% 0; width: 34cqi; height: 60cqi; border-radius: 4cqi; border: .8cqi solid var(--ink); overflow: hidden; background: #fff5f9; }
+.fx-sbg .pg { padding: 3cqi; display: grid; }
+.fx-sbg .sec { height: 46cqi; display: grid; align-content: start; gap: 2cqi; }
+.fx-sbg .sec b { display: block; font: 700 4.4cqi/1 var(--font-en); color: var(--c); }
+.fx-sbg .sec i { display: block; height: 9cqi; border-radius: 2cqi; background: rgba(255, 255, 255, .7); }
+/* 本番：IntersectionObserver で見えているセクションの data-bg を body の背景に反映し、transition で混ぜる */
+.play .fx-sbg     { animation: sbg-color  calc(8s / var(--speed)) ease infinite; }
+.play .fx-sbg .pg { animation: sbg-scroll calc(8s / var(--speed)) ease-in-out infinite; }
+@keyframes sbg-scroll { 0%, 12% { translate: 0 0; } 32%, 46% { translate: 0 -46cqi; } 66%, 92% { translate: 0 -92cqi; } 100% { translate: 0 -92cqi; } }
+@keyframes sbg-color  { 0%, 20% { background: #fff5f9; } 36%, 54% { background: #eaf6ff; } 70%, 100% { background: #f4f0ff; } }
+
+/* @@ line-draw-scroll */
+.stage-ldraw { background: #fff; }
+.fx-ldraw { position: absolute; inset: 0; display: grid; grid-template-columns: 1.2fr 1fr; gap: 4cqi; padding: 6cqi 10cqi; }
+.fx-ldraw svg { width: 100%; height: 100%; overflow: visible; }
+.fx-ldraw path, .fx-ldraw circle { fill: none; stroke: var(--c); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }   /* pathLength="1" にしてあるので 1 = 全長 */
+.fx-ldraw .pg { position: relative; overflow: hidden; }
+.fx-ldraw .pg div { display: grid; gap: 1.6cqi; }
+.fx-ldraw .pg b { display: block; height: 1.6cqi; border-radius: 1cqi; background: #eef0f8; }
+.fx-ldraw .pg b:nth-child(4n+1) { height: 3cqi; width: 55%; background: #c9b8ff; margin-top: 2cqi; }
+/* 本番：animation-timeline: scroll() で stroke-dashoffset を 1 → 0 にする（SVG 側は pathLength="1"） */
+.play .fx-ldraw path, .play .fx-ldraw circle { animation: ldraw-draw calc(7s / var(--speed)) ease-in-out infinite; animation-delay: calc(var(--i) * .5s / var(--speed)); }
+.play .fx-ldraw .pg div { animation: ldraw-scroll calc(7s / var(--speed)) ease-in-out infinite; }
+@keyframes ldraw-draw   { 0%, 8% { stroke-dashoffset: 1; } 70%, 88% { stroke-dashoffset: 0; } 96%, 100% { stroke-dashoffset: 1; } }
+@keyframes ldraw-scroll { 0%, 8% { translate: 0 0; } 78%, 90% { translate: 0 -30cqi; } 100% { translate: 0 0; } }
+
+/* @@ tracking-in */
+.stage-track { background: linear-gradient(135deg, #eaf6ff, #fff0f6); }
+.fx-trackin { position: absolute; left: 50%; top: 50%; translate: -50% -50%; font: 700 12cqi/1 var(--font-en); color: var(--ink); letter-spacing: -.5em; opacity: 0; filter: blur(1cqi); white-space: nowrap; padding-left: .3em; }
+/* 実装：letter-spacing を負から正へ。blur と opacity も同時に */
+.play .fx-trackin { animation: track-in calc(5s / var(--speed)) cubic-bezier(.2, .8, .2, 1) infinite; }
+@keyframes track-in { 0%, 8% { letter-spacing: -.5em; opacity: 0; filter: blur(1cqi); } 40%, 82% { letter-spacing: .3em; opacity: 1; filter: blur(0); } 94%, 100% { letter-spacing: .3em; opacity: 0; filter: blur(0); } }
+
+/* @@ band-reveal */
+.stage-band { background: #fff; }
+.fx-band { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; justify-items: start; gap: 1.2cqi; }
+.fx-band .ln { position: relative; padding: .3em .5em; font: 700 5.6cqi/1.2 var(--font-display); color: var(--ink); }
+.fx-band .ln span { opacity: 0; }
+.fx-band .ln::before { content: ""; position: absolute; inset: 0; background: var(--c); clip-path: inset(0 100% 0 0); }   /* 左から入って右へ抜ける帯 */
+/* 実装：行ごとに --i を振る。帯が覆い切った瞬間に文字を出す */
+.play .fx-band .ln::before { animation: band-sweep calc(6s / var(--speed)) cubic-bezier(.7, 0, .2, 1) infinite; animation-delay: calc(var(--i) * .35s / var(--speed)); }
+.play .fx-band .ln span    { animation: band-text  calc(6s / var(--speed)) steps(1) infinite; animation-delay: calc(var(--i) * .35s / var(--speed)); }
+@keyframes band-sweep { 0%, 6% { clip-path: inset(0 100% 0 0); } 20% { clip-path: inset(0 0 0 0); } 34%, 78% { clip-path: inset(0 0 0 100%); } 79%, 100% { clip-path: inset(0 100% 0 0); } }
+@keyframes band-text  { 0%, 20% { opacity: 0; } 21%, 84% { opacity: 1; } 85%, 100% { opacity: 0; } }
+
+/* @@ color-wave-text */
+.stage-cwave { background: #fff; }
+.fx-cwave { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; font: 700 11cqi/1 var(--font-en); letter-spacing: .04em; }
+.fx-cwave b { display: block; color: #c9b8ff; }
+/* --i × -0.15s の負の遅延で位相をずらすと色の波になる */
+.play .fx-cwave b { animation: cwave calc(2.4s / var(--speed)) ease-in-out infinite; animation-delay: calc(var(--i) * -.15s / var(--speed)); }
+@keyframes cwave { 0%, 100% { color: #c9b8ff; translate: 0 0; } 33% { color: #ff8fb8; translate: 0 -1.4cqi; } 66% { color: #8fd0ff; translate: 0 0; } }

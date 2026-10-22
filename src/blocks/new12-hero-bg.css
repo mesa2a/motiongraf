@@ -1,0 +1,70 @@
+/* @@ split-flip */
+.stage-splitflip { background: linear-gradient(135deg, #eaf6ff, #fff0f6); }
+.fx-sf { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; gap: .6cqi; perspective: 90cqi; font: 700 13cqi/1 var(--font-en); color: var(--ink); }
+.fx-sf b { display: block; transform-origin: 50% 50%; transform: rotateX(-90deg); opacity: 0; }
+/* 実装：文字ごとに span で包み、--i を振る。IntersectionObserver で .in を付けて開始 */
+.play .fx-sf b { animation: sf-flip calc(5s / var(--speed)) cubic-bezier(.3, 1.4, .4, 1) infinite; animation-delay: calc(var(--i) * .08s / var(--speed)); }
+@keyframes sf-flip { 0%, 8% { transform: rotateX(-90deg); opacity: 0; } 22%, 78% { transform: rotateX(0deg); opacity: 1; } 90%, 100% { transform: rotateX(90deg); opacity: 0; } }
+
+/* @@ scramble-text */
+.stage-scramble { background: #15141f; }
+.fx-scr { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; gap: 1.2cqi; font: 400 18cqi/1 var(--font-cool-en); color: #fff; letter-spacing: .04em; }
+.fx-scr b { display: block; height: 1em; overflow: hidden; font-weight: 400; }   /* 1 文字ぶんの窓 */
+.fx-scr b i { display: block; font-style: normal; line-height: 1; color: #ff6fa8; }
+.fx-scr b i::after { content: attr(data-l); display: block; color: #fff; }   /* 最後の段が本当の文字 */
+/* 実装：各文字の上に 4 段のダミー文字を置き、steps() で 1 段ずつ送って最後の段で止める */
+.play .fx-scr b i { animation: scr-roll calc(5s / var(--speed)) infinite; animation-delay: calc(var(--i) * .12s / var(--speed)); }
+@keyframes scr-roll { 0%, 12% { translate: 0 0; opacity: 1; animation-timing-function: steps(4, end); } 40%, 86% { translate: 0 -4em; opacity: 1; } 92%, 100% { translate: 0 -4em; opacity: 0; } }
+
+/* @@ outline-fill */
+.stage-outline { background: #fff5f9; }
+.fx-of { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; font: 700 17cqi/1 var(--font-en); letter-spacing: .02em; }
+.fx-of span { grid-area: 1 / 1; }
+.fx-of .o { color: transparent; -webkit-text-stroke: .35cqi var(--ink); }   /* 輪郭だけ */
+.fx-of .f { color: transparent; background: linear-gradient(160deg, #ff8fb8, #c9b8ff); -webkit-background-clip: text; background-clip: text; clip-path: inset(100% 0 0 0); }   /* 下から満ちる塗り */
+/* 実装：IntersectionObserver で .in を付け、clip-path を inset(0) に transition */
+.play .fx-of .f { animation: of-fill calc(5s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+@keyframes of-fill { 0%, 14% { clip-path: inset(100% 0 0 0); } 50%, 82% { clip-path: inset(0 0 0 0); } 94%, 100% { clip-path: inset(100% 0 0 0); } }
+
+/* @@ word-rotate */
+.stage-wordrot { background: #f0f7ff; }
+.fx-wr { position: absolute; left: 50%; top: 50%; translate: -50% -50%; white-space: nowrap; font: 700 9cqi/1.2 var(--font-en); color: var(--ink); }
+.fx-wr .w { position: relative; display: inline-grid; width: 3.3em; height: 1.2em; overflow: hidden; vertical-align: bottom; color: #ff6fa8; }
+.fx-wr .w i { grid-area: 1 / 1; font-style: normal; translate: 0 110%; opacity: 0; }
+.fx-wr .w::after { content: ""; position: absolute; left: 0; bottom: .08em; height: .12em; width: 2.6em; border-radius: 1em; background: #ffd3e3; }
+/* 実装：単語を重ねて --i を振る。周期 = 単語数 × 2s */
+.play .fx-wr .w i { animation: wr-word calc(6s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; animation-delay: calc(var(--i) * 2s / var(--speed)); }
+@keyframes wr-word { 0% { translate: 0 110%; opacity: 0; } 8%, 27% { translate: 0 0; opacity: 1; } 34%, 100% { translate: 0 -110%; opacity: 0; } }
+
+/* @@ dot-wave-grid */
+.stage-dotwave { background: #f4f0ff; }
+.fx-dw { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(8, 1fr); place-items: center; }
+.fx-dw i { width: 1.6cqi; height: 1.6cqi; border-radius: 50%; background: #c9b8ff; }
+/* --d は x + y（対角線の番号）。負の遅延で最初から波になっている */
+.play .fx-dw i { animation: dw-pulse calc(2.4s / var(--speed)) ease-in-out infinite; animation-delay: calc(var(--d) * -.12s / var(--speed)); }
+@keyframes dw-pulse { 0%, 100% { scale: 1; background: #c9b8ff; } 50% { scale: 2.3; background: #ff8fb8; } }
+
+/* @@ noise-grain */
+.stage-grain { background: radial-gradient(60cqi 40cqi at 30% 40%, #4a3f6b, transparent 70%), radial-gradient(50cqi 40cqi at 75% 70%, #3b2a4a, transparent 70%), #15141f; }
+.fx-grain { position: absolute; inset: 0; }
+.fx-grain::before { content: ""; position: absolute; inset: -20%; opacity: .55; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 30cqi; }   /* SVG の feTurbulence を粒にして敷く */
+.fx-grain .t { position: absolute; left: 50%; top: 50%; translate: -50% -50%; font: 400 16cqi/1 var(--font-cool-en); letter-spacing: .1em; color: #fff; }
+/* 実装：粒の位置を steps(1) でランダムに飛ばすとフィルムのざらつきになる。動きが不要なら animation なしでも質感は出る */
+.play .fx-grain::before { animation: grain-jitter calc(.5s / var(--speed)) steps(1) infinite; }
+@keyframes grain-jitter { 0% { translate: 0 0; } 20% { translate: -3% 2%; } 40% { translate: 2% -4%; } 60% { translate: -1% 5%; } 80% { translate: 4% 1%; } }
+
+/* @@ floating-shapes */
+.stage-shapes { background: #fff; }
+.fx-shapes { position: absolute; inset: 0; }
+.fx-shapes .sh { position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); transform: translateY(0) rotate(var(--r)); }
+.fx-shapes .sh.c { border-radius: 50%; background: #ffd3e3; }
+.fx-shapes .sh.r { border-radius: 50%; border: .8cqi solid #bccbee; }
+.fx-shapes .sh.s { border-radius: 18%; background: #d9c6f0; }
+.fx-shapes .sh.t { clip-path: polygon(50% 0, 100% 100%, 0 100%); background: #b5e4d1; }
+.fx-shapes .sh.x { background: linear-gradient(#f5d98c 0 0) center / 100% 22% no-repeat, linear-gradient(#f5d98c 0 0) center / 22% 100% no-repeat; }   /* 十字 */
+.fx-shapes .ttl { position: absolute; left: 50%; top: 50%; translate: -50% -50%; font: 700 9cqi/1 var(--font-en); color: var(--ink); }
+/* --x --y --s --r は配置、--i で位相をずらす。alternate で行って戻る */
+.play .fx-shapes .sh { animation: shp-float calc(6s / var(--speed)) ease-in-out infinite alternate; animation-delay: calc(var(--i) * -1.1s / var(--speed)); }
+@keyframes shp-float { 0% { transform: translateY(0) rotate(var(--r)); } 100% { transform: translateY(-4cqi) rotate(calc(var(--r) + 50deg)); } }

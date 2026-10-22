@@ -5,10 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CSS MOTION GRAPHICS — Web デザインのための CSS モーション {{COUNT}} 選</title>
 <meta name="description" content="JavaScript 不要。Web デザインでそのまま使える CSS モーション {{COUNT}} 本。見出しの登場、ボタンのホバー、カードや画像、スクロール連動、ナビやモーダルなどの UI、画面転換、背景、エフェクト。コードをコピーしてそのまま使えます。">
+<!-- OGP / PWA：公開時は `node src/build.js --site https://…/` で og:url と og:image が絶対 URL になる -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="CSS MOTION GRAPHICS — Web デザインのための CSS モーション {{COUNT}} 選">
+<meta property="og:description" content="JavaScript 不要。コピーして貼るだけで使える CSS モーション {{COUNT}} 本。">
+<meta property="og:image" content="{{OG_IMAGE}}">
+{{OG_URL}}
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f3aabb">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&family=Dela+Gothic+One&family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script>/* ダークモードの初期値（描画前に反映してチラつきを防ぐ） */
+(function () { try { var s = localStorage.getItem('motion-theme'); var d = s ? JSON.parse(s) : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.dataset.theme = d; } catch (e) {} })();</script>
 <!--
   演出の CSS はこの <style> に全部入っています（src/blocks/*.css から生成）。
   「/* @@ id */」が区切りで、各カードの「コード」はここから自動で切り出されます。
@@ -32,6 +47,7 @@
     <a href="#tips">コツ</a>
     <a href="#usage">使い方</a>
   </nav>
+  <button class="theme-btn" id="theme" type="button" aria-label="ダークモードの切り替え" title="ダークモード"><span class="moon" aria-hidden="true">☾</span><span class="sun" aria-hidden="true">☀</span></button>
   <label class="speed">
     <span>SPEED</span>
     <select id="speed" aria-label="再生速度">
@@ -81,12 +97,37 @@
   <div class="sec-head">
     <span class="sec-scene">EPISODE 01</span>
     <h2 class="sec-title">Catalog<small>モーションカタログ</small></h2>
-    <p class="sec-lead">全 <span data-count>{{COUNT}}</span> 本、7 カテゴリ。親要素に <code>.play</code> を付けるだけで動きます。各カードの「コード」ボタンで HTML と CSS を表示・コピーできます。ホバー系は、実装では <code>:hover</code> と <code>transition</code> の部分だけ使えば OK です。</p>
+    <p class="sec-lead">全 <span data-count>{{COUNT}}</span> 本、{{SECTIONS}} カテゴリ。親要素に <code>.play</code> を付けるだけで動きます。各カードの「コード」ボタンで HTML と CSS を表示・コピーできます。ホバー系は、実装では <code>:hover</code> と <code>transition</code> の部分だけ使えば OK です。</p>
   </div>
 
   <nav class="cat-nav" aria-label="カテゴリ">
 {{CATNAV}}
   </nav>
+
+  <!-- 検索・絞り込み・折りたたみ -->
+  <div class="cat-tools" role="search">
+    <label class="tool-search">
+      <span class="tool-ic" aria-hidden="true"></span>
+      <input id="q" type="search" placeholder="検索（タイトル・タグ・説明）" title="/ キーでフォーカス、Esc でクリア" autocomplete="off" aria-label="モーションを検索">
+      <button class="tool-clear" type="button" aria-label="検索をクリア" hidden>×</button>
+    </label>
+    <div class="tool-group">
+      <button class="tool-btn" id="tool-fav" type="button" aria-pressed="false">♡ お気に入り <b data-fav-count>0</b></button>
+      <button class="tool-btn" id="tool-cool" type="button" aria-pressed="false">COOL のみ</button>
+      <button class="tool-btn" id="tool-export" type="button" title="お気に入りの一覧をコピー">書き出し</button>
+      <button class="tool-btn" id="tool-random" type="button" title="表示中からランダムに 1 本へ">おまかせ ✦</button>
+      <button class="tool-btn" id="tool-bundle" type="button" title="お気に入りの CSS を 1 ファイルにまとめて保存">CSS を保存</button>
+      <button class="tool-btn" id="tool-favlist" type="button" title="お気に入りの並び替え">並び替え ⋮⋮</button>
+    </div>
+    <select id="sort" class="tool-select" aria-label="並び順"><option value="std">標準の順</option><option value="fav">お気に入りを先に</option><option value="new">新しい順</option></select>
+    <div class="tool-group tool-fold">
+      <button class="tool-btn" id="tool-open" type="button">すべて開く</button>
+      <button class="tool-btn" id="tool-close" type="button">すべて閉じる</button>
+    </div>
+    <p class="tool-status" aria-live="polite"><b data-shown>{{COUNT}}</b> 本を表示</p>
+    <p class="tool-hint">キー操作: <kbd>/</kbd> 検索　<kbd>j</kbd> <kbd>k</kbd> カード移動　<kbd>c</kbd> コード　<kbd>f</kbd> お気に入り　<kbd>r</kbd> もういちど　<kbd>l</kbd> リンク</p>
+  </div>
+  <p class="no-results" hidden>該当するモーションがありません。別の言葉で探すか、絞り込みを外してみてください。</p>
 
   <!-- 共通パーツ -->
   <article class="card card-common" data-id="_common" style="--accent: var(--lemon)">
@@ -198,8 +239,37 @@ function replay(stage) {
 }</code></pre>
       </div>
     </li>
+    <li class="step">
+      <span class="step-no">4</span>
+      <div>
+        <h3>探す・ためる・持ち帰る</h3>
+        <p>カタログ上部の検索は、タイトル・タグ・説明を対象にスペース区切りの AND で絞り込めます。カードのタグを押すとそのタグで検索します。気に入ったものは ♡ でお気に入りに入れておくと、「CSS を保存」で共通パーツと一緒に 1 ファイルの CSS としてダウンロードできます（HTML はコメントで入っています）。「リンク」はそのカードへの URL、「大きく」はデモを大きな画面で再生します。各カードの下には、タグが近い「似ている演出」へのリンクも出ます。</p>
+        <p>キー操作: <kbd>/</kbd> 検索　<kbd>j</kbd> <kbd>k</kbd> カードを移動　<kbd>c</kbd> コード　<kbd>f</kbd> お気に入り　<kbd>r</kbd> もういちど　<kbd>l</kbd> リンク　<kbd>Esc</kbd> 閉じる</p>
+      </div>
+    </li>
   </ol>
 </section>
+
+<!-- お気に入りの並び替え -->
+<dialog class="modal modal-fav" id="favlist" aria-label="お気に入りの並び替え">
+  <div class="modal-head">
+    <p class="modal-title">お気に入りの順番<small>ドラッグか ▲▼ で入れ替え</small></p>
+    <div class="modal-actions"><button class="btn btn-sm btn-modal-close" type="button">× 閉じる</button></div>
+  </div>
+  <ul class="fav-list"></ul>
+</dialog>
+
+<!-- デモを大きく見るモーダル -->
+<dialog class="modal" id="preview" aria-label="デモのプレビュー">
+  <div class="modal-head">
+    <p class="modal-title"><b data-modal-no></b><span data-modal-title></span><small data-modal-en></small></p>
+    <div class="modal-actions">
+      <button class="btn btn-sm btn-modal-replay" type="button">▶ もういちど</button>
+      <button class="btn btn-sm btn-modal-close" type="button">× 閉じる</button>
+    </div>
+  </div>
+  <div class="modal-stage"></div>
+</dialog>
 
 </main>
 

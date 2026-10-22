@@ -1,0 +1,53 @@
+/* @@ card-deck-flip */
+.stage-deck { background: #ffe3ef; perspective: 120cqi; }
+.fx-deck { position: absolute; inset: 0; display: grid; place-items: center; font: 700 14cqi/1 var(--font-en); color: var(--ink); background: #d7eeff; transform-origin: 0 50%; backface-visibility: hidden; }   /* 前の画面を 4 枚重ねて束にする */
+.fx-deck:nth-child(2) { filter: brightness(.97); }
+.fx-deck:nth-child(3) { filter: brightness(.94); }
+.fx-deck:nth-child(4) { filter: brightness(.91); }
+.fx-scene.b.deckb { opacity: 0; }
+/* 実装：同じ画面を数枚複製し、左端を軸に 1 枚ずつ rotateY(-180deg) でめくる。遅延は --i × .18s */
+.play .fx-deck        { animation: deck-flip calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; animation-delay: calc(var(--i) * .18s / var(--speed)); }
+.play .fx-scene.b.deckb { animation: deck-b calc(5s / var(--speed)) ease infinite; }
+@keyframes deck-flip { 0%, 14% { transform: rotateY(0deg); } 50%, 84% { transform: rotateY(-180deg); } 96%, 100% { transform: rotateY(0deg); } }
+@keyframes deck-b    { 0%, 16% { opacity: 0; } 24%, 86% { opacity: 1; } 96%, 100% { opacity: 0; } }
+
+/* @@ multi-circle */
+.stage-mcirc { background: #d7eeff; }
+.fx-mcirc { position: absolute; inset: 0; overflow: hidden; }
+.fx-mcirc i { position: absolute; left: var(--x); top: var(--y); width: 10cqi; height: 10cqi; margin: -5cqi; border-radius: 50%; background: #ffe3ef; scale: 0; }   /* 各点から広がる円 */
+.fx-scene.b.mcircb { background: transparent; opacity: 0; }
+/* 実装：クリック位置や複数の点から同時に円を広げる。scale(0 → 14) を --i で少しずつずらす */
+.play .fx-mcirc i       { animation: mcirc-grow calc(5s / var(--speed)) cubic-bezier(.5, 0, .3, 1) infinite; animation-delay: calc(var(--i) * .1s / var(--speed)); }
+.play .fx-scene.b.mcircb { animation: mcirc-b   calc(5s / var(--speed)) ease infinite; }
+@keyframes mcirc-grow { 0%, 12% { scale: 0; } 40%, 80% { scale: 14; } 92%, 100% { scale: 0; } }
+@keyframes mcirc-b    { 0%, 34% { opacity: 0; } 42%, 78% { opacity: 1; } 86%, 100% { opacity: 0; } }
+
+/* @@ text-glare */
+.stage-glare { background: #15141f; }
+.fx-glare { position: absolute; inset: 0; display: grid; place-items: center; }
+.fx-glare b { position: relative; font: 400 20cqi/1 var(--font-cool-en); letter-spacing: .08em; color: #3a3850; }
+.fx-glare b::after { content: attr(data-t); position: absolute; inset: 0; color: transparent;
+  background: linear-gradient(110deg, transparent 35%, #fff 48%, #ff8fb8 52%, transparent 65%) -100% 0 / 60% 100% no-repeat;
+  -webkit-background-clip: text; background-clip: text; }   /* 文字の形に切り抜いた光の帯 */
+/* 実装：background-position を左外 → 右外へ。周期を長くして一瞬だけ光らせる */
+.play .fx-glare b::after { animation: glare-sweep calc(3.5s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+@keyframes glare-sweep { 0%, 20% { background-position: -100% 0; } 70%, 100% { background-position: 200% 0; } }
+
+/* @@ spark-trail */
+.stage-strail { background: #fff5f9; }
+.fx-strail { position: absolute; inset: 0; }
+.fx-strail .cur { position: absolute; left: 0; top: 0; width: 3cqi; height: 3cqi; margin: -1.5cqi; border-radius: 50%; border: .5cqi solid #ff6fa8; background: rgba(255, 111, 168, .3); }
+.fx-strail i { position: absolute; left: 0; top: 0; width: 2.2cqi; height: 2.2cqi; margin: -1.1cqi; background: var(--c); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); opacity: 0; }   /* 4 つ星 */
+/* 実装：pointermove のたびに星を生成してカーソル位置に置き、animationend で消す。デモでは同じ軌道を遅延付きでなぞる */
+.play .fx-strail .cur { animation: strail-path calc(4s / var(--speed)) ease-in-out infinite; }
+.play .fx-strail i    { animation: strail-path calc(4s / var(--speed)) ease-in-out infinite, strail-fade calc(4s / var(--speed)) linear infinite; animation-delay: calc(var(--i) * .07s / var(--speed)); }
+@keyframes strail-path { 0% { translate: 18cqi 40cqi; } 25% { translate: 40cqi 14cqi; } 50% { translate: 62cqi 40cqi; } 75% { translate: 82cqi 18cqi; } 100% { translate: 18cqi 40cqi; } }
+@keyframes strail-fade { 0%, 100% { opacity: 0; scale: .4; rotate: 0deg; } 10% { opacity: 1; scale: 1; } 30% { opacity: 0; scale: .3; rotate: 90deg; } }
+
+/* @@ particles-logo */
+.stage-pdots { background: #15141f; }
+.fx-pdots { position: absolute; left: 50%; top: 50%; width: 40cqi; height: 40cqi; translate: -50% -50%; }
+.fx-pdots i { position: absolute; left: calc(var(--x) * 6.5cqi + 4cqi); top: calc(var(--y) * 6.5cqi + 1cqi); width: 3.4cqi; height: 3.4cqi; border-radius: 50%; background: #ff6fa8; transform: translate(var(--dx), var(--dy)) scale(0); }   /* --x --y は最終位置（ドット絵の座標）、--dx --dy は散らばった開始位置 */
+/* 実装：散らばった位置から 0 へ translate。遅延を --i でばらすと「集まってくる」感じになる */
+.play .fx-pdots i { animation: pdots-in calc(5s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; animation-delay: calc(var(--i) * .03s / var(--speed)); }
+@keyframes pdots-in { 0%, 10% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } 14% { opacity: 1; } 40%, 80% { transform: translate(0, 0) scale(1); opacity: 1; } 92%, 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }

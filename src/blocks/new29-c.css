@@ -1,0 +1,101 @@
+/* @@ flip-tiles */
+.stage-fliptiles { background: #d7eeff; perspective: 120cqi; }
+.fx-fliptiles { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(3, 1fr); transform-style: preserve-3d; }
+.fx-fliptiles i { position: relative; transform-style: preserve-3d; transform: rotateY(0deg); }
+.fx-fliptiles i::before, .fx-fliptiles i::after { content: ""; position: absolute; inset: 0; backface-visibility: hidden; }
+.fx-fliptiles i::before { background: #d7eeff; }                       /* 表（前の画面の色） */
+.fx-fliptiles i::after  { background: #ffe3ef; transform: rotateY(180deg); }   /* 裏（次の画面の色） */
+.fx-scene.b.ftb { background: transparent; opacity: 0; }
+/* 実装：タイルを --i（行 + 列）の順に rotateY(180deg)。裏面に次の画面の色を置き、めくり終わったら中身を出す */
+.play .fx-fliptiles i { animation: fliptiles-flip calc(5s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; animation-delay: calc(var(--i) * .06s / var(--speed)); }
+.play .fx-scene.b.ftb { animation: fliptiles-b calc(5s / var(--speed)) ease infinite; }
+@keyframes fliptiles-flip { 0%, 12% { transform: rotateY(0deg); } 36%, 72% { transform: rotateY(180deg); } 96%, 100% { transform: rotateY(360deg); } }
+@keyframes fliptiles-b { 0%, 44% { opacity: 0; } 52%, 70% { opacity: 1; } 78%, 100% { opacity: 0; } }
+
+/* @@ drop-bounce */
+.stage-dropb { background: #d7eeff; }
+.fx-scene.b.dropbb { translate: 0 -110%; }
+/* 実装：次の画面を上から落として、着地で少し行き過ぎて戻る（バウンド）。下の画面は着地の瞬間に少しつぶす */
+.play .fx-scene.b.dropbb { animation: dropb-in calc(5s / var(--speed)) infinite; }
+.play .fx-scene.a.dropba { animation: dropb-a  calc(5s / var(--speed)) infinite; }
+@keyframes dropb-in { 0%, 14% { translate: 0 -110%; animation-timing-function: cubic-bezier(.5, 0, .9, .5); } 30% { translate: 0 0; animation-timing-function: ease-out; } 36% { translate: 0 -5%; animation-timing-function: ease-in; } 42% { translate: 0 0; animation-timing-function: ease-out; } 46% { translate: 0 -1.5%; } 50%, 84% { translate: 0 0; } 96%, 100% { translate: 0 -110%; } }
+@keyframes dropb-a  { 0%, 29% { scale: 1 1; } 32% { scale: 1.02 .96; transform-origin: 50% 100%; } 38%, 100% { scale: 1 1; } }
+
+/* @@ cube-pages */
+.stage-cubep { background: #2e2d3d; perspective: 140cqi; }
+.fx-cubep { position: absolute; inset: 0; transform-style: preserve-3d; transform: translateZ(-50cqi) rotateY(0deg); }   /* 立方体の中心を奥に置いて回す */
+.fx-cubep .f { position: absolute; inset: 0; display: grid; place-items: center; font: 700 14cqi/1 var(--font-en); color: var(--ink); backface-visibility: hidden; }
+.fx-cubep .f.a { background: #d7eeff; transform: translateZ(50cqi); }                   /* 正面 */
+.fx-cubep .f.b { background: #ffe3ef; transform: rotateY(90deg) translateZ(50cqi); }    /* 右の面 */
+/* 実装：画面幅の半分だけ奥に置いた箱を -90deg 回す。次の画面は右の面に貼っておく */
+.play .fx-cubep { animation: cubep-turn calc(5s / var(--speed)) cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes cubep-turn { 0%, 16% { transform: translateZ(-50cqi) rotateY(0deg); } 48%, 80% { transform: translateZ(-50cqi) rotateY(-90deg); } 96%, 100% { transform: translateZ(-50cqi) rotateY(0deg); } }
+
+/* @@ lava-lamp */
+.stage-lava { background: #2b1d3a; }
+.fx-lava { position: absolute; inset: 0; filter: url(#goo-lava); background: #2b1d3a; }   /* gooey フィルターでくっつける */
+.fx-lava svg { position: absolute; width: 0; height: 0; }
+.fx-lava i { position: absolute; left: var(--x); bottom: -10cqi; width: var(--s); height: var(--s); border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ff9ec4, #ff5c8a); }
+.fx-lava .pool { position: absolute; left: 0; right: 0; bottom: -6cqi; height: 16cqi; border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: #ff5c8a; }   /* 底の溜まり */
+/* 玉は底から上がってまた沈む。周期と遅延をばらす */
+.play .fx-lava i { animation: lava-rise calc(var(--t) * 1s / var(--speed)) ease-in-out infinite alternate; animation-delay: calc(var(--d) * -1s / var(--speed)); }
+@keyframes lava-rise { from { translate: 0 0; scale: 1; } to { translate: calc(var(--w, 0) * 1cqi) -42cqi; scale: .8; } }
+
+/* @@ rain-drops */
+.stage-rdrops { background: linear-gradient(160deg, #5c6b9a, #2f3756); }
+.fx-rdrops { position: absolute; inset: 0; overflow: hidden; }
+.fx-rdrops .city { position: absolute; inset: 0; background: radial-gradient(circle at 20% 70%, #ffd37a 0 2cqi, transparent 3cqi), radial-gradient(circle at 60% 60%, #8fd0ff 0 1.5cqi, transparent 2.5cqi), radial-gradient(circle at 80% 75%, #ff9ec4 0 2cqi, transparent 3cqi), radial-gradient(circle at 40% 80%, #fff 0 1cqi, transparent 2cqi); filter: blur(1.6cqi); }   /* 窓の外のぼけた明かり */
+.fx-rdrops .d { position: absolute; left: var(--x); top: -6cqi; width: var(--s); height: calc(var(--s) * 1.2); border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%; background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .85), rgba(255, 255, 255, .25) 45%, rgba(255, 255, 255, .05) 70%); box-shadow: inset 0 -.3cqi .5cqi rgba(255, 255, 255, .35); }   /* ガラスの雫 */
+/* 実装：雫は下へゆっくり。たまに速く落ちる（--t を短く）ものを混ぜると雨らしい */
+.play .fx-rdrops .d { animation: rdrops-fall calc(var(--t) * 1s / var(--speed)) cubic-bezier(.6, 0, .9, .6) infinite; animation-delay: calc(var(--d) * -1s / var(--speed)); }
+@keyframes rdrops-fall { 0% { translate: 0 0; } 70% { translate: 0 30cqi; } 100% { translate: .6cqi 66cqi; } }
+
+/* @@ sine-lines */
+.stage-sine { background: #fcfbf9; }
+.fx-sine { position: absolute; inset: 0; overflow: hidden; }
+.fx-sine svg { position: absolute; left: 0; top: 50%; width: 200%; height: 40cqi; translate: 0 -50%; }
+.fx-sine path { fill: none; stroke: var(--c); stroke-width: 2; stroke-linecap: round; }
+/* 1 周期ぶん左へ動かして繰り返す。線ごとに速さと位相を変える */
+.play .fx-sine svg { animation: sine-flow calc(6s / var(--speed)) linear infinite; }
+.play .fx-sine path:nth-child(2) { animation: sine-bob calc(4s / var(--speed)) ease-in-out infinite alternate; }
+.play .fx-sine path:nth-child(3) { animation: sine-bob calc(5s / var(--speed)) ease-in-out infinite alternate-reverse; }
+@keyframes sine-flow { from { translate: 0 -50%; } to { translate: -50% -50%; } }
+@keyframes sine-bob  { from { transform: translateY(-6px); } to { transform: translateY(6px); } }
+
+/* @@ fireworks */
+.stage-fw { background: #0f0e1a; }
+.fx-fw { position: absolute; inset: 0; overflow: hidden; }
+.fx-fw .r { position: absolute; left: var(--x); bottom: 0; width: 1cqi; height: 6cqi; border-radius: 1cqi; background: linear-gradient(#fff, transparent); opacity: 0; }   /* 上がる火 */
+.fx-fw .b { position: absolute; left: var(--x); top: var(--y); width: 0; height: 0; }
+.fx-fw .b i { position: absolute; left: -.7cqi; top: -.7cqi; width: 1.4cqi; height: 1.4cqi; border-radius: 50%; background: var(--c); transform: rotate(calc(var(--i) * 30deg)) translateY(0) scale(0); }   /* 12 方向の火花 */
+/* 実装：火が上がり切った位置で 12 個の火花を放射（rotate → translateY）、落ちながら消す。打ち上げは --d でずらす */
+.play .fx-fw .r   { animation: fw-rise  calc(4s / var(--speed)) ease-out infinite; animation-delay: calc(var(--d) * 1s / var(--speed)); }
+.play .fx-fw .b i { animation: fw-burst calc(4s / var(--speed)) ease-out infinite; animation-delay: calc(var(--d) * 1s / var(--speed)); }
+@keyframes fw-rise  { 0% { translate: 0 0; opacity: 1; } 28% { translate: 0 calc(var(--y) - 56cqi); opacity: 1; } 30%, 100% { translate: 0 calc(var(--y) - 56cqi); opacity: 0; } }
+@keyframes fw-burst { 0%, 29% { transform: rotate(calc(var(--i) * 30deg)) translateY(0) scale(0); opacity: 1; } 32% { transform: rotate(calc(var(--i) * 30deg)) translateY(-4cqi) scale(1.3); opacity: 1; } 60% { transform: rotate(calc(var(--i) * 30deg)) translateY(-14cqi) scale(.8); opacity: .8; } 80%, 100% { transform: rotate(calc(var(--i) * 30deg)) translateY(-13cqi) scale(0); opacity: 0; } }
+
+/* @@ radar */
+.stage-radar { background: #0f1a16; }
+.fx-radar { position: absolute; left: 50%; top: 50%; width: 46cqi; height: 46cqi; translate: -50% -50%; border-radius: 50%; background: radial-gradient(circle, transparent 0 32%, rgba(111, 211, 179, .25) 32.5% 33%, transparent 33.5% 65%, rgba(111, 211, 179, .25) 65.5% 66%, transparent 66.5%), linear-gradient(rgba(111, 211, 179, .25), rgba(111, 211, 179, .25)) 50% 0 / .3cqi 100% no-repeat, linear-gradient(rgba(111, 211, 179, .25), rgba(111, 211, 179, .25)) 0 50% / 100% .3cqi no-repeat; border: .4cqi solid rgba(111, 211, 179, .5); }
+.fx-radar::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(111, 211, 179, .55), transparent 70deg); }   /* 掃引 */
+.fx-radar i { position: absolute; left: var(--x); top: var(--y); width: 2cqi; height: 2cqi; margin: -1cqi; border-radius: 50%; background: #6fd3b3; box-shadow: 0 0 1.5cqi #6fd3b3; opacity: 0; }   /* 反応点 */
+/* 掃引が通った角度で点を光らせ、ゆっくり消す。--a は点の角度（0〜1） */
+.play .fx-radar::before { animation: radar-sweep calc(4s / var(--speed)) linear infinite; }
+.play .fx-radar i { animation: radar-blip calc(4s / var(--speed)) linear infinite; animation-delay: calc(var(--a) * 4s / var(--speed)); }
+@keyframes radar-sweep { to { rotate: 360deg; } }
+@keyframes radar-blip  { 0% { opacity: 0; scale: .5; } 3% { opacity: 1; scale: 1.4; } 60%, 100% { opacity: 0; scale: 1; } }
+
+/* @@ map-pin */
+.stage-mappin { background: #eef4ea; }
+.fx-mappin { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(90deg, #fff 0 1.2cqi, transparent 0) 10cqi 0 / 100% 100% no-repeat, linear-gradient(#fff 0 1.2cqi, transparent 0) 0 30cqi / 100% 100% no-repeat, linear-gradient(60deg, transparent 48%, #fff 48% 50.5%, transparent 50.5%), linear-gradient(90deg, #dde6d6 0 .3cqi, transparent 0) 0 0 / 8cqi 8cqi, linear-gradient(#dde6d6 0 .3cqi, transparent 0) 0 0 / 8cqi 8cqi; }   /* 道路っぽい線 */
+.fx-mappin .pin { position: absolute; left: 50%; top: 42%; width: 7cqi; height: 7cqi; margin: -7cqi 0 0 -3.5cqi; border-radius: 50% 50% 50% 0; rotate: -45deg; background: #ff5c8a; box-shadow: 0 .8cqi 2cqi rgba(0, 0, 0, .2); translate: 0 -40cqi; }   /* ピン */
+.fx-mappin .pin::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3cqi; height: 3cqi; translate: -50% -50%; border-radius: 50%; background: #fff; }
+.fx-mappin .rg { position: absolute; left: 50%; top: 42%; width: 4cqi; height: 1.6cqi; margin: -.8cqi 0 0 -2cqi; border-radius: 50%; border: .4cqi solid #ff5c8a; opacity: 0; }   /* 着地の波紋（横長） */
+.fx-mappin .lb { position: absolute; left: 50%; top: 42%; translate: -50% -14cqi; padding: 1.2cqi 2cqi; border-radius: 1.2cqi; background: #fff; box-shadow: 0 1cqi 3cqi rgba(0, 0, 0, .12); font: 700 2.4cqi/1 var(--font-body); color: var(--ink); white-space: nowrap; scale: 0; transform-origin: 50% 100%; }
+/* 実装：ピンは上から落として着地で 1 回弾ませ、楕円の波紋を 2 回広げる。ラベルは少し遅れて */
+.play .fx-mappin .pin { animation: mappin-drop calc(5s / var(--speed)) infinite; }
+.play .fx-mappin .rg  { animation: mappin-ring calc(5s / var(--speed)) ease-out infinite; }
+.play .fx-mappin .lb  { animation: mappin-lb   calc(5s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; }
+@keyframes mappin-drop { 0%, 10% { translate: 0 -40cqi; animation-timing-function: cubic-bezier(.5, 0, .9, .5); } 26% { translate: 0 0; animation-timing-function: ease-out; } 32% { translate: 0 -3cqi; animation-timing-function: ease-in; } 38%, 86% { translate: 0 0; } 94%, 100% { translate: 0 -40cqi; } }
+@keyframes mappin-ring { 0%, 26% { opacity: 0; scale: .5; } 28% { opacity: 1; } 50%, 100% { opacity: 0; scale: 3; } }
+@keyframes mappin-lb   { 0%, 36% { scale: 0; } 46%, 84% { scale: 1; } 92%, 100% { scale: 0; } }

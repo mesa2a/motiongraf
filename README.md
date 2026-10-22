@@ -1,6 +1,6 @@
 # CSS MOTION GRAPHICS
 
-Web デザインでそのまま使える CSS モーションのカタログ。JavaScript はクラスの付け外しとコード表示にだけ使っています。
+Web デザインでそのまま使える CSS モーションのカタログ。演出は HTML と CSS だけで動き、JavaScript はクラスの付け外し・コード表示・カタログの検索や保存にだけ使っています。
 
 `index.html` をブラウザで開くだけで動きます（フォントは Google Fonts を読み込むためオンライン推奨）。
 
@@ -8,30 +8,78 @@ Web デザインでそのまま使える CSS モーションのカタログ。Ja
 
 ```
 index.html        生成物（src/ から build.js で作る。直接編集しない）
-css/style.css     ページ全体のデザイン
-js/main.js        再生制御・コード表示・コピー
+css/style.css     ページ全体のデザイン（ライト / ダーク、モバイル、印刷）
+js/main.js        再生制御、コード表示、検索・お気に入り・並び替え、モーダル、Service Worker 登録
+manifest.json     PWA のマニフェスト
+sw.js             Service Worker（http(s) 配信時だけ登録。ネットワーク優先、取れなければキャッシュ）
+img/              OGP 画像（og.png 1200×630）とアイコン（icon-192 / 512）
 src/
-  build.js        index.html を生成する   → node src/build.js
-  template.html   ページの骨組み（ヒーロー、コツ、使い方、フッター）
-  cards.js        カタログの定義（カテゴリ、カードの順番、説明文、デモの HTML）
-  cards-extra.js  追加分のカード（カテゴリ id ごとの配列。各カテゴリ末尾に足される）
-  blocks/*.css    演出の CSS。ファイル名が id、または /* @@ id */ で複数まとめて書ける
+  build.js        index.html を生成する   → node src/build.js [--site https://…/]
+  template.html   ページの骨組み（ヒーロー、カタログの枠、コツ、使い方、ダイアログ、フッター）
+  cards.js        カタログの定義（カテゴリの順番と説明、最初のカード群）
+  cards-extra*.js 追加分のカード（カテゴリ id ごとの配列。ファイル名順に各カテゴリの末尾へ足される）
+  blocks/*.css    演出の CSS。ファイル名が id、または /* @@ id */ の区切りで複数まとめて書ける
   cards.extracted.json  旧版から取り込んだカード情報（cards.js から参照）
 ```
 
 ## 演出を追加する
 
-1. `src/blocks/` に CSS を書く。`.stage.play` の下でだけアニメーションが動くようにし、時間は `calc(Xs / var(--speed))`、寸法は `cqi` で書く。
-2. `src/cards.js` の該当カテゴリに `{ id, accent, title, en, tags, stage, desc }` を追加する。`id` は CSS ブロックの id と同じにする。
-3. `node src/build.js` を実行する。通し番号と本数は自動で更新される。
+1. `src/blocks/` に CSS を書く。アニメーションは `.stage.play` の下でだけ動くようにし、時間は `calc(Xs / var(--speed))`、寸法は `cqi`（stage の幅の 1%）で書く。
+2. `src/cards-extra*.js` のどれか（または新しいファイル）に `{ id, accent, title, en, tags, stage, desc }` を足す。`id` は CSS ブロックの id と同じにする。暗いステージの演出は `tone: 'cool'` にし、stage のクラスに `cool` を足す。
+3. `node src/build.js` を実行する。通し番号（`data-no`）、本数、カテゴリごとの件数、新しめの機能の注記は自動で付く。
+4. id とクラス名（`.fx-○○`、`.stage-○○`、`@property --○○`）が他のブロックと重複していないことを確認する（`grep -rn "\.fx-○○\b" src/blocks/`）。重複すると静かに崩れる。
+5. デモの中で `.card`、`.btn`、`.grid`、`.modal` など、サイト側（`css/style.css`）が使うクラス名を使わない。サイトのスタイルが混ざって崩れる（デモ内の要素は `.fx-○○` の子として `.ntf` のような短い名前にする）。
 
-## カテゴリを外す / 戻す
+`src/build.js` の `EXCLUDE` 配列にカテゴリ id を入れると、そのカテゴリだけカタログから外せる（CSS ブロックは残る）。カード単位で外すのは同じファイルの `EXCLUDE_IDS`。2026-10-22 の棚卸しで、同じ技法・同じ見た目の重複と、Web デザインでの使いどころが薄い飾りを 32 本ここに入れた（理由と代わりのカードはコメントに書いてある）。戻したいときはリストから消して `node src/build.js`。
 
-`src/build.js` の先頭にある `EXCLUDE` 配列に入れたカテゴリ id はカタログから外れる（CSS ブロックは残る）。いまは `cat-ui`（ナビ・UI 部品）を外している。戻したい時は配列から消して、`src/blocks/` に UI 用の CSS ブロック（git の履歴から復元）を置く。
+## 書き方の約束
 
-## 約束ごと
-
-- `.stage` は 16:9 の `container-type: inline-size`。`1cqi` = 箱の幅の 1%。
-- ホバー系は「実装用の `:hover` + `transition`」と「デモ用の自動再生 `@keyframes`」を両方書き、後者には `/* ---- デモ用の自動再生 ---- */` と注記する。
-- かっこいい系（暗いステージ）は `tone: 'cool'` にし、stage のクラスに `cool` を足す。
+- `.stage` は 16:9 の `container-type: inline-size`。`1cqi` = 箱の幅の 1%。使う側は px / rem に読み替える。
+- ホバー系は「実装用の `:hover` + `transition`」と「デモ用の自動再生 `@keyframes`」を両方書き、後者には `/* デモ用の自動再生 */` と注記する。
+- 複数要素のずらしは `--i` と `animation-delay`。負の遅延にすると最初から途中の状態で始まる。
+- `@property` で登録した変数は、`inherits: false` だと子要素にも疑似要素にも渡らない。子や `::before` から読むものは `inherits: true` で登録する。
+- 3D（`preserve-3d`）の要素に `opacity` を動かすと平面化して崩れるので、3D では opacity を使わない。
 - `prefers-reduced-motion: reduce` のときは自動再生せず、「もういちど」を押した時だけ動く。
+
+## ページ上の機能
+
+**探す**
+- 検索: タイトル・英名・タグ・説明を対象に、スペース区切りの AND 検索。カードのタグを押すとそのタグで検索する。`/` で検索にフォーカス、Esc でクリア。
+- 絞り込み・並び替え: 「お気に入りのみ」「COOL のみ」と、「標準の順／お気に入りを先に／新しい順」。該当のないカテゴリは隠れ、件数は見出しとツールバーに出る。
+- 折りたたみ: カテゴリ見出しの「閉じる／開く」と「すべて開く／閉じる」。絞り込み中は閉じていても結果を表示する。
+- おまかせ: 表示中から 1 本をランダムに選んでスクロールし、数秒だけ枠を強調する。
+- 似ている演出: タグの一致（3 点）、タグ・英名の語の一致（1 点）、説明文のカタカナ語・英数字語の一致（0.5 点、最大 2 点）、同じカテゴリ（0.5 点）で点数を付け、2 点以上の上位 3 本をカードの下にリンクする。
+- URL: 検索語・絞り込み・並び順は `?q=…&fav=1&cool=1&sort=…` に反映され、その URL を開けば同じ状態で始まる。
+
+**ためる・持ち帰る**
+- お気に入り: カードの ♡。「並び替え ⋮⋮」のダイアログでドラッグか ▲▼ で順番を変え、× で外す。
+- 書き出し: お気に入りの番号・タイトル・リンクの一覧をクリップボードにコピーする。
+- CSS を保存: お気に入りの CSS（共通パーツ + 各ブロック、HTML はコメント）を 1 ファイルにまとめてダウンロードする。
+- リンク: そのカードへの URL（`#m-<id>`）をコピーする。開くとそのカードが数秒強調される。
+- コード: 各カードの「コード」で HTML と CSS を表示・コピーする。ハイライトは開いたときに初めて生成する。
+
+**見る**
+- 大きく: デモを `<dialog>` に複製して大きく再生する。Esc・背景クリック・× で閉じる。
+- 速度: ヘッダーの SPEED で 0.5× / 1× / 2×（`--global-speed`）。
+- ダークモード: ヘッダーの ☾ / ☀。初期値は OS 設定、選択は保存され、描画前に反映する。デモの stage は各演出の色のまま。
+- キー操作: `j` / `k` でカードを移動、`c` コード、`f` お気に入り、`r` もういちど、`l` リンク。入力欄にいる間は無効。
+
+保存先はすべて `localStorage`（`motion-favs`、`motion-collapsed`、`motion-theme`）。
+
+## 公開するとき
+
+- 公開先の URL を付けてビルドすると、`og:url` と `og:image` が絶対 URL になる: `node src/build.js --site https://example.com/motion/`。指定なしなら相対パスのまま。
+- http(s) で配信すると `sw.js` が登録され、2 回目以降はオフラインでも開ける。キャッシュを捨てたいときは `sw.js` の `CACHE` 名を変える。
+- ページは 1 ファイル約 700KB（gzip で約 140KB）。デモの CSS を別ファイルにすると `file://` で開いたときにコードパネルが読めなくなるため、あえて 1 ファイルにしている。画面外のカードは `content-visibility: auto` で描画を省く。
+- 本文色と補助色は白地で 4.5:1 以上、主ボタンは白文字で 4.7:1。フォーカスは `:focus-visible` で青い輪を出す。
+- 新しめの機能（`@property`、`animation-timeline`、`backdrop-filter`、`mask`、`color-mix`、SVG フィルター）を使うカードには、ビルド時に検出した ⓘ の注記が付く（マウスを乗せると対応ブラウザが出る）。検出ルールは `src/build.js` の `FEATURES`。
+
+## 確認のしかた
+
+ヘッドレス Chrome で、全カードを一度に（または 1 枚ずつ）静止画にして確かめている。`index.html` を一時ファイルにコピーし、`<base href="file:///…/motiongraf/">` と次の上書きスタイルを差し込んで撮る。
+
+```css
+.stage *, .stage *::before, .stage *::after { animation-delay: -2.5s !important; animation-play-state: paused !important; }
+```
+
+負の遅延で「2.5 秒後の状態」が止まって写る。この上書きは `--i` のずらしも消すので、ずらしを確かめたいときは `.fx-○○ b { animation-delay: calc(var(--i) * .1s - 2.5s) !important; }` のように、そのブロックだけ後から上書きする。スクロール後の画面はヘッドレスでは真っ暗に写るので、スクロールが要る確認は要素を消して画面上部に寄せて撮る。モバイル幅は Chrome の最小ウィンドウ幅（約 500px）に引っかかるため、390px の iframe に入れて撮る。

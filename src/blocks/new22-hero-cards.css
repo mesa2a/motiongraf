@@ -1,0 +1,53 @@
+/* @@ domino-text */
+.stage-domino { background: #fff5f9; }
+.fx-domino { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; gap: .4cqi; font: 700 15cqi/1 var(--font-en); color: var(--ink); }
+.fx-domino b { display: block; transform-origin: 100% 100%; }   /* 右下の角を軸に右へ倒れる */
+/* 実装：文字ごとに span。--i × .1s で順に倒れ、少し待って順に起き上がる */
+.play .fx-domino b { animation: domino-fall calc(5s / var(--speed)) cubic-bezier(.6, 0, .9, .6) infinite; animation-delay: calc(var(--i) * .1s / var(--speed)); }
+@keyframes domino-fall { 0%, 12% { rotate: 0deg; } 24%, 64% { rotate: 72deg; } 76%, 100% { rotate: 0deg; animation-timing-function: cubic-bezier(.3, 1.3, .5, 1); } }
+
+/* @@ water-text */
+.stage-wtext { background: #15141f; }
+.fx-wtext { position: absolute; inset: 0; display: grid; place-items: center; }
+.fx-wtext b { position: relative; font: 400 22cqi/1 var(--font-cool-en); letter-spacing: .06em; color: rgba(255, 255, 255, .12); }
+.fx-wtext b::before, .fx-wtext b::after { content: attr(data-t); position: absolute; inset: 0; color: transparent; -webkit-background-clip: text; background-clip: text;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 20 Q 30 8 60 20 T 120 20 V 60 H 0 Z' fill='%238fd0ff'/%3E%3C/svg%3E"); background-repeat: repeat-x; background-size: 30cqi 100%; background-position: 0 100%; }   /* 波の形で塗りつぶした文字 */
+.fx-wtext b::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 24 Q 30 36 60 24 T 120 24 V 60 H 0 Z' fill='%23c9b8ff'/%3E%3C/svg%3E"); opacity: .7; }   /* 2 枚目は逆位相で奥行き */
+/* 実装：波の画像を background-position で横に流し、水位は縦位置で上げ下げする */
+.play .fx-wtext b::before { animation: water-x calc(3s / var(--speed)) linear infinite, water-lvl calc(7s / var(--speed)) ease-in-out infinite alternate; }
+.play .fx-wtext b::after  { animation: water-x calc(2.2s / var(--speed)) linear infinite reverse, water-lvl calc(7s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes water-x   { from { background-position-x: 0; } to { background-position-x: 30cqi; } }
+@keyframes water-lvl { from { background-position-y: 12cqi; } to { background-position-y: -4cqi; } }
+
+/* @@ masonry-shift */
+.stage-mason { background: #f4f0ff; }
+@property --ms { syntax: "<length>"; inherits: true; initial-value: 0px; }
+.fx-mason { position: absolute; inset: 0 12%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2cqi; overflow: hidden; --ms: 0px; }
+.fx-mason .col { display: grid; gap: 2cqi; align-content: start; padding-top: 4cqi; translate: 0 calc(var(--ms) * var(--k)); }   /* 列ごとに --k 倍で動く */
+.fx-mason .col i { display: block; height: var(--h); border-radius: 2cqi; background: var(--c); }
+/* 実装：スクロール量を --ms に入れる（animation-timeline: scroll() か scroll イベント）。中央の列だけ遅くすると「ずれて」見える */
+.play .fx-mason { animation: mason-scroll calc(7s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes mason-scroll { from { --ms: 0px; } to { --ms: -26cqi; } }
+
+/* @@ origami-card */
+.stage-origami { background: #fff5f9; perspective: 120cqi; }
+.fx-ori { position: absolute; left: 50%; top: 50%; translate: -50% -50%; margin-left: -20cqi; width: 20cqi; height: 30cqi; transform-style: preserve-3d; }
+.fx-ori .p { position: absolute; inset: 0; border-radius: 1.6cqi; background: #fff; box-shadow: 0 1cqi 3cqi rgba(75, 74, 94, .14); display: grid; align-content: end; gap: 1.2cqi; padding: 2cqi; transform-style: preserve-3d; }
+.fx-ori .p b { display: block; height: 1.4cqi; border-radius: 1cqi; background: #eef0f8; }
+.fx-ori .p b:first-child { height: 2.4cqi; width: 60%; background: var(--c); }
+.fx-ori .p .ph { height: 12cqi; border-radius: 1.2cqi; margin-bottom: 1cqi; }
+.fx-ori .p2 { left: 100%; right: auto; width: 100%; transform-origin: 0 50%; transform: rotateY(-180deg); backface-visibility: hidden; }   /* 1 枚目の右端を軸に折りたたまれている（裏面は隠す） */
+.fx-ori .p3 { left: 100%; right: auto; width: 100%; transform-origin: 0 50%; transform: rotateY(-180deg); backface-visibility: hidden; }   /* 2 枚目の中に入れて、その右端を軸に */
+.fx-ori .p2::after, .fx-ori .p3::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, rgba(75, 74, 94, .22), transparent 40%); pointer-events: none; }   /* 折り目側の影 */
+/* 実装：hover / クリックで 2 枚目 → 3 枚目の順に rotateY(0) に戻す。opacity は使わない（3D が崩れる） */
+.fx-ori.open .p2, .fx-ori:hover .p2 { transform: rotateY(0deg); }
+.fx-ori.open .p3, .fx-ori:hover .p3 { transform: rotateY(0deg); }
+/* デモ用の自動再生 */
+.play .fx-ori .p2 { animation: ori-p2 calc(6s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-ori .p3 { animation: ori-p3 calc(6s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-ori .p2::after { animation: ori-sh calc(6s / var(--speed)) ease infinite; }
+.play .fx-ori .p3::after { animation: ori-sh3 calc(6s / var(--speed)) ease infinite; }
+@keyframes ori-p2 { 0%, 14% { transform: rotateY(-180deg); } 32%, 84% { transform: rotateY(0deg); } 98%, 100% { transform: rotateY(-180deg); } }
+@keyframes ori-p3 { 0%, 30% { transform: rotateY(-180deg); } 48%, 66% { transform: rotateY(0deg); } 84%, 100% { transform: rotateY(-180deg); } }
+@keyframes ori-sh  { 0%, 14% { opacity: 1; } 32%, 84% { opacity: 0; } 98%, 100% { opacity: 1; } }
+@keyframes ori-sh3 { 0%, 30% { opacity: 1; } 48%, 66% { opacity: 0; } 84%, 100% { opacity: 1; } }

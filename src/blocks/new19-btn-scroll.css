@@ -1,0 +1,101 @@
+/* @@ btn-expand-label */
+.stage-bel { background: #fff5f9; }
+.fx-bel { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: flex; align-items: center; gap: 1.6cqi; width: 11cqi; height: 11cqi; padding: 0 3cqi; border-radius: 999px; background: #ff6fa8; color: #fff; box-shadow: 0 1.5cqi 4cqi rgba(255, 111, 168, .35); overflow: hidden; white-space: nowrap; transition: width .5s cubic-bezier(.3, 1.2, .4, 1); }
+.fx-bel .ic { flex: none; width: 5cqi; height: 5cqi; display: grid; place-items: center; font-size: 4.4cqi; line-height: 1; }
+.fx-bel .lb { font: 700 3cqi/1 var(--font-body); opacity: 0; translate: -1.5cqi 0; transition: opacity .3s .1s, translate .4s .1s; }
+/* 本番：hover / focus で幅を広げる（アイコンだけのボタンにラベルを添える） */
+.fx-bel:hover, .fx-bel.open { width: 38cqi; }
+.fx-bel:hover .lb, .fx-bel.open .lb { opacity: 1; translate: 0 0; }
+/* デモ用の自動再生 */
+.play .fx-bel     { animation: bel-w  calc(5s / var(--speed)) cubic-bezier(.3, 1.2, .4, 1) infinite; }
+.play .fx-bel .lb { animation: bel-lb calc(5s / var(--speed)) ease infinite; }
+@keyframes bel-w  { 0%, 20% { width: 11cqi; } 32%, 72% { width: 38cqi; } 84%, 100% { width: 11cqi; } }
+@keyframes bel-lb { 0%, 24% { opacity: 0; translate: -1.5cqi 0; } 36%, 70% { opacity: 1; translate: 0 0; } 78%, 100% { opacity: 0; translate: -1.5cqi 0; } }
+
+/* @@ btn-nudge */
+.stage-nudge { background: #f4f0ff; }
+.fx-nudge { position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 3.4cqi 7cqi; border-radius: 999px; background: #ff6fa8; color: #fff; font: 700 3.8cqi/1 var(--font-body); white-space: nowrap; box-shadow: 0 1.5cqi 4cqi rgba(255, 111, 168, .35); }
+.fx-nudge::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: .5cqi solid #ff6fa8; opacity: 0; }   /* 広がる輪 */
+/* 本番：長い周期のループにして、ほとんどの時間は静止させる（うるさくならない） */
+.play .fx-nudge        { animation: nudge-wobble calc(6s / var(--speed)) ease-in-out infinite; }
+.play .fx-nudge::after { animation: nudge-ring   calc(6s / var(--speed)) ease-out infinite; }
+@keyframes nudge-wobble { 0%, 40%, 56%, 100% { rotate: 0deg; scale: 1; } 42% { rotate: -3deg; scale: 1.04; } 45% { rotate: 3deg; } 48% { rotate: -2deg; scale: 1.04; } 51% { rotate: 2deg; } 54% { rotate: 0deg; scale: 1; } }
+@keyframes nudge-ring   { 0%, 40% { scale: 1; opacity: 0; } 42% { opacity: .8; } 62%, 100% { scale: 1.6; opacity: 0; } }
+
+/* @@ btn-border-progress */
+.stage-bprog { background: #fff; }
+@property --bp { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.fx-bprog { position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 3.4cqi 7cqi; border-radius: 999px; background: #fff; border: .4cqi solid #d9d5e6; color: var(--ink); font: 700 3.6cqi/1 var(--font-body); white-space: nowrap; display: grid; place-items: center; }
+.fx-bprog > span { grid-area: 1 / 1; }
+.fx-bprog .done { opacity: 0; }
+.fx-bprog::before { content: ""; position: absolute; inset: -.4cqi; border-radius: inherit; padding: .4cqi; --bp: 0deg;
+  background: conic-gradient(#ff6fa8 var(--bp), transparent 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }   /* 縁だけを一周する線 */
+/* 本番：クリックで .loading（--bp を 0 → 360deg）、完了で .done（緑にして文字差し替え） */
+.play .fx-bprog         { animation: bprog-btn  calc(5s / var(--speed)) ease infinite; }
+.play .fx-bprog::before { animation: bprog-line calc(5s / var(--speed)) cubic-bezier(.4, 0, .2, 1) infinite; }
+.play .fx-bprog .lbl    { animation: bprog-lbl  calc(5s / var(--speed)) steps(1) infinite; }
+.play .fx-bprog .done   { animation: bprog-done calc(5s / var(--speed)) steps(1) infinite; }
+@keyframes bprog-btn  { 0%, 12% { background: #fff; border-color: #d9d5e6; color: #4b4a5e; scale: 1; } 14% { scale: .95; } 16%, 56% { scale: 1; background: #fff; border-color: #d9d5e6; color: #4b4a5e; } 62%, 86% { background: #6fd3b3; border-color: #6fd3b3; color: #fff; } 94%, 100% { background: #fff; border-color: #d9d5e6; color: #4b4a5e; } }
+@keyframes bprog-line { 0%, 16% { --bp: 0deg; opacity: 1; } 56% { --bp: 360deg; opacity: 1; } 60%, 100% { --bp: 360deg; opacity: 0; } }
+@keyframes bprog-lbl  { 0%, 60% { opacity: 1; } 61%, 92% { opacity: 0; } 93%, 100% { opacity: 1; } }
+@keyframes bprog-done { 0%, 60% { opacity: 0; } 61%, 92% { opacity: 1; } 93%, 100% { opacity: 0; } }
+
+/* @@ btn-corner-cut */
+.stage-ccut { background: #15141f; }
+.fx-ccut { position: absolute; left: 50%; top: 50%; translate: -50% -50%; --c: 2.5cqi; padding: 3.6cqi 8cqi; background: #ff4fa3; color: #fff; font: 400 5cqi/1 var(--font-cool-en); letter-spacing: .14em; white-space: nowrap;
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); transition: clip-path .4s, letter-spacing .4s, background-color .4s; }   /* 左上と右下を斜めに切る */
+.fx-ccut::before { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 40%, rgba(255, 255, 255, .35) 50%, transparent 60%); translate: -100% 0; }
+/* 本番：hover で切れ込みを大きくし、文字間を広げる。--c を変えるだけで形が変わる */
+.fx-ccut:hover, .fx-ccut.open { --c: 5cqi; letter-spacing: .3em; background: #ff2d8f; }
+/* デモ用の自動再生 */
+.play .fx-ccut         { animation: ccut-hover calc(4s / var(--speed)) ease infinite; }
+.play .fx-ccut::before { animation: ccut-shine calc(4s / var(--speed)) ease infinite; }
+@keyframes ccut-hover { 0%, 22% { clip-path: polygon(2.5cqi 0, 100% 0, 100% calc(100% - 2.5cqi), calc(100% - 2.5cqi) 100%, 0 100%, 0 2.5cqi); letter-spacing: .14em; background: #ff4fa3; } 34%, 70% { clip-path: polygon(5cqi 0, 100% 0, 100% calc(100% - 5cqi), calc(100% - 5cqi) 100%, 0 100%, 0 5cqi); letter-spacing: .3em; background: #ff2d8f; } 82%, 100% { clip-path: polygon(2.5cqi 0, 100% 0, 100% calc(100% - 2.5cqi), calc(100% - 2.5cqi) 100%, 0 100%, 0 2.5cqi); letter-spacing: .14em; background: #ff4fa3; } }
+@keyframes ccut-shine { 0%, 26% { translate: -100% 0; } 50%, 100% { translate: 100% 0; } }
+
+/* @@ horizontal-scroll-section */
+.stage-hscroll { background: #f0f7ff; }
+.fx-hscroll { position: absolute; inset: 8% 10%; border-radius: 2.5cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; }
+.fx-hscroll .view { position: absolute; inset: 0 4cqi 0 0; overflow: hidden; }
+.fx-hscroll .track { display: flex; height: 100%; }
+.fx-hscroll .pn { flex: none; width: 100%; height: 100%; display: grid; place-items: center; font: 700 10cqi/1 var(--font-en); color: var(--ink); background: var(--c); }
+.fx-hscroll .bar { position: absolute; right: 1.2cqi; top: 2cqi; bottom: 2cqi; width: 1.2cqi; border-radius: 1cqi; background: #eef0f8; }
+.fx-hscroll .thumb { position: absolute; left: 0; right: 0; top: 0; height: 25%; border-radius: 1cqi; background: #c9b8ff; }
+/* 本番：高さ 400vh のセクションの中に position: sticky; top: 0 の窓を置き、animation-timeline: scroll() でトラックを translateX(-300%) まで動かす */
+.play .fx-hscroll .track { animation: hscroll-track calc(8s / var(--speed)) ease-in-out infinite; }
+.play .fx-hscroll .thumb { animation: hscroll-thumb calc(8s / var(--speed)) ease-in-out infinite; }
+@keyframes hscroll-track { 0%, 10% { translate: 0 0; } 30%, 40% { translate: -100% 0; } 60%, 70% { translate: -200% 0; } 90%, 100% { translate: -300% 0; } }
+@keyframes hscroll-thumb { 0%, 10% { top: 0; } 30%, 40% { top: 25%; } 60%, 70% { top: 50%; } 90%, 100% { top: 75%; } }
+
+/* @@ parallax-heading */
+.stage-phead { background: #fff5f9; }
+@property --py { syntax: "<length>"; inherits: true; initial-value: 0px; }
+.fx-phead { position: absolute; inset: 0; overflow: hidden; --py: 0px; }
+.fx-phead > * { position: absolute; translate: 0 calc(var(--py) * var(--k)); }   /* --k が大きいほど速く動く（手前） */
+.fx-phead .bgt { left: 50%; top: 50%; margin-left: -34cqi; margin-top: -11cqi; font: 700 22cqi/1 var(--font-en); color: #ffe3ef; letter-spacing: .04em; --k: .3; }
+.fx-phead .sh1 { left: 16%; top: 20%; width: 9cqi; height: 9cqi; border-radius: 50%; background: #c9b8ff; --k: .7; }
+.fx-phead .sh2 { right: 14%; top: 62%; width: 6cqi; height: 6cqi; border-radius: 1.2cqi; background: #8fd0ff; rotate: 15deg; --k: .9; }
+.fx-phead .ttl { left: 50%; top: 50%; margin-left: -22cqi; margin-top: -7cqi; width: 44cqi; padding: 3cqi; border-radius: 2cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .14); font: 700 4.4cqi/1.3 var(--font-display); color: var(--ink); --k: 1.4; }
+.fx-phead .ttl small { display: block; margin-top: .6cqi; font: 400 2.2cqi/1.6 var(--font-body); color: var(--ink-soft); }
+.fx-phead .bar { right: 2cqi; top: 10%; bottom: 10%; width: 1cqi; border-radius: 1cqi; background: #eef0f8; translate: 0 0; }
+.fx-phead .bar i { position: absolute; left: 0; right: 0; top: 0; height: 30%; border-radius: 1cqi; background: #ff8fb8; translate: 0 calc(var(--py) * -1.2); }
+/* 本番：scroll イベントか animation-timeline: scroll() で --py にスクロール量を入れる。各層は --k を掛けて動く */
+.play .fx-phead { animation: phead-scroll calc(7s / var(--speed)) ease-in-out infinite alternate; }
+@keyframes phead-scroll { from { --py: 0px; } to { --py: -10cqi; } }
+
+/* @@ scroll-dots-nav */
+.stage-sdots { background: #f4f0ff; }
+.fx-sdots { position: absolute; inset: 8% 12%; border-radius: 2.5cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; }
+.fx-sdots .pg { position: absolute; inset: 0; }
+.fx-sdots .sec { height: 100%; display: grid; place-items: center; font: 700 7cqi/1 var(--font-en); color: var(--ink); background: var(--c); }
+.fx-sdots .nav { position: absolute; right: 3cqi; top: 50%; translate: 0 -50%; display: grid; gap: 2.2cqi; justify-items: end; }
+.fx-sdots .nav i { position: relative; width: 2cqi; height: 2cqi; border-radius: 50%; background: #d9d5e6; }
+.fx-sdots .nav i::after { content: attr(data-l); position: absolute; right: 3.4cqi; top: 50%; translate: 0 -50%; font: 700 2.2cqi/1 var(--font-en); letter-spacing: .1em; color: var(--ink); white-space: nowrap; opacity: 0; }   /* ラベル */
+/* 本番：IntersectionObserver で見えているセクションのドットに .on。ドットは position: fixed の右端ナビ */
+.play .fx-sdots .pg    { animation: sdots-scroll calc(8s / var(--speed)) ease-in-out infinite; }
+.play .fx-sdots .nav i { animation: sdots-dot    calc(8s / var(--speed)) ease infinite; animation-delay: calc(var(--i) * 2s / var(--speed)); }
+.play .fx-sdots .nav i::after { animation: sdots-lbl calc(8s / var(--speed)) ease infinite; animation-delay: calc(var(--i) * 2s / var(--speed)); }
+@keyframes sdots-scroll { 0%, 12% { translate: 0 0; } 32%, 40% { translate: 0 -100%; } 58%, 66% { translate: 0 -200%; } 84%, 100% { translate: 0 -300%; } }
+@keyframes sdots-dot { 0%, 2% { background: #d9d5e6; scale: 1; } 6%, 24% { background: #ff6fa8; scale: 1.5; } 28%, 100% { background: #d9d5e6; scale: 1; } }
+@keyframes sdots-lbl { 0%, 2% { opacity: 0; translate: .6cqi -50%; } 6%, 22% { opacity: 1; translate: 0 -50%; } 26%, 100% { opacity: 0; translate: .6cqi -50%; } }

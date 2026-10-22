@@ -1,0 +1,104 @@
+/* @@ blur-up */
+.stage-blurup { background: #fff5f9; }
+.fx-blurup { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 42cqi; height: 28cqi; border-radius: 2.5cqi; overflow: hidden; box-shadow: 0 2cqi 6cqi rgba(75, 74, 94, .16); background: #e8e0ff; }
+.fx-blurup i { position: absolute; inset: 0; background: radial-gradient(circle at 30% 42%, #fff 0 3.2cqi, transparent 3.4cqi), linear-gradient(135deg, #8fd0ff, #c9b8ff 55%, #ff9ec4); }
+.fx-blurup i::after { content: ""; position: absolute; left: 10%; right: 10%; bottom: 14%; height: 1.4cqi; border-radius: 1cqi; background: rgba(255, 255, 255, .8); box-shadow: 0 -3cqi 0 -.2cqi rgba(255, 255, 255, .6); }   /* 細部（ぼけで消える） */
+.fx-blurup .lq { filter: blur(2.2cqi); scale: 1.12; }   /* 小さな画像を拡大してぼかしたプレースホルダー */
+.fx-blurup .hq { opacity: 0; }
+.fx-blurup .bar { position: absolute; left: 0; bottom: 0; height: .8cqi; width: 0; background: #ff6fa8; }
+/* 本番：<img> の load イベントで .hq に .loaded を付け、opacity を transition。lq は 20px 程度の画像を拡大する */
+.play .fx-blurup .hq  { animation: blurup-hq  calc(5s / var(--speed)) ease infinite; }
+.play .fx-blurup .lq  { animation: blurup-lq  calc(5s / var(--speed)) ease infinite; }
+.play .fx-blurup .bar { animation: blurup-bar calc(5s / var(--speed)) ease-out infinite; }
+@keyframes blurup-hq  { 0%, 40% { opacity: 0; } 56%, 88% { opacity: 1; } 94%, 100% { opacity: 0; } }
+@keyframes blurup-lq  { 0%, 40% { filter: blur(2.2cqi); scale: 1.12; } 58%, 88% { filter: blur(0); scale: 1; } 94%, 100% { filter: blur(2.2cqi); scale: 1.12; } }
+@keyframes blurup-bar { 0%, 6% { width: 0; opacity: 1; } 40% { width: 100%; opacity: 1; } 46%, 100% { width: 100%; opacity: 0; } }
+
+/* @@ success-check-draw */
+.stage-chk { background: #effaf4; }
+.fx-chk { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; justify-items: center; gap: 2.5cqi; }
+.fx-chk svg { width: 20cqi; height: 20cqi; overflow: visible; }
+.fx-chk circle, .fx-chk path { fill: none; stroke: #3f9f80; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.fx-chk circle { fill: rgba(111, 211, 179, 0); }
+.fx-chk .msg { font: 700 3.2cqi/1 var(--font-body); color: #3f9f80; opacity: 0; }
+/* 本番：成功時に .done を付け、円 → チェックの順に stroke-dashoffset を 0 に。pathLength="1" で長さを気にしない */
+.play .fx-chk svg    { animation: chk-pop  calc(4s / var(--speed)) cubic-bezier(.3, 1.5, .5, 1) infinite; }
+.play .fx-chk circle { animation: chk-ring calc(4s / var(--speed)) ease-out infinite; }
+.play .fx-chk path   { animation: chk-mark calc(4s / var(--speed)) ease-out infinite; }
+.play .fx-chk .msg   { animation: chk-msg  calc(4s / var(--speed)) ease infinite; }
+@keyframes chk-ring { 0%, 8% { stroke-dashoffset: 1; fill: rgba(111, 211, 179, 0); } 38% { stroke-dashoffset: 0; fill: rgba(111, 211, 179, 0); } 52%, 86% { stroke-dashoffset: 0; fill: rgba(111, 211, 179, .25); } 94%, 100% { stroke-dashoffset: 1; fill: rgba(111, 211, 179, 0); } }
+@keyframes chk-mark { 0%, 36% { stroke-dashoffset: 1; } 52%, 88% { stroke-dashoffset: 0; } 94%, 100% { stroke-dashoffset: 1; } }
+@keyframes chk-pop  { 0%, 50% { scale: 1; } 56% { scale: 1.12; } 64%, 100% { scale: 1; } }
+@keyframes chk-msg  { 0%, 54% { opacity: 0; translate: 0 1cqi; } 64%, 88% { opacity: 1; translate: 0 0; } 94%, 100% { opacity: 0; } }
+
+/* @@ scroll-edge-shadow */
+.stage-sedge { background: #f4f0ff; }
+.fx-sedge { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 44cqi; height: 36cqi; border-radius: 2.5cqi; background: #fff; box-shadow: 0 2cqi 5cqi rgba(75, 74, 94, .12); overflow: hidden; }
+.fx-sedge::before, .fx-sedge::after { content: ""; position: absolute; left: 0; right: 0; height: 6cqi; z-index: 1; pointer-events: none; }
+.fx-sedge::before { top: 0; background: linear-gradient(rgba(75, 74, 94, .18), transparent); opacity: 0; }   /* 上に続きがあるときだけ */
+.fx-sedge::after  { bottom: 0; background: linear-gradient(transparent, rgba(75, 74, 94, .18)); opacity: 1; }   /* 下に続きがあるときだけ */
+.fx-sedge .ls { padding: 2cqi; display: grid; gap: 1.4cqi; }
+.fx-sedge .ls b { display: flex; align-items: center; gap: 1.5cqi; height: 6cqi; padding: 0 2cqi; border-radius: 1.4cqi; background: #fafafd; font: 700 2.4cqi/1 var(--font-body); color: var(--ink); }
+.fx-sedge .ls b::before { content: ""; width: 3cqi; height: 3cqi; border-radius: 50%; background: var(--c, #c9b8ff); }
+/* 本番：scroll イベントで scrollTop と scrollHeight から上下の影の opacity を決める。CSS だけなら background-attachment: local の影テクニック */
+.play .fx-sedge .ls     { animation: sedge-scroll calc(6s / var(--speed)) ease-in-out infinite; }
+.play .fx-sedge::before { animation: sedge-top    calc(6s / var(--speed)) ease infinite; }
+.play .fx-sedge::after  { animation: sedge-bottom calc(6s / var(--speed)) ease infinite; }
+@keyframes sedge-scroll { 0%, 14% { translate: 0 0; } 40%, 56% { translate: 0 -14cqi; } 78%, 100% { translate: 0 -28cqi; } }
+@keyframes sedge-top    { 0%, 14% { opacity: 0; } 24%, 100% { opacity: 1; } }
+@keyframes sedge-bottom { 0%, 60% { opacity: 1; } 76%, 100% { opacity: 0; } }
+
+/* @@ focus-ring-pulse */
+.stage-focus { background: #fff; }
+.fx-focus { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 44cqi; display: grid; gap: 2.4cqi; }
+.fx-focus .f { display: grid; gap: .8cqi; }
+.fx-focus label { font: 700 2.3cqi/1 var(--font-body); color: var(--ink-soft); }
+.fx-focus .in { position: relative; height: 7cqi; border-radius: 1.6cqi; border: .4cqi solid #d9d5e6; background: #fff; }
+.fx-focus .in::after { content: ""; position: absolute; left: 2cqi; top: 1.8cqi; width: .4cqi; height: 3.4cqi; background: #ff6fa8; opacity: 0; }   /* カーソル */
+/* 本番：:focus-visible で box-shadow の外側の輪を広げながら消す（1 回だけ animation） */
+.play .fx-focus .in       { animation: focus-ring  calc(4.5s / var(--speed)) ease-out infinite; animation-delay: calc(var(--i) * 1.5s / var(--speed)); }
+.play .fx-focus .in::after { animation: focus-caret calc(4.5s / var(--speed)) steps(2) infinite; animation-delay: calc(var(--i) * 1.5s / var(--speed)); }
+.play .fx-focus label     { animation: focus-label calc(4.5s / var(--speed)) ease infinite; animation-delay: calc(var(--i) * 1.5s / var(--speed)); }
+@keyframes focus-ring  { 0% { border-color: #d9d5e6; box-shadow: 0 0 0 0 #ff6fa8, 0 0 0 0 rgba(255, 111, 168, .35); } 3% { border-color: #ff6fa8; box-shadow: 0 0 0 .4cqi #ff6fa8, 0 0 0 .4cqi rgba(255, 111, 168, .35); } 16%, 32% { border-color: #ff6fa8; box-shadow: 0 0 0 .4cqi #ff6fa8, 0 0 0 2.4cqi rgba(255, 111, 168, 0); } 34%, 100% { border-color: #d9d5e6; box-shadow: 0 0 0 0 #ff6fa8, 0 0 0 0 rgba(255, 111, 168, 0); } }
+@keyframes focus-caret { 0%, 32% { opacity: 1; } 33%, 100% { opacity: 0; } }
+@keyframes focus-label { 0%, 2% { color: #9a9ab0; } 4%, 32% { color: #ff6fa8; } 34%, 100% { color: #9a9ab0; } }
+
+/* @@ starfield-parallax */
+.stage-starp { background: linear-gradient(#0f0e1a, #1f1b33); }
+.fx-starp { position: absolute; inset: 0; overflow: hidden; }
+.fx-starp i { position: absolute; inset: 0; background-repeat: repeat; }
+/* 2 種類の点パターンを違う間隔で重ねると格子に見えにくい。背景サイズの公倍数ぶん動かすとつなぎ目が出ない */
+.fx-starp .l1 { background-image: radial-gradient(circle, rgba(255, 255, 255, .55) .6px, transparent 1.2px), radial-gradient(circle, rgba(255, 255, 255, .4) .5px, transparent 1px); background-size: 12cqi 12cqi, 18cqi 14cqi; background-position: 0 0, 5cqi 7cqi; }
+.fx-starp .l2 { background-image: radial-gradient(circle, #fff .9px, transparent 1.6px), radial-gradient(circle, rgba(255, 255, 255, .7) .7px, transparent 1.3px); background-size: 16cqi 16cqi, 24cqi 20cqi; background-position: 3cqi 2cqi, 11cqi 9cqi; }
+.fx-starp .l3 { background-image: radial-gradient(circle, #fff 1.3px, transparent 2.2px), radial-gradient(circle, #ffe9c7 1px, transparent 1.8px); background-size: 20cqi 20cqi, 30cqi 24cqi; background-position: 8cqi 4cqi, 2cqi 13cqi; }
+.fx-starp .moon { position: absolute; right: 14%; top: 18%; width: 9cqi; height: 9cqi; border-radius: 50%; background: #fff6d8; box-shadow: 0 0 4cqi 1cqi rgba(255, 246, 216, .35); }
+.play .fx-starp .l1 { animation: starp-1 calc(40s / var(--speed)) linear infinite; }
+.play .fx-starp .l2 { animation: starp-2 calc(24s / var(--speed)) linear infinite; }
+.play .fx-starp .l3 { animation: starp-3 calc(14s / var(--speed)) linear infinite; }
+@keyframes starp-1 { to { background-position: -36cqi 0, calc(5cqi - 36cqi) 7cqi; } }
+@keyframes starp-2 { to { background-position: calc(3cqi - 48cqi) 2cqi, calc(11cqi - 48cqi) 9cqi; } }
+@keyframes starp-3 { to { background-position: calc(8cqi - 60cqi) 4cqi, calc(2cqi - 60cqi) 13cqi; } }
+
+/* @@ grid-glow-pulse */
+.stage-ggrid { background: #15141f; }
+.fx-ggrid { position: absolute; inset: 0; overflow: hidden;
+  --grid: linear-gradient(90deg, currentColor 0 .25cqi, transparent 0) 0 0 / 8cqi 8cqi, linear-gradient(currentColor 0 .25cqi, transparent 0) 0 0 / 8cqi 8cqi; }
+.fx-ggrid i { position: absolute; inset: 0; background: var(--grid); }
+.fx-ggrid .base { color: rgba(201, 184, 255, .18); }   /* 薄い格子 */
+.fx-ggrid .glow { color: #ff8fb8; -webkit-mask: radial-gradient(circle, #000, transparent 70%) 0 0 / 36cqi 36cqi no-repeat; mask: radial-gradient(circle, #000, transparent 70%) 0 0 / 36cqi 36cqi no-repeat; filter: drop-shadow(0 0 .8cqi #ff8fb8); }   /* 同じ格子を明るい色で描き、丸い mask の中だけ見せる */
+.fx-ggrid .glow.b { color: #8fd0ff; filter: drop-shadow(0 0 .8cqi #8fd0ff); }
+/* mask-position を動かすと光が格子の上を走る */
+.play .fx-ggrid .glow.a { animation: ggrid-a calc(8s / var(--speed)) ease-in-out infinite; }
+.play .fx-ggrid .glow.b { animation: ggrid-b calc(8s / var(--speed)) ease-in-out infinite; }
+@keyframes ggrid-a { 0%, 100% { -webkit-mask-position: -10cqi -8cqi; mask-position: -10cqi -8cqi; } 50% { -webkit-mask-position: 70cqi 30cqi; mask-position: 70cqi 30cqi; } }
+@keyframes ggrid-b { 0%, 100% { -webkit-mask-position: 74cqi -10cqi; mask-position: 74cqi -10cqi; } 50% { -webkit-mask-position: 0 28cqi; mask-position: 0 28cqi; } }
+
+/* @@ paper-shadow */
+.stage-paper { background: #fbf6ee; }
+.fx-paper { position: absolute; inset: 0; overflow: hidden; background: repeating-linear-gradient(0deg, rgba(120, 100, 70, .03) 0 .2cqi, transparent .2cqi .9cqi); }   /* 薄い紙の目 */
+.fx-paper .note { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 34cqi; padding: 4cqi; border-radius: 1cqi; background: #fff; box-shadow: 0 1cqi 3cqi rgba(90, 70, 40, .12); font: 700 4cqi/1.4 var(--font-en); color: var(--ink); }
+.fx-paper .note small { display: block; font: 400 2.2cqi/1.6 var(--font-body); color: var(--ink-soft); }
+.fx-paper .leaf { position: absolute; left: var(--x); top: var(--y); width: var(--s); height: calc(var(--s) * .55); border-radius: 70% 0 70% 0; background: rgba(70, 55, 35, .22); filter: blur(.9cqi); mix-blend-mode: multiply; transform-origin: 0 50%; rotate: var(--r); }   /* 葉の影 */
+/* 木漏れ日の影。ぼかした葉の形を multiply で重ね、ゆっくり揺らす */
+.play .fx-paper .leaf { animation: paper-sway calc(4s / var(--speed)) ease-in-out infinite alternate; animation-delay: calc(var(--i) * -.9s / var(--speed)); }
+@keyframes paper-sway { from { rotate: calc(var(--r) - 4deg); translate: 0 0; } to { rotate: calc(var(--r) + 4deg); translate: 1.2cqi .6cqi; } }
